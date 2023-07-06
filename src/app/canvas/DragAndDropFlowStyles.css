@@ -1,0 +1,41 @@
+.react-flow__controls-button {
+    background: #1A202C;
+    border-color: #1A202C;
+    fill: white
+}
+
+.react-flow__controls-button:hover {
+    background-color: #131820;
+}
+
+.react-flow__minimap svg path {
+    fill: #131820aa
+}
+
+/* Incoming Edge */
+.react-flow__edge.incoming .react-flow__edge-path {
+    stroke: url(#incoming-edge-gradient);
+    stroke-width: 2;
+    stroke-opacity: 0.75;
+}
+
+/* Outgoing Edge */
+.react-flow__edge.outgoing .react-flow__edge-path {
+    stroke: url(#outgoing-edge-gradient);
+    stroke-width: 2;
+    stroke-opacity: 0.75;
+}
+
+/* Default Edge */
+.react-flow__edge.bothSelected .react-flow__edge-path {
+    stroke: url(#bothSelected-edge-gradient);
+    stroke-width: 2;
+    stroke-opacity: 0.75;
+}
+
+/* Default Edge */
+.react-flow__edge.default .react-flow__edge-path {
+    stroke: url(#default-edge-gradient);
+    stroke-width: 2;
+    stroke-opacity: 0.75;
+}
