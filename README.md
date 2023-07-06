@@ -19,7 +19,7 @@ The front end is developed using [Next.js](https://nextjs.org/), and the editor 
 
 ## Installation
 
-Make sure you have Node.js and npm installed on your system before you start.
+Make sure you have [Node.js](https://nodejs.org/en) and npm installed on your system before you start.
 
 1. Clone the repository:
 
@@ -30,7 +30,7 @@ git clone https://github.com/MertenD/node-crawler.git
 2. Navigate into the directory and install the dependencies:
 
 ```shell
-cd WebCrawler-Editor
+cd node-crawler
 npm install
 ```
 
@@ -41,7 +41,3 @@ npm run dev
 ```
 
 Now you should be able to see the web application on `http://localhost:3000` in your browser.
-
-## License
-
-This project is licensed under the MIT License. For more details, please refer to the [License file](LICENSE).

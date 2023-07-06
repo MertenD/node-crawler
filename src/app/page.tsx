@@ -1,5 +1,7 @@
 import Image from 'next/image'
 
+// TODO Es wäre geil Verbindungsregeln in einer Config Datei setzten zu können. Vielleicht kann ich dort ja auch die NodeTypes und co. setzen. Eine einheitliche Struktur wäre auf jeden Fall schön
+
 export default function Home() {
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
