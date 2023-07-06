@@ -90,7 +90,6 @@ export const useReactFlowStore = create<RFState>((set, get) => ({
                 return node;
             }),
         });
-        console.log("Updated node data", data)
     },
     getNodeById: (nodeId: string): Node | null => {
         let resultNode = null

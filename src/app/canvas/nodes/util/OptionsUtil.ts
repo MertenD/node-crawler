@@ -1,7 +1,7 @@
 import {Node} from "reactflow";
 import React from "react";
 
-export function updateLocalNodeDataValue(
+export function setNodeWithUpdatedDataValue(
     setNode: React.Dispatch<React.SetStateAction<Node | null>>,
     key: string,
     value: string
