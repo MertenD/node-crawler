@@ -10,6 +10,7 @@ import {
 } from "@/stores/ReactFlowStore";
 import {TextField, Typography} from "@mui/material";
 import React, {useEffect, useState} from "react";
+import {updateLocalNodeDataValue} from "@/app/canvas/nodes/util/OptionsUtil";
 
 export type FetchWebsiteNodeData = {
     content: string
@@ -76,12 +77,7 @@ export function FetchWebsiteOptions(props: {id: string}) {
                 variant="outlined"
                 value={localNode.data.content}
                 onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                    setLocalNode((node) => {
-                        if (node !== null) {
-                            node.data.content = event.target.value
-                        }
-                        return node
-                    })
+                    updateLocalNodeDataValue(setLocalNode,"content", event.target.value)
                 }}
                 sx={{
                     input: {
