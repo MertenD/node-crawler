@@ -2,6 +2,7 @@
 
 import {Handle, Node, NodeProps, Position} from "reactflow";
 import {
+    defaultEdgeColor,
     handleStyle,
     nodeBackgroundColor,
     nodeShadowColor,
@@ -12,7 +13,8 @@ import React, {CSSProperties, useEffect, useState} from "react";
 import {setNodeWithUpdatedDataValue} from "@/modules/editor/nodes/util/OptionsUtil";
 import OptionsContainer from "@/modules/form/OptionsContainer";
 import TextInputOption from "@/modules/form/TextInputOption";
-import CloudDownloadIcon from '@mui/icons-material/CloudDownload';
+import {Badge, Typography} from "@mui/material";
+import CloudDownloadTwoToneIcon from '@mui/icons-material/CloudDownloadTwoTone';
 
 export type FetchWebsiteNodeData = {
     name: string
@@ -28,16 +30,22 @@ export default function FetchWebsiteNode({ id, selected, data}: NodeProps<FetchW
         }}>
             <Handle style={handleStyle(selected)} type="source" position={Position.Right}/>
             <Handle style={handleStyle(selected)} type="target" position={Position.Left}/>
-            <div style={{
-                width: 100,
-                height: 60,
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                textAlign: "center"
-            }}>
-                { (data.name && data.name !== "") ? data.name : "Fetch Website" }
-            </div>
+            <Badge badgeContent={<CloudDownloadTwoToneIcon sx={{
+                color: selected ? selectedColor : defaultEdgeColor
+            }}/>} anchorOrigin={{ horizontal: "left", vertical: "top" }} >
+                <div style={{
+                    width: 100,
+                    height: 60,
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    textAlign: "center"
+                }}>
+                    <Typography variant="body1">
+                        { (data.name && data.name !== "") ? data.name : "Fetch Website" }
+                    </Typography>
+                </div>
+            </Badge>
         </div>
     )
 }

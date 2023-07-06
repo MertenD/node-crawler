@@ -26,9 +26,7 @@ export default function StartNode({ id, selected, data}: NodeProps<StartNodeData
                 alignItems: "center",
                 textAlign: "center"
             }}>
-                <Typography variant="h5">
-                    >
-                </Typography>
+                <PlayArrowIcon />
             </div>
         </div>
     )

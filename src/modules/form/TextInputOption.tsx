@@ -1,10 +1,11 @@
 import React from "react"
-import {TextField} from "@mui/material";
+import {OutlinedInputProps, TextField} from "@mui/material";
 
 export interface TextInputOptionProps {
     label: string,
-    value?: string,
+    value: string | undefined | null,
     onChange: (event: React.ChangeEvent<HTMLInputElement>) => void
+    inputProps?: Partial<OutlinedInputProps>
 }
 
 export default function TextInputOption(props: TextInputOptionProps) {
@@ -16,6 +17,7 @@ export default function TextInputOption(props: TextInputOptionProps) {
             variant="outlined"
             value={props.value || ""}
             onChange={props.onChange}
+            InputProps={props.inputProps || {}}
         />
     )
 }
