@@ -1,34 +1,45 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Project Name: Node-Crawler
 
-## Getting Started
+[![Next.js](https://img.shields.io/badge/Next.js-13.4.8-000?style=for-the-badge&logo=nextdotjs&logoColor=white)](https://nextjs.org/)
+[![ReactFlow](https://img.shields.io/badge/ReactFlow-11.7.4-000?style=for-the-badge&logo=react&logoColor=white)](https://reactflow.dev/)
 
-First, run the development server:
+## Overview
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
+Node-Crawler is a highly customizable, Node-based web application for creating web crawlers and further processing and transforming the retrieved data. Users can build tailor-made web crawlers and manipulate and transform the collected data as needed. The output data format can be set to a wide range of formats including JSON, CSV, and various database formats.
+
+The front end is developed using [Next.js](https://nextjs.org/), and the editor is based on the [React Flow](https://reactflow.dev/) library, which provides an intuitive and user-friendly interface for creating and editing web crawlers.
+
+## Features
+
+- **Node-based Editing**: Users can create and edit their own crawler workflows by drag-and-dropping nodes.
+- **Data Transformation**: The application supports a variety of data manipulation and transformation operations for cleaning and restructuring the gathered data.
+- **Data Export**: The transformed data can be output in a variety of formats including JSON, CSV, and various database formats.
+
+## Installation
+
+Make sure you have Node.js and npm installed on your system before you start.
+
+1. Clone the repository:
+
+```shell
+git clone https://github.com/MertenD/node-crawler.git
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+2. Navigate into the directory and install the dependencies:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```shell
+cd WebCrawler-Editor
+npm install
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+3. Start the development server:
 
-## Learn More
+```shell
+npm run dev
+```
 
-To learn more about Next.js, take a look at the following resources:
+Now you should be able to see the web application on `http://localhost:3000` in your browser.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## License
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+This project is licensed under the MIT License. For more details, please refer to the [License file](LICENSE).
