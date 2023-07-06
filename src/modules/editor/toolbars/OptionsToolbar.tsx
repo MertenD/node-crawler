@@ -30,15 +30,8 @@ export default function OptionsToolbar() {
     }, [currentNode])
 
     return (
-        <div style={{
-            borderRadius: 10,
-            background: "#1A202C",
-            display: "flex",
-            flexDirection: "column",
-            alignItems: 'center',
-            justifyContent: 'center',
-        }}>
+        <>
             { options }
-        </div>
+        </>
     )
 }

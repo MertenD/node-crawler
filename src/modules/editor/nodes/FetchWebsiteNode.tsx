@@ -8,12 +8,13 @@ import {
     selectedColor,
     useReactFlowStore
 } from "@/stores/ReactFlowStore";
-import {TextField, Typography} from "@mui/material";
+import {TextField} from "@mui/material";
 import React, {useEffect, useState} from "react";
 import {setNodeWithUpdatedDataValue} from "@/modules/editor/nodes/util/OptionsUtil";
+import OptionsContainer from "@/modules/form/OptionsContainer";
 
 export type FetchWebsiteNodeData = {
-    content: string
+    url: string
 }
 
 export default function FetchWebsiteNode({ id, selected, data}: NodeProps<FetchWebsiteNodeData>) {
@@ -57,33 +58,18 @@ export function FetchWebsiteOptions(props: {id: string}) {
     }, [localNode, updateNodeData])
 
     return (
-        localNode !== null && <div style={{
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "center",
-            alignItems: "left",
-            margin: 20
-        }}>
-            <Typography variant="h5" >
-                Fetch Website
-            </Typography>
-            <div />
+        localNode !== null && <OptionsContainer title="Fetch Website">
             <TextField
+                fullWidth
                 id="contentTextField"
-                label="Content"
+                label="URL"
                 variant="outlined"
-                value={localNode.data.content || ""}
+                value={localNode.data.url || ""}
                 onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                    setNodeWithUpdatedDataValue(setLocalNode,"content", event.target.value)
-                }}
-                sx={{
-                    input: {
-                        color: "white"
-                    }
+                    setNodeWithUpdatedDataValue(setLocalNode,"url", event.target.value)
                 }}
             />
-            { localNode.data.content }
-        </div>
+        </OptionsContainer>
     )
 }
 
