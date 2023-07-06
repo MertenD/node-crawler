@@ -17,6 +17,7 @@ import DefaultEdge from "@/modules/editor/edges/DefaultEdge";
 import SelectedIncomingEdge from "@/modules/editor/edges/SelectedIncomingEdge";
 import SelectedOutgoingEdge from "@/modules/editor/edges/SelectedOutgoingEdge";
 import BothSelectedEdge from "@/modules/editor/edges/BothSelectedEdge";
+import StartNode from "@/modules/editor/nodes/StartNode";
 
 export type RFState = {
     nodes: Node[];
@@ -53,7 +54,8 @@ export const useReactFlowStore = create<RFState>((set, get) => ({
     selectedNodes: [],
     edges: [],
     nodeTypes: {
-        fetchWebsiteNode: FetchWebsiteNode
+        fetchWebsiteNode: FetchWebsiteNode,
+        startNode: StartNode
     },
     edgeTypes: {
         defaultEdge: DefaultEdge,
@@ -79,6 +81,7 @@ export const useReactFlowStore = create<RFState>((set, get) => ({
                     ...connection
                 }, get().edges)
             });
+            get().updateEdgesGradient()
         }
     },
     updateNodeData: <NodeData>(nodeId: string, data: NodeData) => {

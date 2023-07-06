@@ -3,6 +3,7 @@
 import {NodeTypes} from "@/model/NodeTypes";
 import {fetchWebsiteShapeStyle} from "@/modules/editor/nodes/FetchWebsiteNode";
 import {Typography} from "@mui/material";
+import getNodesInformation from "@/modules/editor/toolbars/util/NodesInformation";
 
 export default function NodesToolbar() {
     const onDragStart = (event: any, nodeType: String, nodeData: any) => {
@@ -20,13 +21,20 @@ export default function NodesToolbar() {
                 flexDirection: "column",
                 alignItems: 'center',
                 justifyContent: 'center',
+                gap: 20,
+                paddingBottom: 20,
+                textAlign: "center"
             }}>
-                <Typography variant="body1">
-                    Fetch Website
-                </Typography>
-                <div draggable style={{ ...fetchWebsiteShapeStyle(true), marginTop: 10, marginBottom: 10 }} onDragStart={(event) =>
-                    onDragStart(event, NodeTypes.FETCH_WEBSITE_NODE, {})
-                } />
+                { getNodesInformation().map(info => (
+                   <div>
+                       <Typography variant="body1">
+                           { info.title }
+                       </Typography>
+                       <div draggable style={{ ...info.style, marginTop: 10 }} onDragStart={(event) =>
+                           onDragStart(event, info.type, {})
+                       } />
+                   </div>
+                )) }
             </div>
         </aside>
     );

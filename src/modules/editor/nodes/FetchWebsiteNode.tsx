@@ -8,12 +8,14 @@ import {
     selectedColor,
     useReactFlowStore
 } from "@/stores/ReactFlowStore";
-import {TextField} from "@mui/material";
-import React, {useEffect, useState} from "react";
+import React, {CSSProperties, useEffect, useState} from "react";
 import {setNodeWithUpdatedDataValue} from "@/modules/editor/nodes/util/OptionsUtil";
 import OptionsContainer from "@/modules/form/OptionsContainer";
+import TextInputOption from "@/modules/form/TextInputOption";
+import CloudDownloadIcon from '@mui/icons-material/CloudDownload';
 
 export type FetchWebsiteNodeData = {
+    name: string
     url: string
 }
 
@@ -34,7 +36,7 @@ export default function FetchWebsiteNode({ id, selected, data}: NodeProps<FetchW
                 alignItems: "center",
                 textAlign: "center"
             }}>
-                Fetch website
+                { (data.name && data.name !== "") ? data.name : "Fetch Website" }
             </div>
         </div>
     )
@@ -59,12 +61,16 @@ export function FetchWebsiteOptions(props: {id: string}) {
 
     return (
         localNode !== null && <OptionsContainer title="Fetch Website">
-            <TextField
-                fullWidth
-                id="contentTextField"
+            <TextInputOption
+                label="Name"
+                value={localNode.data.name}
+                onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                    setNodeWithUpdatedDataValue(setLocalNode,"name", event.target.value)
+                }}
+            />
+            <TextInputOption
                 label="URL"
-                variant="outlined"
-                value={localNode.data.url || ""}
+                value={localNode.data.url}
                 onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
                     setNodeWithUpdatedDataValue(setLocalNode,"url", event.target.value)
                 }}
@@ -73,7 +79,7 @@ export function FetchWebsiteOptions(props: {id: string}) {
     )
 }
 
-export const fetchWebsiteShapeStyle = (isSelected: boolean) => {
+export const fetchWebsiteShapeStyle = (isSelected: boolean): CSSProperties => {
     return {
         minWidth: 100,
         minHeight: 60,
@@ -82,5 +88,5 @@ export const fetchWebsiteShapeStyle = (isSelected: boolean) => {
         border: "2px solid",
         borderColor: isSelected ? selectedColor : nodeBackgroundColor,
         boxShadow: isSelected ? `0px 0px 5px 1px ${selectedColor}` : `0px 0px 3px 2px ${nodeShadowColor}`
-    }
+    } as CSSProperties
 }

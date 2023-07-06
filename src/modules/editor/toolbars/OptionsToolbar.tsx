@@ -1,7 +1,6 @@
 import useReactFlowStore from "@/stores/ReactFlowStore";
 import React, {useEffect, useState} from "react";
-import {NodeTypes} from "@/model/NodeTypes";
-import {FetchWebsiteOptions} from "@/modules/editor/nodes/FetchWebsiteNode";
+import getNodesInformation from "@/modules/editor/toolbars/util/NodesInformation";
 
 export default function OptionsToolbar() {
 
@@ -22,11 +21,12 @@ export default function OptionsToolbar() {
             setOptions(<></>)
             return
         }
-        switch(currentNode.type) {
-            case NodeTypes.FETCH_WEBSITE_NODE:
-                setOptions(<FetchWebsiteOptions  id={currentNode.id} />)
-                break
-        }
+
+        setOptions(
+            getNodesInformation(currentNode.id)
+                .find(info => info.type === currentNode.type)
+                .options
+        )
     }, [currentNode])
 
     return (

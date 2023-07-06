@@ -4,7 +4,7 @@ import {Typography} from "@mui/material";
 export interface OptionsContainerProps {
     title: string
     width?: number
-    children: React.ReactNode
+    children?: React.ReactNode
 }
 
 export default function OptionsContainer(props: OptionsContainerProps) {
@@ -20,7 +20,7 @@ export default function OptionsContainer(props: OptionsContainerProps) {
             width: props.width || 500,
             padding: 25,
             flexWrap: "wrap",
-            gap: 15
+            gap: 20
         }}>
             <Typography variant="h5" style={{ marginBottom: 5 }} >
                 { props.title }

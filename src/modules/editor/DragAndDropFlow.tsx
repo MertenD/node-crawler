@@ -20,6 +20,7 @@ import OnCanvasNodesToolbar from "@/modules/editor/toolbars/OnCanvasNodesSelecto
 import NodesToolbar from "@/modules/editor/toolbars/NodesToolbar";
 import './DragAndDropFlowStyles.css'
 import OptionsToolbar from "@/modules/editor/toolbars/OptionsToolbar";
+import getNodesInformation from "@/modules/editor/toolbars/util/NodesInformation";
 
 const selector = (state: any) => ({
     nodes: state.nodes,
@@ -90,9 +91,8 @@ export default function DragAndDropFlow() {
     function addNodeAtPosition(position: {x: number, y: number}, nodeType: NodeTypes, data: any = {}): string {
         let yOffset = 0
         let zIndex = 0
-        switch(nodeType) {
-            // TODO
-        }
+
+        yOffset += getNodesInformation().find(info => info.type === nodeType).style.minHeight / 2
 
         const id = uuidv4();
         const newNode = {

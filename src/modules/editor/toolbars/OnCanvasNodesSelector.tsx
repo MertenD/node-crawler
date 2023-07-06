@@ -4,8 +4,9 @@ import * as React from 'react';
 import DialogTitle from '@mui/material/DialogTitle';
 import Dialog from '@mui/material/Dialog';
 import {NodeTypes} from "@/model/NodeTypes";
-import {fetchWebsiteShapeStyle} from "@/modules/editor/nodes/FetchWebsiteNode";
 import {toolbarBackgroundColor} from "@/stores/ReactFlowStore";
+import getNodesInformation from "@/modules/editor/toolbars/util/NodesInformation";
+import {Typography} from "@mui/material";
 
 export interface OnCanvasNodesToolbarProps {
     open: boolean;
@@ -45,11 +46,18 @@ export default function OnCanvasNodesToolbar(props: OnCanvasNodesToolbarProps) {
                 flexDirection: "column",
                 alignItems: 'center',
                 justifyContent: 'center',
+                gap: 20
             }}>
-                Fetch Website
-                <div style={{ ...fetchWebsiteShapeStyle(true), marginTop: 10, marginBottom: 10 }} onClick={() =>
-                    handleNodeSelected(NodeTypes.FETCH_WEBSITE_NODE)
-                } />
+                { getNodesInformation().filter(info => info.isAvailableOnCanvas).map(info => (
+                    <>
+                        <Typography variant="body1">
+                            { info.title }
+                        </Typography>
+                        <div style={{ ...info.style }} onClick={() => {
+                            handleNodeSelected(info.type)
+                        }}/>
+                    </>
+                )) }
             </div>
         </Dialog>
     );
