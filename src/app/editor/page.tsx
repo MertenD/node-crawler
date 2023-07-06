@@ -2,7 +2,7 @@
 
 import {ReactFlowProvider} from "reactflow";
 import React from "react";
-import DragAndDropFlow from "@/app/canvas/DragAndDropFlow";
+import DragAndDropFlow from "@/modules/editor/DragAndDropFlow";
 
 export default function Canvas() {
 

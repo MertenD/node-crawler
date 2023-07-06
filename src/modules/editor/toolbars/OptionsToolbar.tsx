@@ -1,7 +1,7 @@
 import useReactFlowStore from "@/stores/ReactFlowStore";
 import React, {useEffect, useState} from "react";
 import {NodeTypes} from "@/model/NodeTypes";
-import {FetchWebsiteOptions} from "@/app/canvas/nodes/FetchWebsiteNode";
+import {FetchWebsiteOptions} from "@/modules/editor/nodes/FetchWebsiteNode";
 
 export default function OptionsToolbar() {
 

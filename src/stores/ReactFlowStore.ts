@@ -12,11 +12,11 @@ import {
     OnEdgesChange,
     OnNodesChange
 } from 'reactflow';
-import FetchWebsiteNode from "@/app/canvas/nodes/FetchWebsiteNode";
-import SelectedIncomingEdge from "@/app/canvas/edges/SelectedIncomingEdge";
-import SelectedOutgoingEdge from "@/app/canvas/edges/SelectedOutgoingEdge";
-import DefaultEdge from "@/app/canvas/edges/DefaultEdge";
-import BothSelectedEdge from "@/app/canvas/edges/BothSelectedEdge";
+import FetchWebsiteNode from "@/modules/editor/nodes/FetchWebsiteNode";
+import DefaultEdge from "@/modules/editor/edges/DefaultEdge";
+import SelectedIncomingEdge from "@/modules/editor/edges/SelectedIncomingEdge";
+import SelectedOutgoingEdge from "@/modules/editor/edges/SelectedOutgoingEdge";
+import BothSelectedEdge from "@/modules/editor/edges/BothSelectedEdge";
 
 export type RFState = {
     nodes: Node[];

@@ -10,7 +10,7 @@ import {
 } from "@/stores/ReactFlowStore";
 import {TextField, Typography} from "@mui/material";
 import React, {useEffect, useState} from "react";
-import {setNodeWithUpdatedDataValue} from "@/app/canvas/nodes/util/OptionsUtil";
+import {setNodeWithUpdatedDataValue} from "@/modules/editor/nodes/util/OptionsUtil";
 
 export type FetchWebsiteNodeData = {
     content: string
@@ -72,7 +72,7 @@ export function FetchWebsiteOptions(props: {id: string}) {
                 id="contentTextField"
                 label="Content"
                 variant="outlined"
-                value={localNode.data.content}
+                value={localNode.data.content || ""}
                 onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
                     setNodeWithUpdatedDataValue(setLocalNode,"content", event.target.value)
                 }}

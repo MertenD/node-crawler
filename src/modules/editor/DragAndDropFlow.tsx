@@ -16,10 +16,10 @@ import {selectedColor, toolbarBackgroundColor, useReactFlowStore} from "@/stores
 import React, {useCallback, useRef, useState} from "react";
 import {NodeTypes} from "@/model/NodeTypes";
 import {v4 as uuidv4} from 'uuid';
-import OnCanvasNodesToolbar from "@/app/canvas/toolbars/OnCanvasNodesSelector";
-import NodesToolbar from "@/app/canvas/toolbars/NodesToolbar";
+import OnCanvasNodesToolbar from "@/modules/editor/toolbars/OnCanvasNodesSelector";
+import NodesToolbar from "@/modules/editor/toolbars/NodesToolbar";
 import './DragAndDropFlowStyles.css'
-import OptionsToolbar from "@/app/canvas/toolbars/OptionsToolbar";
+import OptionsToolbar from "@/modules/editor/toolbars/OptionsToolbar";
 
 const selector = (state: any) => ({
     nodes: state.nodes,

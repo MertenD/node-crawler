@@ -4,7 +4,7 @@ import * as React from 'react';
 import DialogTitle from '@mui/material/DialogTitle';
 import Dialog from '@mui/material/Dialog';
 import {NodeTypes} from "@/model/NodeTypes";
-import {fetchWebsiteShapeStyle} from "@/app/canvas/nodes/FetchWebsiteNode";
+import {fetchWebsiteShapeStyle} from "@/modules/editor/nodes/FetchWebsiteNode";
 import {toolbarBackgroundColor} from "@/stores/ReactFlowStore";
 
 export interface OnCanvasNodesToolbarProps {

@@ -1,7 +1,7 @@
 'use client'
 
 import {NodeTypes} from "@/model/NodeTypes";
-import {fetchWebsiteShapeStyle} from "@/app/canvas/nodes/FetchWebsiteNode";
+import {fetchWebsiteShapeStyle} from "@/modules/editor/nodes/FetchWebsiteNode";
 import {Typography} from "@mui/material";
 
 export default function NodesToolbar() {
