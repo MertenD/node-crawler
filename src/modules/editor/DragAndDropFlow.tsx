@@ -34,6 +34,7 @@ const selector = (state: any) => ({
 
 export default function DragAndDropFlow() {
     const { nodes, edges, onNodesChange, onEdgesChange, onConnect, nodeTypes, edgeTypes } = useReactFlowStore(selector, shallow);
+
     const setSelectedNodes = useReactFlowStore((state) => state.setSelectedNodes)
 
     const connectStartParams = useRef<OnConnectStartParams | null>(null);
