@@ -1,8 +1,8 @@
 import React from 'react';
 import {EdgeProps, getSmoothStepPath} from 'reactflow';
-import {selectedColor} from "@/stores/ReactFlowStore";
+import {defaultEdgeColor} from "@/stores/editor/ReactFlowStore";
 
-export default function BothSelectedEdge({
+export default function DefaultEdge({
     id,
     sourceX,
     sourceY,
@@ -27,14 +27,14 @@ export default function BothSelectedEdge({
     });
 
     return (
-        <g className={`react-flow__edge bothSelected`}>
+        <g className={`react-flow__edge default`}>
             <defs>
-                <linearGradient id="bothSelected-edge-gradient">
-                    <stop offset="0%" stopColor={selectedColor} />
-                    <stop offset="100%" stopColor={selectedColor} />
+                <linearGradient id="default-edge-gradient">
+                    <stop offset="0%" stopColor={defaultEdgeColor} />
+                    <stop offset="100%" stopColor={defaultEdgeColor} />
                 </linearGradient>
-                <marker id="bothSelected-arrow" markerWidth="15" markerHeight="15" refX="7" refY="3" orient="auto" markerUnits="strokeWidth">
-                    <path d="M0,0 L0,6 L9,3 z" fill={selectedColor} />
+                <marker id="default-arrow" markerWidth="15" markerHeight="15" refX="7" refY="3" orient="auto" markerUnits="strokeWidth">
+                    <path d="M0,0 L0,6 L9,3 z" fill={defaultEdgeColor} />
                 </marker>
             </defs>
             <path
@@ -42,9 +42,9 @@ export default function BothSelectedEdge({
                 style={style}
                 className="react-flow__edge-path"
                 d={edgePath}
-                stroke="url(#bothSelected-edge-gradient)"
+                stroke="url(#default-edge-gradient)"
                 strokeWidth={2}
-                markerEnd="url(#bothSelected-arrow)"
+                markerEnd="url(#default-arrow)"
             />
         </g>
     );

@@ -1,8 +1,8 @@
 import React from 'react';
 import {EdgeProps, getSmoothStepPath} from 'reactflow';
-import {defaultEdgeColor} from "@/stores/ReactFlowStore";
+import {defaultEdgeColor, selectedColor} from "@/stores/editor/ReactFlowStore";
 
-export default function DefaultEdge({
+export default function SelectedOutgoingEdge({
     id,
     sourceX,
     sourceY,
@@ -27,13 +27,13 @@ export default function DefaultEdge({
     });
 
     return (
-        <g className={`react-flow__edge default`}>
+        <g className={`react-flow__edge outgoing`}>
             <defs>
-                <linearGradient id="default-edge-gradient">
-                    <stop offset="0%" stopColor={defaultEdgeColor} />
+                <linearGradient id="outgoing-edge-gradient">
+                    <stop offset="0%" stopColor={selectedColor} />
                     <stop offset="100%" stopColor={defaultEdgeColor} />
                 </linearGradient>
-                <marker id="default-arrow" markerWidth="15" markerHeight="15" refX="7" refY="3" orient="auto" markerUnits="strokeWidth">
+                <marker id="outgoing-arrow" markerWidth="15" markerHeight="15" refX="7" refY="3" orient="auto" markerUnits="strokeWidth">
                     <path d="M0,0 L0,6 L9,3 z" fill={defaultEdgeColor} />
                 </marker>
             </defs>
@@ -42,9 +42,9 @@ export default function DefaultEdge({
                 style={style}
                 className="react-flow__edge-path"
                 d={edgePath}
-                stroke="url(#default-edge-gradient)"
+                stroke="url(#outgoing-edge-gradient)"
                 strokeWidth={2}
-                markerEnd="url(#default-arrow)"
+                markerEnd="url(#outgoing-arrow)"
             />
         </g>
     );

@@ -4,9 +4,9 @@ import * as React from 'react';
 import DialogTitle from '@mui/material/DialogTitle';
 import Dialog from '@mui/material/Dialog';
 import {NodeTypes} from "@/model/NodeTypes";
-import {toolbarBackgroundColor} from "@/stores/ReactFlowStore";
-import getNodesInformation from "@/modules/editor/toolbars/util/NodesInformation";
+import {toolbarBackgroundColor} from "@/stores/editor/ReactFlowStore";
 import {Typography} from "@mui/material";
+import getNodesInformation from "@/components/editor/pages/edit/nodes/util/NodesInformation";
 
 export interface OnCanvasNodesToolbarProps {
     open: boolean;

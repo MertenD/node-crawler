@@ -1,13 +1,14 @@
 'use client'
 
 import {Handle, NodeProps, Position} from "reactflow";
-import {handleStyle, nodeBackgroundColor, nodeShadowColor, selectedColor} from "@/stores/ReactFlowStore";
+import {handleStyle, nodeBackgroundColor, nodeShadowColor, selectedColor} from "@/stores/editor/ReactFlowStore";
 import {Typography} from "@mui/material";
 import React, {CSSProperties} from "react";
-import OptionsContainer from "@/modules/form/OptionsContainer";
+import OptionsContainer from "@/components/form/OptionsContainer";
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
+import {NodeData} from "@/model/NodeData";
 
-export type StartNodeData = {
+export interface StartNodeData extends NodeData {
 }
 
 export default function StartNode({ id, selected, data}: NodeProps<StartNodeData>) {

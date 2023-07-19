@@ -1,12 +1,13 @@
-import useReactFlowStore from "@/stores/ReactFlowStore";
 import React, {useEffect, useState} from "react";
-import getNodesInformation from "@/modules/editor/toolbars/util/NodesInformation";
+import {useReactFlowStore} from "@/stores/editor/ReactFlowStore";
+import {Node,} from 'reactflow';
+import getNodesInformation from "@/components/editor/pages/edit/nodes/util/NodesInformation";
 
 export default function OptionsToolbar() {
 
     const selectedNodes = useReactFlowStore((state) => state.selectedNodes)
     const [options, setOptions] = useState<React.ReactNode>(<></>)
-    const [currentNode, setCurrentNode] = useState(null)
+    const [currentNode, setCurrentNode] = useState<Node | null>(null)
 
     useEffect(() => {
         if (selectedNodes.length === 1) {

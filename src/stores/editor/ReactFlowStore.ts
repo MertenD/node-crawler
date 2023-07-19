@@ -12,26 +12,13 @@ import {
     OnEdgesChange,
     OnNodesChange
 } from 'reactflow';
-import FetchWebsiteNode from "@/modules/editor/nodes/FetchWebsiteNode";
-import DefaultEdge from "@/modules/editor/edges/DefaultEdge";
-import SelectedIncomingEdge from "@/modules/editor/edges/SelectedIncomingEdge";
-import SelectedOutgoingEdge from "@/modules/editor/edges/SelectedOutgoingEdge";
-import BothSelectedEdge from "@/modules/editor/edges/BothSelectedEdge";
-import StartNode from "@/modules/editor/nodes/StartNode";
-import SaveNode from "@/modules/editor/nodes/SaveNode";
-
-export type RFState = {
-    nodes: Node[];
-    selectedNodes: Node[]
-    edges: Edge[];
-    onNodesChange: OnNodesChange;
-    onEdgesChange: OnEdgesChange;
-    onConnect: OnConnect;
-    updateNodeData: <NodeData>(nodeId: string, data: NodeData) => void;
-    getNodeById: (nodeId: string) => Node | null;
-    setSelectedNodes: () => Node[]
-    updateEdgesGradient: () => void
-}
+import FetchWebsiteNode from "@/components/editor/pages/edit/nodes/FetchWebsiteNode";
+import DefaultEdge from "@/components/editor/pages/edit/edges/DefaultEdge";
+import SelectedIncomingEdge from "@/components/editor/pages/edit/edges/SelectedIncomingEdge";
+import SelectedOutgoingEdge from "@/components/editor/pages/edit/edges/SelectedOutgoingEdge";
+import BothSelectedEdge from "@/components/editor/pages/edit/edges/BothSelectedEdge";
+import StartNode from "@/components/editor/pages/edit/nodes/StartNode";
+import SaveNode from "@/components/editor/pages/edit/nodes/SaveNode";
 
 export const selectedColor = "#F98E35"
 
@@ -50,7 +37,20 @@ export const handleStyle = (isNodeSelected) => {
     }
 }
 
-export const useReactFlowStore = create<RFState>((set, get) => ({
+export type ReactFlowState = {
+    nodes: Node[];
+    selectedNodes: Node[]
+    edges: Edge[];
+    onNodesChange: OnNodesChange;
+    onEdgesChange: OnEdgesChange;
+    onConnect: OnConnect;
+    updateNodeData: <NodeData>(nodeId: string, data: NodeData) => void;
+    getNodeById: (nodeId: string) => Node | null;
+    setSelectedNodes: () => Node[]
+    updateEdgesGradient: () => void
+}
+
+export const useReactFlowStore = create<ReactFlowState>((set, get) => ({
     nodes: [],
     selectedNodes: [],
     edges: [],

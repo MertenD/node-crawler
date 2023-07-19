@@ -1,9 +1,9 @@
 'use client'
 
 import {NodeTypes} from "@/model/NodeTypes";
-import {fetchWebsiteShapeStyle} from "@/modules/editor/nodes/FetchWebsiteNode";
+import {fetchWebsiteShapeStyle} from "@/components/editor/pages/edit/nodes/FetchWebsiteNode";
 import {Typography} from "@mui/material";
-import getNodesInformation from "@/modules/editor/toolbars/util/NodesInformation";
+import getNodesInformation from "@/components/editor/pages/edit/nodes/util/NodesInformation";
 
 export default function NodesToolbar() {
     const onDragStart = (event: any, nodeType: String, nodeData: any) => {

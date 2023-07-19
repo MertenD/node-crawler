@@ -8,15 +8,16 @@ import {
     nodeShadowColor,
     selectedColor,
     useReactFlowStore
-} from "@/stores/ReactFlowStore";
+} from "@/stores/editor/ReactFlowStore";
 import React, {CSSProperties, useEffect, useState} from "react";
-import {setNodeWithUpdatedDataValue} from "@/modules/editor/nodes/util/OptionsUtil";
-import OptionsContainer from "@/modules/form/OptionsContainer";
-import TextInputOption from "@/modules/form/TextInputOption";
+import {setNodeWithUpdatedDataValue} from "@/components/editor/pages/edit/nodes/util/OptionsUtil";
+import OptionsContainer from "@/components/form/OptionsContainer";
+import TextInputOption from "@/components/form/TextInputOption";
 import {Badge, Typography} from "@mui/material";
 import CloudDownloadTwoToneIcon from '@mui/icons-material/CloudDownloadTwoTone';
+import {NodeData} from "@/model/NodeData";
 
-export type FetchWebsiteNodeData = {
+export interface FetchWebsiteNodeData extends NodeData {
     name: string
     url: string
 }

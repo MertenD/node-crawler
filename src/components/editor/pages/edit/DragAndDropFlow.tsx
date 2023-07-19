@@ -12,15 +12,15 @@ import ReactFlow, {
 } from 'reactflow';
 import 'reactflow/dist/style.css';
 import shallow from 'zustand/shallow';
-import {selectedColor, toolbarBackgroundColor, useReactFlowStore} from "@/stores/ReactFlowStore";
+import {selectedColor, toolbarBackgroundColor, useReactFlowStore} from "@/stores/editor/ReactFlowStore";
 import React, {useCallback, useRef, useState} from "react";
 import {NodeTypes} from "@/model/NodeTypes";
 import {v4 as uuidv4} from 'uuid';
-import OnCanvasNodesToolbar from "@/modules/editor/toolbars/OnCanvasNodesSelector";
-import NodesToolbar from "@/modules/editor/toolbars/NodesToolbar";
+import OnCanvasNodesToolbar from "@/components/editor/pages/edit/toolbars/OnCanvasNodesSelector";
+import NodesToolbar from "@/components/editor/pages/edit/toolbars/NodesToolbar";
 import './DragAndDropFlowStyles.css'
-import OptionsToolbar from "@/modules/editor/toolbars/OptionsToolbar";
-import getNodesInformation from "@/modules/editor/toolbars/util/NodesInformation";
+import OptionsToolbar from "@/components/editor/pages/edit/toolbars/OptionsToolbar";
+import getNodesInformation from "@/components/editor/pages/edit/nodes/util/NodesInformation";
 
 const selector = (state: any) => ({
     nodes: state.nodes,

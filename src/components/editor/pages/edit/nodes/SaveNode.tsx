@@ -7,14 +7,15 @@ import {
     nodeShadowColor,
     selectedColor,
     useReactFlowStore
-} from "@/stores/ReactFlowStore";
+} from "@/stores/editor/ReactFlowStore";
 import React, {CSSProperties, useEffect, useState} from "react";
-import OptionsContainer from "@/modules/form/OptionsContainer";
+import OptionsContainer from "@/components/form/OptionsContainer";
 import SaveIcon from '@mui/icons-material/Save';
-import TextInputOption from "@/modules/form/TextInputOption";
-import {setNodeWithUpdatedDataValue} from "@/modules/editor/nodes/util/OptionsUtil";
+import TextInputOption from "@/components/form/TextInputOption";
+import {setNodeWithUpdatedDataValue} from "@/components/editor/pages/edit/nodes/util/OptionsUtil";
+import {NodeData} from "@/model/NodeData";
 
-export type SaveNodeData = {
+export interface SaveNodeData extends NodeData {
     fileName: string
 }
 
