@@ -29,7 +29,8 @@ export default function HeaderBar() {
         <div style={{
             display: "flex",
             flexDirection: "row",
-            gap: 5
+            gap: 5,
+            width: "33%",
         }}>
             <Tooltip title="Save Project" >
                 <IconButton onClick={() => {
@@ -56,7 +57,9 @@ export default function HeaderBar() {
         <div>
             <PageNavigation />
         </div>
-        <div>
+        <div style={{
+            width: "33%"
+        }}>
 
         </div>
     </div>

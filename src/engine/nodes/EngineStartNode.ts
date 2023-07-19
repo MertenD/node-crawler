@@ -15,7 +15,7 @@ export class EngineStartNode implements BasicNode {
     }
 
     run(): void {
-        console.log("Start")
+        usePlayStore.getState().writeToLog("Starting crawler")
         usePlayStore.getState().nextNode()
     }
 }

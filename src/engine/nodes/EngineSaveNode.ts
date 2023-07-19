@@ -15,7 +15,8 @@ export class EngineSaveNode implements BasicNode {
     }
 
     run(): void {
-        console.log("Save as", this.data.fileName)
+        usePlayStore.getState().writeToLog(`Saving file as "${this.data.fileName}"`)
+        console.log("saving file")
         usePlayStore.getState().nextNode()
     }
 }
