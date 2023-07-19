@@ -8,6 +8,8 @@ import {loadCrawlerProject, onSave} from "@/util/IOUtil";
 import {CrawlerProjectDto} from "@/model/CrawlerProjectDto";
 import {useReactFlow} from "reactflow";
 import PageNavigation from "@/components/editor/headerbar/PageNavigation";
+import HomeIcon from '@mui/icons-material/Home';
+import Link from "next/link";
 
 export default function HeaderBar() {
 
@@ -32,6 +34,13 @@ export default function HeaderBar() {
             gap: 5,
             width: "33%",
         }}>
+            <Tooltip title="Back to Homepage" >
+                <Link href="/" passHref>
+                    <IconButton>
+                        <HomeIcon />
+                    </IconButton>
+                </Link>
+            </Tooltip>
             <Tooltip title="Save Project" >
                 <IconButton onClick={() => {
                     const data = {

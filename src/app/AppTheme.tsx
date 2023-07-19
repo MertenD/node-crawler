@@ -15,6 +15,15 @@ const appTheme = createTheme({
         background: {
             default: toolbarBackgroundColor
         }
+    },
+    components: {
+        MuiButton: {
+            styleOverrides: {
+                contained: {
+                    backgroundColor: selectedColor
+                }
+            }
+        }
     }
 });
 
