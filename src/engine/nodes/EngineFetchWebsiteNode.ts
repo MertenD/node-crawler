@@ -14,10 +14,10 @@ export class EngineFetchWebsiteNode implements BasicNode {
         this.data = data
     }
 
-    run(): void {
-        usePlayStore.getState().writeToLog(`Fetching website "${this.data.url} with name ${this.data.name}`)
+    async run() {
+        usePlayStore.getState().writeToLog(`Fetching website "${this.data.url}" with name "${this.data.name}"`)
 
-        fetch('/api/fetch', {
+        await fetch('/api/fetch', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -31,6 +31,7 @@ export class EngineFetchWebsiteNode implements BasicNode {
                 return response.text();
             })
             .then(data => {
+                usePlayStore.getState().addOutputToInput(this.id, data)
                 usePlayStore.getState().writeToLog(`Website content (First 1000 characters): ${data.substring(0, 999)}`);
                 usePlayStore.getState().nextNode();
             })

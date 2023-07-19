@@ -3,8 +3,8 @@ import {CrawlerProjectDto} from "@/model/CrawlerProjectDto";
 import {v4 as uuidv4} from 'uuid';
 import {Node, Edge} from "reactflow";
 
-export function onSave<T>(fileName: string, data: T, anchorElementName: string) {
-    const downloadableContent = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(data, null, 2));
+export function onSave(fileName: string, content: string, anchorElementName: string) {
+    const downloadableContent = "data:text/json;charset=utf-8," + encodeURIComponent(content)
     const anchorElement = document.getElementById(anchorElementName);
     if (anchorElement !== null) {
         anchorElement.setAttribute("href", downloadableContent);

@@ -11,12 +11,13 @@ import {
 import React, {CSSProperties, useEffect, useState} from "react";
 import OptionsContainer from "@/components/form/OptionsContainer";
 import SaveIcon from '@mui/icons-material/Save';
-import TextInputOption from "@/components/form/TextInputOption";
 import {setNodeWithUpdatedDataValue} from "@/components/editor/pages/edit/nodes/util/OptionsUtil";
 import {NodeData} from "@/model/NodeData";
+import FileNameInputOption from "@/components/form/FileNameInputOption";
 
 export interface SaveNodeData extends NodeData {
     fileName: string
+    extension: string
 }
 
 export default function SaveNode({ id, selected, data}: NodeProps<SaveNodeData>) {
@@ -27,6 +28,7 @@ export default function SaveNode({ id, selected, data}: NodeProps<SaveNodeData>)
             backgroundColor: nodeBackgroundColor,
         }}>
             <Handle style={handleStyle(selected)} type="target" position={Position.Left}/>
+            <Handle style={handleStyle(selected)} type="source" position={Position.Right}/>
             <div style={{
                 width: 60,
                 height: 60,
@@ -61,11 +63,14 @@ export function SaveOptions(props: {id: string}) {
 
     return (
         localNode !== null && <OptionsContainer title="Save" >
-            <TextInputOption
-                label="Filename"
-                value={localNode.data.fileName}
-                onChange={(event) => {
+            <FileNameInputOption
+                fileName={localNode.data.fileName}
+                onFileNameChange={(event) => {
                     setNodeWithUpdatedDataValue(setLocalNode, "fileName", event.target.value)
+                }}
+                extension={localNode.data.extension}
+                onExtensionChange={(event) => {
+                    setNodeWithUpdatedDataValue(setLocalNode, "extension", event.target.value)
                 }}
             />
         </OptionsContainer>

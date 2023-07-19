@@ -14,7 +14,7 @@ export class EngineStartNode implements BasicNode {
         this.data = {}
     }
 
-    run(): void {
+    async run() {
         usePlayStore.getState().writeToLog("Starting crawler")
         usePlayStore.getState().nextNode()
     }

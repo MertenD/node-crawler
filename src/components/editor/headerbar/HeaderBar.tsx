@@ -38,7 +38,8 @@ export default function HeaderBar() {
                         nodes: nodes,
                         edges: edges
                     } as CrawlerProjectDto
-                    onSave("crawler-project.ncp", data, "saveProject")
+                    const dataString = JSON.stringify(data, null, 2)
+                    onSave("crawler-project.ncp", dataString, "saveProject")
                 }}>
                     <SaveIcon />
                     <a id="saveProject" style={{ display: "none"}} />

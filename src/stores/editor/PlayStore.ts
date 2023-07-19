@@ -21,44 +21,61 @@ export type PlayStoreState = {
     nodeMap: NodeMap
     currentNode: NodeMapValue | null
     variables: Record<string, any>
-    log: []
+    files: {name: string, content: string}[]
+    log: string[]
+    outputsToInputs: {from: string, to: string, value: any}[]
+    isProcessRunning: boolean
     setup: () => void
     stop: () => void
     getFirstNode: () => NodeMapValue | null
     setCurrentNode: (newNode: NodeMapValue | null) => void
     nextNode: (nextNodeKey?: NextNodeKey) => void
+    getNode: (nodeId: string) => void
     getVariable: (name: string) => any
     setVariable: (name: string, value: any) => void
+    addFile: (name: string, extension: string, content: string) => void
     writeToLog: (message: string) => void
+    addOutputToInput: (from: string, value: any) => void
+    getInput: (nodeId: string) => string[]
+    setIsProcessRunning: (newValue: boolean) => void
 }
 
 export const usePlayStore = create<PlayStoreState>((set, get) => ({
     nodeMap: new Map(),
     currentNode: null,
     variables: {},
+    files: [],
     log: [],
+    outputsToInputs: [],
+    isProcessRunning: false,
     setup: () => {
         // reset store
         set({
             nodeMap: new Map(),
             currentNode: null,
             variables: null,
-            log: []
+            files: [],
+            log: [],
+            outputsToInputs: [],
+            isProcessRunning: false
         })
         get().writeToLog("Setting up crawler")
         // set new store
         set({
-            nodeMap: getNodeMap(useReactFlowStore.getState().nodes, useReactFlowStore.getState().edges)
+            nodeMap: getNodeMap(useReactFlowStore.getState().nodes, useReactFlowStore.getState().edges),
+            isProcessRunning: true
         })
         get().setCurrentNode(get().getFirstNode())
     },
     stop: () => {
-        set({
-            nodeMap: new Map(),
-            currentNode: null,
-            variables: null,
-            log: []
-        })
+        if (get().isProcessRunning) {
+            get().writeToLog("Crawler ended successfully")
+            set({
+                nodeMap: new Map(),
+                currentNode: null,
+                isProcessRunning: false
+            })
+        }
     },
     setCurrentNode: (newNode: NodeMapValue | null) => {
         set({
@@ -73,7 +90,7 @@ export const usePlayStore = create<PlayStoreState>((set, get) => ({
     },
     nextNode: (nextNodeKey: NextNodeKey = NextNodeKey.ONLY) => {
         if (!get().currentNode || get().currentNode?.next === null) {
-            get().setCurrentNode(null)
+            get().stop()
             return
         }
 
@@ -83,11 +100,14 @@ export const usePlayStore = create<PlayStoreState>((set, get) => ({
             if (newNode) {
                 get().setCurrentNode(newNode)
             } else {
-                get().setCurrentNode(null)
+                get().stop()
             }
         } else {
-            get().setCurrentNode(null)
+            get().stop()
         }
+    },
+    getNode: (nodeId: string): NodeMapValue => {
+        return get().nodeMap.get(nodeId)
     },
     getVariable: (name: string) => {
         return get().variables[name]
@@ -102,9 +122,34 @@ export const usePlayStore = create<PlayStoreState>((set, get) => ({
             variables: newVariables
         })
     },
+    addFile: (name: string, extension: string, content: string) => {
+        set({
+            files: [...get().files, {
+                name: name,
+                extension: extension,
+                content: content
+            }]
+        })
+    },
     writeToLog: (message: string) => {
         set({
             log: [...get().log, `${getFormattedTimestamp()}: ${message}`]
         })
+    },
+    addOutputToInput: (from: string, value: any) => {
+        set({
+            outputsToInputs: [...get().outputsToInputs, Object.values(get().getNode(from).next).map(to => {
+                return {
+                    from: from,
+                    to: to,
+                    value: value
+                }
+            })].flat()
+        })
+    },
+    getInput: (nodeId: string): string[] => {
+        return get().outputsToInputs.filter(outputToInput => {
+            return outputToInput.to === nodeId
+        }).map(outputToInput => outputToInput.value)
     }
 }))

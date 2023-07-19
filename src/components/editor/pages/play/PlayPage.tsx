@@ -1,10 +1,17 @@
 import Engine from "@/components/editor/pages/play/Engine";
-import {Button, Typography} from "@mui/material";
 import {usePlayStore} from "@/stores/editor/PlayStore";
 import Log from "@/components/editor/pages/play/Log";
-import {toolbarBackgroundColor} from "@/stores/editor/ReactFlowStore";
+import Files from "@/components/editor/pages/play/Files";
+import LoadingButton from '@mui/lab/LoadingButton';
+import PlayCircleFilledIcon from '@mui/icons-material/PlayCircleFilled';
+import CancelIcon from '@mui/icons-material/Cancel';
+import {Button} from "@mui/material";
 
 export default function PlayPage() {
+
+    const setup = usePlayStore(state => state.setup)
+    const stop = usePlayStore(state => state.stop)
+    const isProcessRunning = usePlayStore(state => state.isProcessRunning)
 
     return <div style={{
         width: "100%",
@@ -12,14 +19,40 @@ export default function PlayPage() {
         display: "flex",
         flexDirection: "column",
         justifyContent: "flex-start",
-        alignItems: "center",
+        alignItems: "flex-start",
         padding: 20
     }}>
-        <Button variant="contained" onClick={() => {
-            usePlayStore.getState().setup()
-        }}> 
-            Start Process
-        </Button>
+        <div style={{
+            display: "flex",
+            flexDirection: "row",
+            gap: 20
+        }}>
+            <LoadingButton
+                loadingPosition="end"
+                endIcon={<PlayCircleFilledIcon />}
+                loading={isProcessRunning}
+                variant="contained"
+                onClick={() => {
+                    setup()
+                }}
+                sx={{
+                    width: 180
+                }}
+            >
+                { isProcessRunning ? "Running" : "Start Crawler" }
+            </LoadingButton>
+            <Button
+                endIcon={<CancelIcon />}
+                disabled={!isProcessRunning}
+                variant="contained"
+                onClick={() => {
+                    usePlayStore.getState().writeToLog("Crawler was manual stopped")
+                    stop()
+                }}
+            >
+                Stop
+            </Button>
+        </div>
         <Engine />
         <div style={{
             display: "flex",
@@ -30,15 +63,7 @@ export default function PlayPage() {
             paddingTop: 20,
         }}>
             <Log />
-            <div style={{
-                width: 500,
-                backgroundColor: toolbarBackgroundColor,
-                borderRadius: 10
-            }}>
-                <Typography variant={"h5"} style={{ margin: 20 }}>
-                    Files
-                </Typography>
-            </div>
+            <Files />
         </div>
     </div>
 }

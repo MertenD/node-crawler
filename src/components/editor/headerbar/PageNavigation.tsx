@@ -4,7 +4,7 @@ import React from "react";
 
 export default function PageNavigation() {
 
-    const { pages, selectedPage, onPageChanged } = useEditorPageState()
+    const { pages, selectedPage } = useEditorPageState()
 
     return <BottomNavigation
         showLabels
@@ -13,8 +13,7 @@ export default function PageNavigation() {
         }}
         value={selectedPage}
         onChange={(event: React.SyntheticEvent, newSelectedPage: string) => {
-            console.log("Page changed", newSelectedPage)
-            onPageChanged(newSelectedPage)
+            useEditorPageState.getState().onPageChanged(newSelectedPage)
         }}
     >
         { Array.from(pages, ([value, page]) => {
