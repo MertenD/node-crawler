@@ -9,7 +9,7 @@ import {CrawlerProjectDto} from "@/model/CrawlerProjectDto";
 import {useReactFlow} from "reactflow";
 import PageNavigation from "@/components/editor/headerbar/PageNavigation";
 
-export default function HeaderBar(props: HeaderBarProps) {
+export default function HeaderBar() {
 
     const reactFlowInstance = useReactFlow();
     const inputFile = useRef<HTMLInputElement | null>(null);
@@ -32,7 +32,7 @@ export default function HeaderBar(props: HeaderBarProps) {
             gap: 5
         }}>
             <Tooltip title="Save Project" >
-                <IconButton onClick={(event) => {
+                <IconButton onClick={() => {
                     const data = {
                         nodes: nodes,
                         edges: edges

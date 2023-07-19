@@ -1,7 +1,5 @@
 'use client'
 
-import {NodeTypes} from "@/model/NodeTypes";
-import {fetchWebsiteShapeStyle} from "@/components/editor/pages/edit/nodes/FetchWebsiteNode";
 import {Typography} from "@mui/material";
 import getNodesInformation from "@/components/editor/pages/edit/nodes/util/NodesInformation";
 
