@@ -31,7 +31,7 @@ export class EngineFetchWebsiteNode implements BasicNode {
                 return response.text();
             })
             .then(data => {
-                usePlayStore.getState().addOutputToInput(this.id, data)
+                usePlayStore.getState().addPipeline(this.id, data)
                 usePlayStore.getState().writeToLog(`Website content (First 1000 characters): ${data.substring(0, 999)}`);
                 usePlayStore.getState().nextNode();
             })

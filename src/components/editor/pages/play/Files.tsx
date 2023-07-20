@@ -46,7 +46,7 @@ export default function Files() {
         borderRadius: 10
     }}>
         <Typography variant={"h5"} style={{ margin: 20 }}>
-            Files
+            Created Files
         </Typography>
         <div ref={filesRef} style={{
             display: "flex",

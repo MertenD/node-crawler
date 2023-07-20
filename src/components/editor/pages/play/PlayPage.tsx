@@ -46,7 +46,7 @@ export default function PlayPage() {
                 disabled={!isProcessRunning}
                 variant="contained"
                 onClick={() => {
-                    usePlayStore.getState().writeToLog("Crawler was manual stopped")
+                    usePlayStore.getState().writeToLog("Crawler was stopped manually")
                     stop()
                 }}
             >

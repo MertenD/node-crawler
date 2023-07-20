@@ -19,10 +19,10 @@ export default function Home() {
       <Typography variant="h1" style={{ marginBottom: 50 }}>
           Node-Crawler
       </Typography>
-      <Link href="/editor" passHref>
+      <Link href="/editor">
           <Button variant="text" onClick={() => {
             useEditorPageState.getState().onPageChanged("edit")
-          }}>
+          }} style={{ padding: 10 }}>
               <Typography variant="h4">
                   Go to /editor
               </Typography>

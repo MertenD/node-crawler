@@ -1,7 +1,7 @@
 'use client'
 
 import {createTheme, ThemeProvider} from "@mui/material/styles";
-import {selectedColor, toolbarBackgroundColor} from "@/stores/editor/ReactFlowStore";
+import {disabledColor, selectedColor, selectedColorHover, toolbarBackgroundColor} from "@/stores/editor/ReactFlowStore";
 
 const appTheme = createTheme({
     palette: {
@@ -20,7 +20,13 @@ const appTheme = createTheme({
         MuiButton: {
             styleOverrides: {
                 contained: {
-                    backgroundColor: selectedColor
+                    backgroundColor: selectedColor + ' !important',
+                    '&:hover': {
+                        backgroundColor: selectedColorHover + ' !important',
+                    },
+                    '&:disabled': {
+                        backgroundColor: disabledColor + ' !important',
+                    },
                 }
             }
         }
@@ -28,7 +34,7 @@ const appTheme = createTheme({
 });
 
 export default function AppTheme({ children }) {
-    return <ThemeProvider theme={appTheme} >
+    return<ThemeProvider theme={appTheme} >
         { children }
     </ThemeProvider>
 }

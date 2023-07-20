@@ -21,6 +21,8 @@ import StartNode from "@/components/editor/pages/edit/nodes/StartNode";
 import SaveNode from "@/components/editor/pages/edit/nodes/SaveNode";
 
 export const selectedColor = "#F98E35"
+export const selectedColorHover = "#AE6325"
+export const disabledColor = "#9BA8BD33"
 
 export const nodeBackgroundColor = "#1A202C"
 export const nodeShadowColor = "#1b2631"

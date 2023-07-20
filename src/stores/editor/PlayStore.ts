@@ -23,7 +23,7 @@ export type PlayStoreState = {
     variables: Record<string, any>
     files: {name: string, content: string}[]
     log: string[]
-    outputsToInputs: {from: string, to: string, value: any}[]
+    pipelines: {from: string, to: string, value: any}[]
     isProcessRunning: boolean
     setup: () => void
     stop: () => void
@@ -35,7 +35,7 @@ export type PlayStoreState = {
     setVariable: (name: string, value: any) => void
     addFile: (name: string, extension: string, content: string) => void
     writeToLog: (message: string) => void
-    addOutputToInput: (from: string, value: any) => void
+    addPipeline: (from: string, value: any) => void
     getInput: (nodeId: string) => string[]
     setIsProcessRunning: (newValue: boolean) => void
 }
@@ -46,7 +46,7 @@ export const usePlayStore = create<PlayStoreState>((set, get) => ({
     variables: {},
     files: [],
     log: [],
-    outputsToInputs: [],
+    pipelines: [],
     isProcessRunning: false,
     setup: () => {
         // reset store
@@ -56,7 +56,7 @@ export const usePlayStore = create<PlayStoreState>((set, get) => ({
             variables: null,
             files: [],
             log: [],
-            outputsToInputs: [],
+            pipelines: [],
             isProcessRunning: false
         })
         get().writeToLog("Setting up crawler")
@@ -65,11 +65,18 @@ export const usePlayStore = create<PlayStoreState>((set, get) => ({
             nodeMap: getNodeMap(useReactFlowStore.getState().nodes, useReactFlowStore.getState().edges),
             isProcessRunning: true
         })
-        get().setCurrentNode(get().getFirstNode())
+
+        const firstNode = get().getFirstNode()
+        if (firstNode !== null) {
+            get().setCurrentNode(get().getFirstNode())
+        } else {
+            get().writeToLog("Error: There is no start node")
+            get().stop()
+        }
     },
     stop: () => {
         if (get().isProcessRunning) {
-            get().writeToLog("Crawler ended successfully")
+            get().writeToLog("Crawler stopped successfully")
             set({
                 nodeMap: new Map(),
                 currentNode: null,
@@ -136,9 +143,9 @@ export const usePlayStore = create<PlayStoreState>((set, get) => ({
             log: [...get().log, `${getFormattedTimestamp()}: ${message}`]
         })
     },
-    addOutputToInput: (from: string, value: any) => {
+    addPipeline: (from: string, value: any) => {
         set({
-            outputsToInputs: [...get().outputsToInputs, Object.values(get().getNode(from).next).map(to => {
+            pipelines: [...get().outputsToInputs, Object.values(get().getNode(from).next).map(to => {
                 return {
                     from: from,
                     to: to,

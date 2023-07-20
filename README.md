@@ -1,4 +1,4 @@
-# Project Name: Node-Crawler
+# Project Name
 
 [![Next.js](https://img.shields.io/badge/Next.js-13.4.8-000?style=for-the-badge&logo=nextdotjs&logoColor=white)](https://nextjs.org/)
 [![ReactFlow](https://img.shields.io/badge/ReactFlow-11.7.4-000?style=for-the-badge&logo=react&logoColor=white)](https://reactflow.dev/)
