@@ -11,6 +11,12 @@ export type EditorPageState = {
     selectedPage: string
     onPageChanged: (newPage: string) => void
     getPage: (pageId: string) => {label: string, child: React.ReactNode, icon?: React.ReactNode }
+    isSnackBarOpen: boolean,
+    setIsSnackBarOpen: (isOpen: boolean) => void
+    snackBarSeverity: string,
+    setSnackBarSeverity: (severity: string) => void
+    snackBarText: string,
+    setSnackBarText: (text: string) => void
 }
 
 export const useEditorPageState = create<EditorPageState>((set, get) => ({
@@ -38,6 +44,24 @@ export const useEditorPageState = create<EditorPageState>((set, get) => ({
     },
     getPage: (pageId: string) => {
         return get().pages.get(pageId)
+    },
+    isSnackBarOpen: false,
+    setIsSnackBarOpen: (isOpen: boolean) => {
+        set({
+            isSnackBarOpen: isOpen
+        })
+    },
+    snackBarSeverity: "warning",
+    setSnackBarSeverity: (severity: string) => {
+        set({
+            snackBarSeverity: severity
+        })
+    },
+    snackBarText: "",
+    setSnackBarText: (text: string) => {
+        set({
+            snackBarText: text
+        })
     }
 }));
 

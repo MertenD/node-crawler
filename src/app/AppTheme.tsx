@@ -14,6 +14,9 @@ const appTheme = createTheme({
         },
         background: {
             default: toolbarBackgroundColor
+        },
+        warning: {
+            main: selectedColor
         }
     },
     components: {

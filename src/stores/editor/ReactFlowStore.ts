@@ -20,6 +20,7 @@ import BothSelectedEdge from "@/components/editor/pages/edit/edges/BothSelectedE
 import StartNode from "@/components/editor/pages/edit/nodes/StartNode";
 import SaveNode from "@/components/editor/pages/edit/nodes/SaveNode";
 import {connectionRules} from "@/config/ConnectionRules";
+import useEditorPageState from "@/stores/editor/EditorPageStore";
 
 export const selectedColor = "#F98E35"
 export const selectedColorHover = "#AE6325"
@@ -91,22 +92,34 @@ export const useReactFlowStore = create<ReactFlowState>((set, get) => ({
             return rule.handleId === connection.targetHandle
         })?.allowedValueTypes?.includes(pipelineValueType)
 
-        const existingConnectionsToTarget = get().edges.filter(edge => edge.target === connection.target).length
+        const existingConnectionsToTarget = get().edges.filter(edge => edge.target === connection.target && edge.targetHandle === connection.targetHandle).length
         const isMaxConnectionsReached = existingConnectionsToTarget >= connectionRules.find(rule =>
             rule.nodeType === targetNode.type
         )?.inputRules.find(rule => {
             return rule.handleId === connection.targetHandle
         }).maxConnections
 
-        // Source and target node can not be the same
-        if (connection.source !== connection.target && isConnectionAllowed && !isMaxConnectionsReached) {
-            set({
-                edges: addEdge({
-                    ...connection
-                }, get().edges)
-            });
-            get().updateEdgesGradient()
+        if (connection.source === connection.target) {
+            openWarningSnackBar("You can't connect a node to itself")
+            return
         }
+
+        if (!isConnectionAllowed) {
+            openWarningSnackBar("This connection is not allowed")
+            return
+        }
+
+        if (isMaxConnectionsReached) {
+            openWarningSnackBar("The max amount of inputs for this node is reached")
+            return
+        }
+
+        set({
+            edges: addEdge({
+                ...connection
+            }, get().edges)
+        });
+        get().updateEdgesGradient()
     },
     updateNodeData: <NodeData>(nodeId: string, data: NodeData) => {
         set({
@@ -166,5 +179,11 @@ export const useReactFlowStore = create<ReactFlowState>((set, get) => ({
         })
     }
 }));
+
+function openWarningSnackBar(message: string) {
+    useEditorPageState.getState().setSnackBarSeverity("warning")
+    useEditorPageState.getState().setSnackBarText(message)
+    useEditorPageState.getState().setIsSnackBarOpen(true)
+}
 
 export default useReactFlowStore;
