@@ -23,7 +23,7 @@ export type PlayStoreState = {
     variables: Record<string, any>
     files: {name: string, content: string}[]
     log: string[]
-    pipelines: {from: string, to: string, value: any}[]
+    pipelines: {from: string, to: string, toHandleId: string, value: any}[]
     isProcessRunning: boolean
     setup: () => void
     stop: () => void
@@ -36,7 +36,7 @@ export type PlayStoreState = {
     addFile: (name: string, extension: string, content: string) => void
     writeToLog: (message: string) => void
     addPipeline: (from: string, value: any) => void
-    getInput: (nodeId: string) => string[]
+    getInput: (nodeId: string, handleId: string) => string[]
     setIsProcessRunning: (newValue: boolean) => void
 }
 
@@ -68,7 +68,8 @@ export const usePlayStore = create<PlayStoreState>((set, get) => ({
 
         const firstNode = get().getFirstNode()
         if (firstNode !== null) {
-            get().setCurrentNode(get().getFirstNode())
+            console.log("First node is", firstNode)
+            get().setCurrentNode(firstNode)
         } else {
             get().writeToLog("Error: There is no start node")
             get().stop()
@@ -76,7 +77,7 @@ export const usePlayStore = create<PlayStoreState>((set, get) => ({
     },
     stop: () => {
         if (get().isProcessRunning) {
-            get().writeToLog("Crawler stopped successfully")
+            get().writeToLog("Crawler stopped")
             set({
                 nodeMap: new Map(),
                 currentNode: null,
@@ -103,7 +104,7 @@ export const usePlayStore = create<PlayStoreState>((set, get) => ({
 
         const nextNode = get().currentNode?.next
         if (nextNode !== null && nextNode !== undefined) {
-            const newNode = get().nodeMap.get(nextNode[nextNodeKey])
+            const newNode = get().nodeMap.get(nextNode[nextNodeKey]?.nodeId)
             if (newNode) {
                 get().setCurrentNode(newNode)
             } else {
@@ -145,18 +146,26 @@ export const usePlayStore = create<PlayStoreState>((set, get) => ({
     },
     addPipeline: (from: string, value: any) => {
         set({
-            pipelines: [...get().outputsToInputs, Object.values(get().getNode(from).next).map(to => {
+            pipelines: [...get().pipelines, Object.values(get().getNode(from).next).map(to => {
                 return {
                     from: from,
-                    to: to,
+                    to: to.nodeId,
+                    toHandleId: to.targetHandleId,
                     value: value
                 }
             })].flat()
         })
     },
-    getInput: (nodeId: string): string[] => {
-        return get().outputsToInputs.filter(outputToInput => {
-            return outputToInput.to === nodeId
-        }).map(outputToInput => outputToInput.value)
+    getInput: (nodeId: string, handleId: string): string[] => {
+        const input =  get().pipelines.filter(pipeline => {
+            return pipeline.to === nodeId && pipeline.toHandleId === handleId
+        }).map(pipeline => pipeline.value)
+
+        if (input.length > 0 && input.every(value => value !== undefined)) {
+            return input
+        } else {
+            get().writeToLog(`Error: One ore more inputs of the node "${nodeId}" are undefined`)
+            get().stop()
+        }
     }
 }))

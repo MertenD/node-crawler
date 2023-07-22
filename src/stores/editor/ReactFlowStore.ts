@@ -19,6 +19,7 @@ import SelectedOutgoingEdge from "@/components/editor/pages/edit/edges/SelectedO
 import BothSelectedEdge from "@/components/editor/pages/edit/edges/BothSelectedEdge";
 import StartNode from "@/components/editor/pages/edit/nodes/StartNode";
 import SaveNode from "@/components/editor/pages/edit/nodes/SaveNode";
+import {connectionRules} from "@/config/ConnectionRules";
 
 export const selectedColor = "#F98E35"
 export const selectedColorHover = "#AE6325"
@@ -78,8 +79,27 @@ export const useReactFlowStore = create<ReactFlowState>((set, get) => ({
         });
     },
     onConnect: (connection: Connection) => {
+
+        const sourceNode = get().getNodeById(connection.source)
+        const targetNode = get().getNodeById(connection.target)
+
+        // Check connectivity rules
+        const pipelineValueType = connectionRules.find(rule => rule.nodeType === sourceNode.type)?.outputValueType
+        const isConnectionAllowed = connectionRules.find(rule =>
+            rule.nodeType === targetNode.type
+        )?.inputRules.find(rule => {
+            return rule.handleId === connection.targetHandle
+        })?.allowedValueTypes?.includes(pipelineValueType)
+
+        const existingConnectionsToTarget = get().edges.filter(edge => edge.target === connection.target).length
+        const isMaxConnectionsReached = existingConnectionsToTarget >= connectionRules.find(rule =>
+            rule.nodeType === targetNode.type
+        )?.inputRules.find(rule => {
+            return rule.handleId === connection.targetHandle
+        }).maxConnections
+
         // Source and target node can not be the same
-        if (connection.source !== connection.target) {
+        if (connection.source !== connection.target && isConnectionAllowed && !isMaxConnectionsReached) {
             set({
                 edges: addEdge({
                     ...connection

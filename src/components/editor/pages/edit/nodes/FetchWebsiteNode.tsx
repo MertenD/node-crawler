@@ -29,8 +29,8 @@ export default function FetchWebsiteNode({ id, selected, data}: NodeProps<FetchW
             ...fetchWebsiteShapeStyle(selected),
             backgroundColor: nodeBackgroundColor,
         }}>
-            <Handle style={handleStyle(selected)} type="source" position={Position.Right}/>
-            <Handle style={handleStyle(selected)} type="target" position={Position.Left}/>
+            <Handle id="output" style={handleStyle(selected)} type="source" position={Position.Right}/>
+            <Handle id="input" style={handleStyle(selected)} type="target" position={Position.Left}/>
             <Badge badgeContent={<CloudDownloadTwoToneIcon sx={{
                 color: selected ? selectedColor : defaultEdgeColor
             }}/>} anchorOrigin={{ horizontal: "left", vertical: "top" }} >

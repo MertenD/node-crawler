@@ -18,7 +18,7 @@ export default function StartNode({ id, selected, data}: NodeProps<StartNodeData
             ...startShapeStyle(selected),
             backgroundColor: nodeBackgroundColor,
         }}>
-            <Handle style={handleStyle(selected)} type="source" position={Position.Right}/>
+            <Handle id="output" style={handleStyle(selected)} type="source" position={Position.Right}/>
             <div style={{
                 width: 60,
                 height: 60,

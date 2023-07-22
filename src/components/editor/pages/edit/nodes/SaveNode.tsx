@@ -27,8 +27,8 @@ export default function SaveNode({ id, selected, data}: NodeProps<SaveNodeData>)
             ...saveShapeStyle(selected),
             backgroundColor: nodeBackgroundColor,
         }}>
-            <Handle style={handleStyle(selected)} type="target" position={Position.Left}/>
-            <Handle style={handleStyle(selected)} type="source" position={Position.Right}/>
+            <Handle id="input" style={handleStyle(selected)} type="target" position={Position.Left}/>
+            <Handle id="output" style={handleStyle(selected)} type="source" position={Position.Right}/>
             <div style={{
                 width: 60,
                 height: 60,

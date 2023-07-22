@@ -16,7 +16,6 @@ import {selectedColor, toolbarBackgroundColor, useReactFlowStore} from "@/stores
 import React, {useCallback, useRef, useState} from "react";
 import {NodeTypes} from "@/model/NodeTypes";
 import {v4 as uuidv4} from 'uuid';
-import OnCanvasNodesToolbar from "@/components/editor/pages/edit/toolbars/OnCanvasNodesSelector";
 import NodesToolbar from "@/components/editor/pages/edit/toolbars/NodesToolbar";
 import './DragAndDropFlowStyles.css'
 import OptionsToolbar from "@/components/editor/pages/edit/toolbars/OptionsToolbar";
@@ -40,10 +39,6 @@ export default function DragAndDropFlow() {
     const connectStartParams = useRef<OnConnectStartParams | null>(null);
     const reactFlowWrapper = useRef(null);
     const reactFlowInstance = useReactFlow();
-
-    const [openOnCanvasNodeSelector, setOpenOnCanvasNodeSelector] = React.useState(false);
-    const [lastEventPosition, setLastEventPosition] = React.useState<{x: number, y: number}>({x: 0, y: 0})
-    const [isDragging, setIsDragging] = useState(false)
 
     const onDragOver = useCallback((event: any) => {
         event.preventDefault();
@@ -74,21 +69,6 @@ export default function DragAndDropFlow() {
         connectStartParams.current = node;
     }, []);
 
-    const onConnectEnd = useCallback(
-        (event: any) => {
-            const targetIsPane = event.target.classList.contains('react-flow__pane');
-            const targetIsChallengeNode = event.target.parentElement.classList.contains("react-flow__node-challengeNode")
-
-            if ((targetIsPane || targetIsChallengeNode) && connectStartParams.current?.handleType === "source" && reactFlowWrapper.current !== null) {
-                // @ts-ignore
-                const { top, left } = reactFlowWrapper.current.getBoundingClientRect();
-                setLastEventPosition({ x: event.clientX - left, y: event.clientY - top })
-                setOpenOnCanvasNodeSelector(true)
-            }
-        },
-        [reactFlowInstance.project]
-    );
-
     function addNodeAtPosition(position: {x: number, y: number}, nodeType: NodeTypes, data: any = {}): string {
         let yOffset = 0
         let zIndex = 0
@@ -109,14 +89,6 @@ export default function DragAndDropFlow() {
         return id
     }
 
-    const onNodeDragStart = useCallback(() => {
-        setIsDragging(true)
-    }, [])
-
-    const onNodeDragStop = useCallback(() => {
-        setIsDragging(false)
-    }, [])
-
     return (
         <ReactFlow ref={reactFlowWrapper}
                    nodes={nodes}
@@ -125,10 +97,7 @@ export default function DragAndDropFlow() {
                    onEdgesChange={onEdgesChange}
                    onConnect={onConnect}
                    onConnectStart={onConnectStart}
-                   onConnectEnd={onConnectEnd}
                    onDragOver={onDragOver}
-                   onNodeDragStart={onNodeDragStart}
-                   onNodeDragStop={onNodeDragStop}
                    onDrop={onDrop}
                    nodeTypes={nodeTypes}
                    edgeTypes={edgeTypes}
@@ -151,23 +120,6 @@ export default function DragAndDropFlow() {
             <MiniMap nodeColor={selectedColor} nodeStrokeWidth={3} zoomable pannable style={{
                 backgroundColor: toolbarBackgroundColor
             }} />
-            <OnCanvasNodesToolbar
-                open={openOnCanvasNodeSelector}
-                position={lastEventPosition}
-                onClose={(nodeType: NodeTypes | null) => {
-                    setOpenOnCanvasNodeSelector(false)
-
-                    if (nodeType !== null && connectStartParams.current !== null && connectStartParams.current?.nodeId !== null) {
-                        const id = addNodeAtPosition(reactFlowInstance.project(lastEventPosition), nodeType)
-                        reactFlowInstance.addEdges({
-                            id,
-                            source: connectStartParams.current?.nodeId || "",
-                            sourceHandle: connectStartParams.current?.handleId,
-                            target: id
-                        });
-                    }
-                }}
-            />
         </ReactFlow>
     );
 }

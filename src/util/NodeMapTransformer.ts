@@ -31,19 +31,22 @@ export function getNodeMap(nodes: Node[], edges: Edge[]): Map<NodeMapKey, NodeMa
         }
         nodeMap.set(id, {
             node: basicNode,
-            next: edges.filter((edge: Edge) => edge.source === id).reduce<Record<NextNodeKey, NodeMapKey>>((accumulator, edge: Edge) => {
+            next: edges.filter((edge: Edge) => edge.source === id).reduce<Record<NextNodeKey, {nodeId: NodeMapKey, targetHandleId: string}>>((accumulator, edge: Edge) => {
                 // sourceHandle is "True" or "False" when dealing with gateway nodes
+
+                const newAccumulatorValue = {nodeId: edge.target, targetHandleId: edge.targetHandle} as {nodeId: NodeMapKey, targetHandleId: string}
+
                 if (type === NodeTypes.GATEWAY_NODE && edge.sourceHandle !== null) {
                     if (edge.sourceHandle === "True") {
-                        accumulator[NextNodeKey.TRUE] = edge.target as NodeMapKey
+                        accumulator[NextNodeKey.TRUE] = newAccumulatorValue
                     } else {
-                        accumulator[NextNodeKey.FALSE] = edge.target as NodeMapKey
+                        accumulator[NextNodeKey.FALSE] = newAccumulatorValue
                     }
                 } else {
-                    accumulator[NextNodeKey.ONLY] = edge.target as NodeMapKey
+                    accumulator[NextNodeKey.ONLY] = newAccumulatorValue
                 }
                 return accumulator
-            }, {} as Record<NextNodeKey, NodeMapKey>) || null
+            }, {} as Record<NextNodeKey, {nodeId: NodeMapKey, targetHandleId: string}>) || null
         })
     })
 

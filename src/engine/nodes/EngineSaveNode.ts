@@ -16,7 +16,7 @@ export class EngineSaveNode implements BasicNode {
 
     async run() {
 
-        const input = usePlayStore.getState().getInput(this.id)
+        const input = usePlayStore.getState().getInput(this.id, "input")
 
         usePlayStore.getState().writeToLog(`Saving file as "${this.data.fileName}"`)
         usePlayStore.getState().addFile(this.data.fileName, this.data.extension, input.join(", "))

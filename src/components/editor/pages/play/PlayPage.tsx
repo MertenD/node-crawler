@@ -6,11 +6,15 @@ import LoadingButton from '@mui/lab/LoadingButton';
 import PlayCircleFilledIcon from '@mui/icons-material/PlayCircleFilled';
 import CancelIcon from '@mui/icons-material/Cancel';
 import {Button} from "@mui/material";
+import SaveIcon from "@mui/icons-material/Save";
+import React from "react";
+import {onSave} from "@/util/IOUtil";
 
 export default function PlayPage() {
 
     const setup = usePlayStore(state => state.setup)
     const stop = usePlayStore(state => state.stop)
+    const log = usePlayStore(state => state.log)
     const isProcessRunning = usePlayStore(state => state.isProcessRunning)
 
     return <div style={{
@@ -51,6 +55,17 @@ export default function PlayPage() {
                 }}
             >
                 Stop
+            </Button>
+            <Button
+                endIcon={<SaveIcon />}
+                disabled={isProcessRunning || log.length === 0}
+                variant="contained"
+                onClick={() => {
+                    onSave(`log.txt`, JSON.stringify(log, null, 2), `downloadFile-log`)
+                }}
+            >
+                <a id={`downloadFile-log`} style={{ display: "none"}} />
+                Download Log
             </Button>
         </div>
         <Engine />

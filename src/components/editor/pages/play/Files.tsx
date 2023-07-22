@@ -12,7 +12,6 @@ export default function Files() {
     const filesRef = useRef<HTMLDivElement | null>(null);
 
     useEffect(() => {
-        console.log("files", files)
         if (filesRef.current) {
             smoothScrollToBottom(filesRef.current, filesRef.current?.scrollHeight, 300);
         }
