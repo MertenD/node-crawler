@@ -1,7 +1,7 @@
 'use client'
 
 import {Typography} from "@mui/material";
-import getNodesInformation from "@/components/editor/pages/canvas/nodes/util/NodesInformation";
+import getNodesInformation from "@/config/NodesInformation";
 import useReactFlowStore from "@/stores/editor/ReactFlowStore";
 import {useEffect, useState} from "react";
 import {NodeTypes} from "@/model/NodeTypes";

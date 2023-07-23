@@ -2,11 +2,13 @@
 
 import {Handle, NodeProps, Position} from "reactflow";
 import {handleStyle, nodeBackgroundColor, nodeShadowColor, selectedColor} from "@/stores/editor/ReactFlowStore";
-import {Typography} from "@mui/material";
 import React, {CSSProperties} from "react";
 import OptionsContainer from "@/components/form/OptionsContainer";
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import {NodeData} from "@/model/NodeData";
+import {LoadingButton} from "@mui/lab";
+import PlayCircleFilledIcon from '@mui/icons-material/PlayCircleFilled';
+import {usePlayStore} from "@/stores/editor/PlayStore";
 
 export interface StartNodeData extends NodeData {
 }
@@ -36,10 +38,19 @@ export default function StartNode({ id, selected, data}: NodeProps<StartNodeData
 export function StartOptions(props: {id: string}) {
 
     return (
-        <OptionsContainer title="Start" >
-            <Typography variant="body1">
-                This is the start of the crawler. There are no options.
-            </Typography>
+        <OptionsContainer title="Start" width={300} >
+            <LoadingButton
+                endIcon={<PlayCircleFilledIcon />}
+                variant="contained"
+                onClick={() => {
+                    usePlayStore.getState().setup()
+                }}
+                sx={{
+                    width: "100%"
+                }}
+            >
+                Start Crawler
+            </LoadingButton>
         </OptionsContainer>
     )
 }

@@ -19,7 +19,7 @@ import {v4 as uuidv4} from 'uuid';
 import NodesToolbar from "@/components/editor/pages/canvas/toolbars/NodesToolbar";
 import './DragAndDropFlowStyles.css'
 import OptionsToolbar from "@/components/editor/pages/canvas/toolbars/OptionsToolbar";
-import getNodesInformation from "@/components/editor/pages/canvas/nodes/util/NodesInformation";
+import getNodesInformation from "@/config/NodesInformation";
 import {usePlayStore} from "@/stores/editor/PlayStore";
 
 const selector = (state: any) => ({
