@@ -17,6 +17,8 @@ export const connectionRules: ConnectionRule[] = [
                     OutputValueType.NONE
                 ],
                 maxConnections: 1
+                // TODO Hier noch sowas wie, "warten auf alle" oder "jedes einzeln" und dementsprechend auch die Logik anpassen
+                // TODO OOOOOder Alles ist immer automatisch "jedes einzeln" bearbeiten und um verschiedene Pipelines zu verbinden, gibt es einen Connector Node (Find ich besser)
             }
         ]
     },
@@ -32,6 +34,19 @@ export const connectionRules: ConnectionRule[] = [
                     OutputValueType.JSON
                 ],
                 maxConnections: 999
+            }
+        ]
+    },
+    {
+        nodeType: NodeType.EXTRACTOR_NODE,
+        outputValueType: OutputValueType.JSON,
+        inputRules: [
+            {
+                handleId: "input",
+                allowedValueTypes: [
+                    OutputValueType.HTML
+                ],
+                maxConnections: 1
             }
         ]
     }

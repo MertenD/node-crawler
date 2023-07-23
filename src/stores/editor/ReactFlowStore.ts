@@ -40,8 +40,6 @@ export const handleStyle = (isNodeSelected) => {
     }
 }
 
-// TODO Keine gleichen Connections erlauben
-
 export type ReactFlowState = {
     nodes: Node[];
     selectedNodes: Node[]

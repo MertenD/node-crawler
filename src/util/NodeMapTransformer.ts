@@ -18,6 +18,8 @@ import {EngineFetchWebsiteNode} from "@/engine/nodes/EngineFetchWebsiteNode";
 import {FetchWebsiteNodeData} from "@/components/editor/pages/canvas/nodes/FetchWebsiteNode";
 import {EngineSaveNode} from "@/engine/nodes/EngineSaveNode";
 import {SaveNodeData} from "@/components/editor/pages/canvas/nodes/SaveNode";
+import {EngineExtractorNode} from "@/engine/nodes/EngineExtractorNode";
+import {ExtractorNodeData} from "@/components/editor/pages/canvas/nodes/ExtractorNode";
 
 export function getNodeMap(nodes: Node[], edges: Edge[]): Map<NodeMapKey, NodeMapValue> {
 
@@ -65,5 +67,7 @@ function getNodeFromType(type: NodeType, id: string, data: NodeData | undefined)
             return new EngineFetchWebsiteNode(id, data as FetchWebsiteNodeData)
         case NodeType.SAVE_NODE:
             return new EngineSaveNode(id, data as SaveNodeData)
+        case NodeType.EXTRACTOR_NODE:
+            return new EngineExtractorNode(id, data as ExtractorNodeData)
     }
 }

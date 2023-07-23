@@ -47,7 +47,11 @@ Now you should be able to see the web application on `http://localhost:3000` in 
 
 Follow these steps when you need to create a new Node:
 
-### Step 1: Create the New Node
+### Step 1: Add the Node to the NodeType Enum
+
+Next, add your newly created Node to the **config/NodeType** enum.
+
+### Step 2: Create the New Node
 
 First, create a new file in the **components/editor/pages/canvas/nodes** directory. In this file, you will define the following elements:
 
@@ -76,7 +80,7 @@ export const [NAME]ShapeStyle = createNodeShapeStyle({
 
 // --- Node ---
 export const [NAME]Node = createNodeComponent<[NAME]NodeData>(
-    NodeTypes.[NAME]_NODE,
+    NodeType.[NAME]_NODE,
     [NAME]ShapeStyle,
     (id, selected, data) => {
         // TODO: Place the node content here
@@ -88,10 +92,6 @@ export const [NAME]Options = createOptionsComponent<[NAME]NodeData>("Start", ({ 
     return // TODO: Place options here
 })
 ```
-
-### Step 2: Add the Node to the NodeType Enum
-
-Next, add your newly created Node to the **config/NodeType** enum.
 
 ### Step 3: Add Metadata to NodesInformation.tsx
 
@@ -115,7 +115,7 @@ export class Engine[NAME]Node implements BasicNode {
     constructor(id: string, data: /* TODO */) {
         this.id = id
         this.nodeType = // TODO
-        this.data = {}
+        this.data = data
     }
 
     async run() {

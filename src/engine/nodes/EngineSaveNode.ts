@@ -16,6 +16,7 @@ export class EngineSaveNode implements BasicNode {
 
     async run() {
 
+        // TODO Hier kann ich die extension automatisch auf Basis des Types des Inputs setzen
         const input = usePlayStore.getState().getInput(this.id, "input")
 
         if (input) {
