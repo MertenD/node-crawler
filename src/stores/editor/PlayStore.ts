@@ -1,7 +1,7 @@
 import create from 'zustand';
 import {NodeMap, NodeMapValue} from "@/model/NodeMap";
 import {NextNodeKey} from "@/model/NextNodeKey";
-import {NodeTypes} from "@/model/NodeTypes";
+import {NodeType} from "@/config/NodeType";
 import {getNodeMap} from "@/util/NodeMapTransformer";
 import useReactFlowStore from "@/stores/editor/ReactFlowStore";
 
@@ -96,7 +96,7 @@ export const usePlayStore = create<PlayStoreState>((set, get) => ({
     },
     getFirstNode: (): NodeMapValue | null => {
         const firstNode = Array.from(get().nodeMap.values()).find(({node}) =>
-            node.nodeType === NodeTypes.START_NODE
+            node.nodeType === NodeType.START_NODE
         );
         return firstNode as NodeMapValue || null
     },
@@ -167,7 +167,6 @@ export const usePlayStore = create<PlayStoreState>((set, get) => ({
         set({
             log: [...get().log, `${getFormattedTimestamp()}: ${message}`]
         })
-        console.log("log", message)
     },
     addOutgoingPipelines: (from: string, value: any = null) => {
         set({

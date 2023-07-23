@@ -9,7 +9,7 @@
  */
 import {Edge, Node} from "reactflow";
 import {NodeMapKey, NodeMapValue} from "@/model/NodeMap";
-import {NodeTypes} from "@/model/NodeTypes";
+import {NodeType} from "@/config/NodeType";
 import {NextNodeKey} from "@/model/NextNodeKey";
 import {NodeData} from "@/model/NodeData";
 import {BasicNode} from "@/engine/nodes/BasicNode";
@@ -25,7 +25,7 @@ export function getNodeMap(nodes: Node[], edges: Edge[]): Map<NodeMapKey, NodeMa
 
     nodes.forEach((node: Node) => {
         const { id, type, data } = node
-        const basicNode = getNodeFromType(type as NodeTypes, id, data)
+        const basicNode = getNodeFromType(type as NodeType, id, data)
         if (basicNode === null) {
             return
         }
@@ -36,7 +36,7 @@ export function getNodeMap(nodes: Node[], edges: Edge[]): Map<NodeMapKey, NodeMa
 
                 const newAccumulatorValue = {nodeId: edge.target, targetHandleId: edge.targetHandle} as {nodeId: NodeMapKey, targetHandleId: string}
 
-                if (type === NodeTypes.GATEWAY_NODE && edge.sourceHandle !== null) {
+                if (type === NodeType.GATEWAY_NODE && edge.sourceHandle !== null) {
                     if (edge.sourceHandle === "True") {
                         accumulator[NextNodeKey.TRUE] = [...accumulator[NextNodeKey.TRUE], newAccumulatorValue]
                     } else {
@@ -57,13 +57,13 @@ export function getNodeMap(nodes: Node[], edges: Edge[]): Map<NodeMapKey, NodeMa
     return nodeMap
 }
 
-function getNodeFromType(type: NodeTypes, id: string, data: NodeData | undefined): BasicNode | null {
+function getNodeFromType(type: NodeType, id: string, data: NodeData | undefined): BasicNode | null {
     switch (type) {
-        case NodeTypes.START_NODE:
+        case NodeType.START_NODE:
             return new EngineStartNode(id)
-        case NodeTypes.FETCH_WEBSITE_NODE:
+        case NodeType.FETCH_WEBSITE_NODE:
             return new EngineFetchWebsiteNode(id, data as FetchWebsiteNodeData)
-        case NodeTypes.SAVE_NODE:
+        case NodeType.SAVE_NODE:
             return new EngineSaveNode(id, data as SaveNodeData)
     }
 }

@@ -4,7 +4,7 @@ import {Typography} from "@mui/material";
 import getNodesInformation from "@/config/NodesInformation";
 import useReactFlowStore from "@/stores/editor/ReactFlowStore";
 import {useEffect, useState} from "react";
-import {NodeTypes} from "@/model/NodeTypes";
+import {NodeType} from "@/config/NodeType";
 
 export default function NodesToolbar() {
 
@@ -17,7 +17,7 @@ export default function NodesToolbar() {
     const [isStartAlreadyPlaced, setIsStartAlreadyPlaced] = useState<boolean>(false)
 
     useEffect(() => {
-        setIsStartAlreadyPlaced(nodes.filter(node => node.type === NodeTypes.START_NODE).length !== 0)
+        setIsStartAlreadyPlaced(nodes.filter(node => node.type === NodeType.START_NODE).length !== 0)
     }, [nodes])
 
     return (
@@ -35,7 +35,7 @@ export default function NodesToolbar() {
                 textAlign: "center"
             }}>
                 { getNodesInformation().filter(nodeInfo =>
-                    nodeInfo.type !== NodeTypes.START_NODE || !isStartAlreadyPlaced
+                    nodeInfo.type !== NodeType.START_NODE || !isStartAlreadyPlaced
                 ).map(info => (
                    <div>
                        <Typography variant="body1">

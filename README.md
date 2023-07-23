@@ -42,3 +42,8 @@ npm run dev
 ```
 
 Now you should be able to see the web application on `http://localhost:3000` in your browser.
+
+## Add new Node
+
+1. Create a new node in the components/editor/pages/canvas/nodes folder. There you have to create a ```Data``` interface which stores all the data the user can configure in the options, 
+a ```Node``` react component which will be the node on the canvas itself, a ```Options``` component where  

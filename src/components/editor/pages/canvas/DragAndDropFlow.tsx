@@ -14,7 +14,7 @@ import 'reactflow/dist/style.css';
 import shallow from 'zustand/shallow';
 import {selectedColor, toolbarBackgroundColor, useReactFlowStore} from "@/stores/editor/ReactFlowStore";
 import React, {useCallback, useRef, useState} from "react";
-import {NodeTypes} from "@/model/NodeTypes";
+import {NodeType} from "@/config/NodeType";
 import {v4 as uuidv4} from 'uuid';
 import NodesToolbar from "@/components/editor/pages/canvas/toolbars/NodesToolbar";
 import './DragAndDropFlowStyles.css'
@@ -22,6 +22,7 @@ import OptionsToolbar from "@/components/editor/pages/canvas/toolbars/OptionsToo
 import getNodesInformation from "@/config/NodesInformation";
 import {usePlayStore} from "@/stores/editor/PlayStore";
 import OnCanvasNodesToolbar from "@/components/editor/pages/canvas/toolbars/OnCanvasNodesSelector";
+import {connectionRules} from "@/config/ConnectionRules";
 
 const selector = (state: any) => ({
     nodes: state.nodes,
@@ -91,7 +92,7 @@ export default function DragAndDropFlow() {
         [reactFlowInstance.project]
     );
 
-    function addNodeAtPosition(position: {x: number, y: number}, nodeType: NodeTypes, data: any = {}): string {
+    function addNodeAtPosition(position: {x: number, y: number}, nodeType: NodeType, data: any = {}): string {
         let yOffset = 0
         let zIndex = 0
 
@@ -155,7 +156,7 @@ export default function DragAndDropFlow() {
                 }
                 open={isOnCanvasNodeSelectorOpen}
                 position={lastEventPosition}
-                onClose={(nodeType: NodeTypes | null) => {
+                onClose={(nodeType: NodeType | null) => {
                     setIsOnCanvasNodeSelectorOpen(false)
 
                     if (nodeType !== null && connectStartParams.current !== null && connectStartParams.current?.nodeId !== null) {
@@ -164,7 +165,8 @@ export default function DragAndDropFlow() {
                             id,
                             source: connectStartParams.current?.nodeId,
                             sourceHandle: connectStartParams.current?.handleId,
-                            target: id
+                            target: id,
+                            targetHandle: connectionRules.find(rule => rule.nodeType === nodeType).inputRules[0].handleId
                         } as Edge);
                     }
                 }}

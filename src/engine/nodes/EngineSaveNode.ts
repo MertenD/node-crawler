@@ -1,16 +1,16 @@
 import {BasicNode} from "./BasicNode";
-import {NodeTypes} from "@/model/NodeTypes";
+import {NodeType} from "@/config/NodeType";
 import {usePlayStore} from "@/stores/editor/PlayStore";
 import {SaveNodeData} from "@/components/editor/pages/canvas/nodes/SaveNode";
 
 export class EngineSaveNode implements BasicNode {
     id: string;
-    nodeType: NodeTypes
+    nodeType: NodeType
     data: SaveNodeData
 
     constructor(id: string, data: SaveNodeData) {
         this.id = id
-        this.nodeType = NodeTypes.SAVE_NODE
+        this.nodeType = NodeType.SAVE_NODE
         this.data = data
     }
 

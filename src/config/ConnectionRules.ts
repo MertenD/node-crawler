@@ -1,20 +1,14 @@
-import {NodeTypes} from "@/model/NodeTypes";
-
-export enum OutputValueType {
-    NONE = "none",
-    HTML = "html",
-    JSON = "json",
-    TEXT = "text"
-}
+import {NodeType} from "@/config/NodeType";
+import {OutputValueType} from "@/config/OutputValueType";
 
 export const connectionRules: ConnectionRule[] = [
     {
-        nodeType: NodeTypes.START_NODE,
+        nodeType: NodeType.START_NODE,
         outputValueType: OutputValueType.NONE,
         inputRules: []
     },
     {
-        nodeType: NodeTypes.FETCH_WEBSITE_NODE,
+        nodeType: NodeType.FETCH_WEBSITE_NODE,
         outputValueType: OutputValueType.HTML,
         inputRules: [
             {
@@ -27,7 +21,7 @@ export const connectionRules: ConnectionRule[] = [
         ]
     },
     {
-        nodeType: NodeTypes.SAVE_NODE,
+        nodeType: NodeType.SAVE_NODE,
         outputValueType: OutputValueType.NONE,
         inputRules: [
             {
@@ -44,7 +38,7 @@ export const connectionRules: ConnectionRule[] = [
 ] as ConnectionRule[]
 
 export type ConnectionRule = {
-    nodeType: NodeTypes
+    nodeType: NodeType
     outputValueType: OutputValueType
     inputRules: InputRule[]
 }

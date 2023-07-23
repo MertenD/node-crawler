@@ -3,14 +3,14 @@ import DialogTitle from '@mui/material/DialogTitle';
 import Dialog from '@mui/material/Dialog';
 import getNodesInformation from "@/config/NodesInformation";
 import {Typography} from "@mui/material";
-import {NodeTypes} from "@/model/NodeTypes";
+import {NodeType} from "@/config/NodeType";
 import {Node} from "reactflow";
 import {connectionRules} from "@/config/ConnectionRules";
 
 export interface OnCanvasNodesToolbarProps {
     open: boolean;
     position: {x: number, y: number}
-    onClose: (nodeType: NodeTypes | null) => void;
+    onClose: (nodeType: NodeType | null) => void;
     sourceNode: Node | null
 }
 
@@ -24,7 +24,7 @@ export default function OnCanvasNodesToolbar(props: OnCanvasNodesToolbarProps) {
         onClose(null)
     }
 
-    const handleNodeSelected = (nodeType: NodeTypes) => {
+    const handleNodeSelected = (nodeType: NodeType) => {
         onClose(nodeType);
     };
 
@@ -55,7 +55,7 @@ export default function OnCanvasNodesToolbar(props: OnCanvasNodesToolbarProps) {
                 textAlign: "center"
             }}>
                 { getNodesInformation().filter(nodeInfo => {
-                    if (nodeInfo.type === NodeTypes.START_NODE) {
+                    if (nodeInfo.type === NodeType.START_NODE) {
                         return false
                     }
                     if (props.sourceNode === null) {
@@ -76,7 +76,7 @@ export default function OnCanvasNodesToolbar(props: OnCanvasNodesToolbarProps) {
                         <Typography variant="body1">
                             { info.title }
                         </Typography>
-                        <div draggable style={{ ...info.style, marginTop: 10 }} onClick={(event) =>
+                        <div draggable style={{ ...info.style, marginTop: 10 }} onClick={() =>
                             handleNodeSelected(info.type)
                         } />
                     </div>

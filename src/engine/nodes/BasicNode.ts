@@ -1,10 +1,10 @@
 import React from "react";
 import {NodeData} from "@/model/NodeData";
-import {NodeTypes} from "@/model/NodeTypes";
+import {NodeType} from "@/config/NodeType";
 
 export interface BasicNode {
     id: string
-    nodeType: NodeTypes,
+    nodeType: NodeType,
     data: NodeData
     run: () => Promise<React.ReactNode> | void
 }

@@ -5,7 +5,7 @@ import {Button} from "@mui/material";
 import Link from "next/link";
 import useEditorPageState from "@/stores/editor/EditorPageStore";
 
-// TODO Es wäre geil Verbindungsregeln in einer Config Datei setzten zu können. Vielleicht kann ich dort ja auch die NodeTypes und co. setzen. Eine einheitliche Struktur wäre auf jeden Fall schön
+// TODO Es wäre geil Verbindungsregeln in einer Config Datei setzten zu können. Vielleicht kann ich dort ja auch die NodeType und co. setzen. Eine einheitliche Struktur wäre auf jeden Fall schön
 
 export default function Home() {
   return <div style={{

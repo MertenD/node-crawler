@@ -1,16 +1,16 @@
 import {BasicNode} from "./BasicNode";
-import {NodeTypes} from "@/model/NodeTypes";
+import {NodeType} from "@/config/NodeType";
 import {usePlayStore} from "@/stores/editor/PlayStore";
 import {FetchWebsiteNodeData} from "@/components/editor/pages/canvas/nodes/FetchWebsiteNode";
 
 export class EngineFetchWebsiteNode implements BasicNode {
     id: string;
-    nodeType: NodeTypes
+    nodeType: NodeType
     data: FetchWebsiteNodeData
 
     constructor(id: string, data: FetchWebsiteNodeData) {
         this.id = id
-        this.nodeType = NodeTypes.FETCH_WEBSITE_NODE
+        this.nodeType = NodeType.FETCH_WEBSITE_NODE
         this.data = data
     }
 
