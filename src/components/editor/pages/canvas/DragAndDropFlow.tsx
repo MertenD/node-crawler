@@ -3,7 +3,7 @@
 import ReactFlow, {
     Background,
     BackgroundVariant,
-    Controls,
+    Controls, Edge,
     MiniMap,
     Node,
     OnConnectStartParams,
@@ -13,7 +13,7 @@ import ReactFlow, {
 import 'reactflow/dist/style.css';
 import shallow from 'zustand/shallow';
 import {selectedColor, toolbarBackgroundColor, useReactFlowStore} from "@/stores/editor/ReactFlowStore";
-import React, {useCallback, useRef} from "react";
+import React, {useCallback, useRef, useState} from "react";
 import {NodeTypes} from "@/model/NodeTypes";
 import {v4 as uuidv4} from 'uuid';
 import NodesToolbar from "@/components/editor/pages/canvas/toolbars/NodesToolbar";
@@ -21,6 +21,7 @@ import './DragAndDropFlowStyles.css'
 import OptionsToolbar from "@/components/editor/pages/canvas/toolbars/OptionsToolbar";
 import getNodesInformation from "@/config/NodesInformation";
 import {usePlayStore} from "@/stores/editor/PlayStore";
+import OnCanvasNodesToolbar from "@/components/editor/pages/canvas/toolbars/OnCanvasNodesSelector";
 
 const selector = (state: any) => ({
     nodes: state.nodes,
@@ -33,13 +34,16 @@ const selector = (state: any) => ({
 });
 
 export default function DragAndDropFlow() {
-    const { nodes, edges, onNodesChange, onEdgesChange, onConnect, nodeTypes, edgeTypes } = useReactFlowStore(selector, shallow);
+    const { nodes, edges, onNodesChange, onEdgesChange, onConnect, nodeTypes, edgeTypes } = useReactFlowStore(selector, shallow)
 
     const setSelectedNodes = useReactFlowStore((state) => state.setSelectedNodes)
 
-    const connectStartParams = useRef<OnConnectStartParams | null>(null);
-    const reactFlowWrapper = useRef(null);
-    const reactFlowInstance = useReactFlow();
+    const connectStartParams = useRef<OnConnectStartParams | null>(null)
+    const reactFlowWrapper = useRef(null)
+    const reactFlowInstance = useReactFlow()
+
+    const [isOnCanvasNodeSelectorOpen, setIsOnCanvasNodeSelectorOpen] = useState(false)
+    const [lastEventPosition, setLastEventPosition] = useState<{x: number, y: number}>({x: 0, y: 0})
 
     const isProcessRunning = usePlayStore(state => state.isProcessRunning)
 
@@ -72,6 +76,21 @@ export default function DragAndDropFlow() {
         connectStartParams.current = node;
     }, []);
 
+    const onConnectEnd = useCallback(
+        (event: any) => {
+            const targetIsPane = event.target.classList.contains('react-flow__pane');
+            const targetIsChallengeNode = event.target.parentElement.classList.contains("react-flow__node-challengeNode")
+
+            if ((targetIsPane || targetIsChallengeNode) && connectStartParams.current?.handleType === "source" && reactFlowWrapper.current !== null) {
+                // @ts-ignore
+                const { top, left } = reactFlowWrapper.current.getBoundingClientRect();
+                setLastEventPosition({ x: event.clientX - left, y: event.clientY - top })
+                setIsOnCanvasNodeSelectorOpen(true)
+            }
+        },
+        [reactFlowInstance.project]
+    );
+
     function addNodeAtPosition(position: {x: number, y: number}, nodeType: NodeTypes, data: any = {}): string {
         let yOffset = 0
         let zIndex = 0
@@ -100,6 +119,7 @@ export default function DragAndDropFlow() {
                    onEdgesChange={onEdgesChange}
                    onConnect={onConnect}
                    onConnectStart={onConnectStart}
+                   onConnectEnd={onConnectEnd}
                    onDragOver={onDragOver}
                    onDrop={onDrop}
                    nodeTypes={nodeTypes}
@@ -129,6 +149,26 @@ export default function DragAndDropFlow() {
             <MiniMap nodeColor={selectedColor} nodeStrokeWidth={3} zoomable pannable style={{
                 backgroundColor: toolbarBackgroundColor
             }} />
+            <OnCanvasNodesToolbar
+                sourceNode={
+                    useReactFlowStore.getState().getNodeById(connectStartParams.current?.nodeId || "")
+                }
+                open={isOnCanvasNodeSelectorOpen}
+                position={lastEventPosition}
+                onClose={(nodeType: NodeTypes | null) => {
+                    setIsOnCanvasNodeSelectorOpen(false)
+
+                    if (nodeType !== null && connectStartParams.current !== null && connectStartParams.current?.nodeId !== null) {
+                        const id = addNodeAtPosition(reactFlowInstance.project(lastEventPosition), nodeType)
+                        reactFlowInstance.addEdges({
+                            id,
+                            source: connectStartParams.current?.nodeId,
+                            sourceHandle: connectStartParams.current?.handleId,
+                            target: id
+                        } as Edge);
+                    }
+                }}
+            />
         </ReactFlow>
     );
 }
