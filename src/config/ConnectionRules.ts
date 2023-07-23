@@ -54,7 +54,7 @@ export const connectionRules: ConnectionRule[] = [
 
 export type ConnectionRule = {
     nodeType: NodeType
-    outputValueType: OutputValueType
+    outputValueType: OutputValueType | null
     inputRules: InputRule[]
 }
 

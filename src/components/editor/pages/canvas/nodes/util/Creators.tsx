@@ -40,7 +40,9 @@ export function createNodeComponent<DataType>(
             { connectionRules.find(rule => rule.nodeType === nodeType)?.inputRules.map(rule => {
                 return <Handle id={rule.handleId} style={handleStyle(selected)} type="target" position={Position.Left} />
             }) }
-            <Handle id="output" style={handleStyle(selected)} type="source" position={Position.Right}/>
+            { connectionRules.find(rule => rule.nodeType === nodeType)?.outputValueType && (
+                <Handle id="output" style={handleStyle(selected)} type="source" position={Position.Right}/>
+            ) }
             { content(id, selected, data) }
         </div>
     }
