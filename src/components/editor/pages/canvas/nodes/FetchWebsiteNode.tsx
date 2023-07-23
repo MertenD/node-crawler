@@ -10,7 +10,7 @@ import {
     useReactFlowStore
 } from "@/stores/editor/ReactFlowStore";
 import React, {CSSProperties, useEffect, useState} from "react";
-import {setNodeWithUpdatedDataValue} from "@/components/editor/pages/edit/nodes/util/OptionsUtil";
+import {setNodeWithUpdatedDataValue} from "@/components/editor/pages/canvas/nodes/util/OptionsUtil";
 import OptionsContainer from "@/components/form/OptionsContainer";
 import TextInputOption from "@/components/form/TextInputOption";
 import {Badge, Typography} from "@mui/material";

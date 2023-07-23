@@ -1,9 +1,9 @@
 import React, {useEffect, useState} from "react";
 import {useReactFlowStore} from "@/stores/editor/ReactFlowStore";
 import {Node,} from 'reactflow';
-import getNodesInformation from "@/components/editor/pages/edit/nodes/util/NodesInformation";
+import getNodesInformation from "@/components/editor/pages/canvas/nodes/util/NodesInformation";
 import {usePlayStore} from "@/stores/editor/PlayStore";
-import Log from "@/components/editor/pages/play/Log";
+import Log from "@/components/editor/pages/output/Log";
 import OptionsContainer from "@/components/form/OptionsContainer";
 
 export default function OptionsToolbar() {

@@ -1,8 +1,8 @@
 import {NodeTypes} from "@/model/NodeTypes";
 import React, {CSSProperties} from "react";
-import {StartOptions, startShapeStyle} from "@/components/editor/pages/edit/nodes/StartNode";
-import {FetchWebsiteOptions, fetchWebsiteShapeStyle} from "@/components/editor/pages/edit/nodes/FetchWebsiteNode";
-import {SaveOptions, saveShapeStyle} from "@/components/editor/pages/edit/nodes/SaveNode";
+import {StartOptions, startShapeStyle} from "@/components/editor/pages/canvas/nodes/StartNode";
+import {FetchWebsiteOptions, fetchWebsiteShapeStyle} from "@/components/editor/pages/canvas/nodes/FetchWebsiteNode";
+import {SaveOptions, saveShapeStyle} from "@/components/editor/pages/canvas/nodes/SaveNode";
 
 export default function getNodesInformation(
     nodeId: string = ""

@@ -1,8 +1,8 @@
-import Log from "@/components/editor/pages/play/Log";
-import Files from "@/components/editor/pages/play/Files";
+import Log from "@/components/editor/pages/output/Log";
+import Files from "@/components/editor/pages/output/Files";
 import React from "react";
 
-export default function PlayPage() {
+export default function OutputPage() {
 
     return <div style={{
         display: "flex",

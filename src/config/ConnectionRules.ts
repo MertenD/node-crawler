@@ -2,6 +2,8 @@ import {NodeTypes} from "@/model/NodeTypes";
 
 export enum OutputValueType {
     NONE = "none",
+    HTML = "html",
+    JSON = "json",
     TEXT = "text"
 }
 
@@ -13,7 +15,7 @@ export const connectionRules: ConnectionRule[] = [
     },
     {
         nodeType: NodeTypes.FETCH_WEBSITE_NODE,
-        outputValueType: OutputValueType.TEXT,
+        outputValueType: OutputValueType.HTML,
         inputRules: [
             {
                 handleId: "input",
@@ -31,7 +33,9 @@ export const connectionRules: ConnectionRule[] = [
             {
                 handleId: "input",
                 allowedValueTypes: [
-                    OutputValueType.TEXT
+                    OutputValueType.HTML,
+                    OutputValueType.TEXT,
+                    OutputValueType.JSON
                 ],
                 maxConnections: 999
             }

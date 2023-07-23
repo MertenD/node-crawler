@@ -21,7 +21,7 @@ export default function Home() {
       </Typography>
       <Link href="/editor">
           <Button variant="text" onClick={() => {
-            useEditorPageState.getState().onPageChanged("edit")
+            useEditorPageState.getState().onPageChanged("canvas")
           }} style={{ padding: 10 }}>
               <Typography variant="h4">
                   Go to /editor

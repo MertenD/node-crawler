@@ -11,7 +11,7 @@ import {
 import React, {CSSProperties, useEffect, useState} from "react";
 import OptionsContainer from "@/components/form/OptionsContainer";
 import SaveIcon from '@mui/icons-material/Save';
-import {setNodeWithUpdatedDataValue} from "@/components/editor/pages/edit/nodes/util/OptionsUtil";
+import {setNodeWithUpdatedDataValue} from "@/components/editor/pages/canvas/nodes/util/OptionsUtil";
 import {NodeData} from "@/model/NodeData";
 import FileNameInputOption from "@/components/form/FileNameInputOption";
 import TextInputOption from "@/components/form/TextInputOption";

@@ -12,13 +12,13 @@ import {
     OnEdgesChange,
     OnNodesChange
 } from 'reactflow';
-import FetchWebsiteNode from "@/components/editor/pages/edit/nodes/FetchWebsiteNode";
-import DefaultEdge from "@/components/editor/pages/edit/edges/DefaultEdge";
-import SelectedIncomingEdge from "@/components/editor/pages/edit/edges/SelectedIncomingEdge";
-import SelectedOutgoingEdge from "@/components/editor/pages/edit/edges/SelectedOutgoingEdge";
-import BothSelectedEdge from "@/components/editor/pages/edit/edges/BothSelectedEdge";
-import StartNode from "@/components/editor/pages/edit/nodes/StartNode";
-import SaveNode from "@/components/editor/pages/edit/nodes/SaveNode";
+import FetchWebsiteNode from "@/components/editor/pages/canvas/nodes/FetchWebsiteNode";
+import DefaultEdge from "@/components/editor/pages/canvas/edges/DefaultEdge";
+import SelectedIncomingEdge from "@/components/editor/pages/canvas/edges/SelectedIncomingEdge";
+import SelectedOutgoingEdge from "@/components/editor/pages/canvas/edges/SelectedOutgoingEdge";
+import BothSelectedEdge from "@/components/editor/pages/canvas/edges/BothSelectedEdge";
+import StartNode from "@/components/editor/pages/canvas/nodes/StartNode";
+import SaveNode from "@/components/editor/pages/canvas/nodes/SaveNode";
 import {connectionRules} from "@/config/ConnectionRules";
 import useEditorPageState from "@/stores/editor/EditorPageStore";
 
@@ -88,6 +88,12 @@ export const useReactFlowStore = create<ReactFlowState>((set, get) => ({
         const targetNode = get().getNodeById(connection.target)
 
         // Check connectivity rules
+
+        if (connection.source === connection.target) {
+            openWarningSnackBar("You can't connect a node to itself")
+            return
+        }
+
         const pipelineValueType = connectionRules.find(rule => rule.nodeType === sourceNode.type)?.outputValueType
         const isConnectionAllowed = connectionRules.find(rule =>
             rule.nodeType === targetNode.type
@@ -95,22 +101,23 @@ export const useReactFlowStore = create<ReactFlowState>((set, get) => ({
             return rule.handleId === connection.targetHandle
         })?.allowedValueTypes?.includes(pipelineValueType)
 
+        if (!isConnectionAllowed) {
+            openWarningSnackBar(`You can't connect a "${
+                connectionRules.find(rule => rule.nodeType === sourceNode.type)?.outputValueType
+            }" output to a "${
+                connectionRules.find(rule => rule.nodeType === targetNode.type)?.inputRules.find(rule => 
+                    rule.handleId === connection.targetHandle
+                ).allowedValueTypes.join("/")
+            }" input`)
+            return
+        }
+
         const existingConnectionsToTarget = get().edges.filter(edge => edge.target === connection.target && edge.targetHandle === connection.targetHandle).length
         const isMaxConnectionsReached = existingConnectionsToTarget >= connectionRules.find(rule =>
             rule.nodeType === targetNode.type
         )?.inputRules.find(rule => {
             return rule.handleId === connection.targetHandle
         }).maxConnections
-
-        if (connection.source === connection.target) {
-            openWarningSnackBar("You can't connect a node to itself")
-            return
-        }
-
-        if (!isConnectionAllowed) {
-            openWarningSnackBar("This connection is not allowed")
-            return
-        }
 
         if (isMaxConnectionsReached) {
             openWarningSnackBar("The max amount of inputs for this node is reached")

@@ -15,9 +15,9 @@ import {NodeData} from "@/model/NodeData";
 import {BasicNode} from "@/engine/nodes/BasicNode";
 import {EngineStartNode} from "@/engine/nodes/EngineStartNode";
 import {EngineFetchWebsiteNode} from "@/engine/nodes/EngineFetchWebsiteNode";
-import {FetchWebsiteNodeData} from "@/components/editor/pages/edit/nodes/FetchWebsiteNode";
+import {FetchWebsiteNodeData} from "@/components/editor/pages/canvas/nodes/FetchWebsiteNode";
 import {EngineSaveNode} from "@/engine/nodes/EngineSaveNode";
-import {SaveNodeData} from "@/components/editor/pages/edit/nodes/SaveNode";
+import {SaveNodeData} from "@/components/editor/pages/canvas/nodes/SaveNode";
 
 export function getNodeMap(nodes: Node[], edges: Edge[]): Map<NodeMapKey, NodeMapValue> {
 

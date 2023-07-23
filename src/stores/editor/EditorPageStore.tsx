@@ -1,8 +1,8 @@
 import React from "react";
-import DragAndDropFlow from "@/components/editor/pages/edit/DragAndDropFlow";
+import DragAndDropFlow from "@/components/editor/pages/canvas/DragAndDropFlow";
 import create from "zustand";
 import EditIcon from '@mui/icons-material/Edit';
-import PlayPage from "@/components/editor/pages/play/PlayPage";
+import OutputPage from "@/components/editor/pages/output/OutputPage";
 import OutputIcon from '@mui/icons-material/Output';
 
 export type EditorPageState = {
@@ -20,26 +20,22 @@ export type EditorPageState = {
 
 export const useEditorPageState = create<EditorPageState>((set, get) => ({
     pages: new Map<string, {label: string, child: React.ReactNode, icon?: React.ReactNode }>([
-        ["edit", {
+        ["canvas", {
             label: "Canvas",
             child: <DragAndDropFlow />,
             icon: <EditIcon />
         }],
-        ["play", {
+        ["output", {
             label: "Output",
-            child: <PlayPage />,
+            child: <OutputPage />,
             icon: <OutputIcon />
         }]
     ]),
-    selectedPage: "edit",
+    selectedPage: "canvas",
     onPageChanged: (newPage: string) => {
         set({
             selectedPage: newPage
         })
-        /*if (usePlayStore.getState().isProcessRunning) {
-            usePlayStore.getState().writeToLog("Stopped crawler due to a page switch")
-        }
-        usePlayStore.getState().stop()*/
     },
     getPage: (pageId: string) => {
         return get().pages.get(pageId)

@@ -1,7 +1,7 @@
 import {BasicNode} from "./BasicNode";
 import {NodeTypes} from "@/model/NodeTypes";
 import {usePlayStore} from "@/stores/editor/PlayStore";
-import {StartNodeData} from "@/components/editor/pages/edit/nodes/StartNode";
+import {StartNodeData} from "@/components/editor/pages/canvas/nodes/StartNode";
 
 export class EngineStartNode implements BasicNode {
     id: string;
