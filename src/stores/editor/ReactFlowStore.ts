@@ -12,15 +12,14 @@ import {
     OnEdgesChange,
     OnNodesChange
 } from 'reactflow';
-import FetchWebsiteNode from "@/components/editor/pages/canvas/nodes/FetchWebsiteNode";
 import DefaultEdge from "@/components/editor/pages/canvas/edges/DefaultEdge";
 import SelectedIncomingEdge from "@/components/editor/pages/canvas/edges/SelectedIncomingEdge";
 import SelectedOutgoingEdge from "@/components/editor/pages/canvas/edges/SelectedOutgoingEdge";
 import BothSelectedEdge from "@/components/editor/pages/canvas/edges/BothSelectedEdge";
-import StartNode from "@/components/editor/pages/canvas/nodes/StartNode";
-import SaveNode from "@/components/editor/pages/canvas/nodes/SaveNode";
 import {connectionRules} from "@/config/ConnectionRules";
 import useEditorPageState from "@/stores/editor/EditorPageStore";
+import getNodesInformation from "@/config/NodesInformation";
+import React from "react";
 
 export const selectedColor = "#F98E35"
 export const selectedColorHover = "#AE6325"
@@ -61,11 +60,10 @@ export const useReactFlowStore = create<ReactFlowState>((set, get) => ({
     nodes: [],
     selectedNodes: [],
     edges: [],
-    nodeTypes: {
-        fetchWebsiteNode: FetchWebsiteNode,
-        startNode: StartNode,
-        saveNode: SaveNode
-    },
+    nodeTypes: getNodesInformation().reduce<Record<string, React.ReactNode>>((acc, info) => {
+        acc[info.type] = info.node
+        return acc
+    }, {}),
     edgeTypes: {
         defaultEdge: DefaultEdge,
         selectedIncomingEdge: SelectedIncomingEdge,
