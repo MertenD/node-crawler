@@ -7,6 +7,7 @@ import {onSave} from "@/util/IOUtil";
 
 export interface LogProps {
     hasPadding?: boolean
+    hasTitle?: boolean
 }
 
 export default function Log(props: LogProps) {
@@ -54,6 +55,9 @@ export default function Log(props: LogProps) {
         padding: props.hasPadding === undefined || props.hasPadding ? 20 : 0,
         overflowY: "hidden"
     }}>
+        { (props.hasTitle === undefined || props.hasTitle) && <Typography variant={"h5"} style={{ marginBottom: 30 }}>
+            Log
+        </Typography> }
         <div ref={logRef} style={{
             display: "flex",
             flexDirection: "column",

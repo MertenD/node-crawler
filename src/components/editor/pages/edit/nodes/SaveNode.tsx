@@ -76,7 +76,7 @@ export function SaveOptions(props: {id: string}) {
                 }}
             />
             <TextInputOption
-                label={"Separator (if there are multiple inputs)"}
+                label={"Content separator (For multiple inputs)"}
                 value={localNode.data.separator}
                 onChange={(event) => {
                     setNodeWithUpdatedDataValue(setLocalNode, "separator", event.target.value)

@@ -45,7 +45,9 @@ export default function OptionsToolbar() {
     return (
         <>
             { !isLogOpen && options }
-            { isLogOpen && <OptionsContainer title={"Log"} onClose={() => setIsLogOpen(false)}><Log hasPadding={false} /></OptionsContainer> }
+            { isLogOpen && <OptionsContainer title={"Log"} onClose={() => setIsLogOpen(false)}>
+                <Log hasPadding={false} hasTitle={false} />
+            </OptionsContainer> }
         </>
     )
 }
