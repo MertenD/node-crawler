@@ -41,6 +41,8 @@ export const handleStyle = (isNodeSelected) => {
     }
 }
 
+// TODO Keine gleichen Connections erlauben
+
 export type ReactFlowState = {
     nodes: Node[];
     selectedNodes: Node[]
@@ -50,6 +52,7 @@ export type ReactFlowState = {
     onConnect: OnConnect;
     updateNodeData: <NodeData>(nodeId: string, data: NodeData) => void;
     getNodeById: (nodeId: string) => Node | null;
+    setNodeSelected: (nodeId) => void
     setSelectedNodes: () => Node[]
     updateEdgesGradient: () => void
 }
@@ -139,6 +142,15 @@ export const useReactFlowStore = create<ReactFlowState>((set, get) => ({
             }
         })
         return resultNode;
+    },
+    setNodeSelected: (nodeId: string | null) => {
+        set({
+            nodes: get().nodes.map(node => {
+                node.selected =  nodeId !== null && node.id === nodeId
+                return node
+            })
+        })
+        get().setSelectedNodes()
     },
     setSelectedNodes: () => {
         set({

@@ -1,11 +1,18 @@
 import {usePlayStore} from "@/stores/editor/PlayStore";
-import {Typography} from "@mui/material";
+import {Button, Typography} from "@mui/material";
 import {defaultEdgeColor, toolbarBackgroundColor} from "@/stores/editor/ReactFlowStore";
-import {useEffect, useRef} from "react";
+import React, {useEffect, useRef} from "react";
+import SaveIcon from "@mui/icons-material/Save";
+import {onSave} from "@/util/IOUtil";
 
-export default function Log() {
+export interface LogProps {
+    hasPadding?: boolean
+}
+
+export default function Log(props: LogProps) {
 
     const log = usePlayStore(state => state.log)
+    const isProcessRunning = usePlayStore(state => state.isProcessRunning)
 
     const logRef = useRef<HTMLDivElement | null>(null);
 
@@ -36,26 +43,45 @@ export default function Log() {
         }
     }
 
-    return <div ref={logRef} style={{
+    return <div style={{
         display: "flex",
         flexDirection: "column",
         justifyContent: "flex-start",
-        alignItems: "left",
         backgroundColor: toolbarBackgroundColor,
         borderRadius: 10,
-        padding: 20,
-        overflowY: "auto",
         height: "100%",
         width: "100%",
-        gap: 10,
+        padding: props.hasPadding === undefined || props.hasPadding ? 20 : 0,
+        overflowY: "hidden"
     }}>
-        { log.map((message: string, index) =>
-            <Typography key={"log" + index} variant="body1" style={{ wordWrap: "break-word" }}>
-                <span style={{ fontWeight: "bold", color: defaultEdgeColor }}>
-                    { message.substring(0, 19) }:
-                </span>
-                { message.substring(20) }
-            </Typography>
-        ) }
+        <div ref={logRef} style={{
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "flex-start",
+            alignItems: "left",
+            overflowY: "auto",
+            gap: 10,
+            marginBottom: 20
+        }}>
+            { log.map((message: string, index) =>
+                <Typography key={"log" + index} variant="body1" style={{ wordWrap: "break-word" }}>
+                    <span style={{ fontWeight: "bold", color: defaultEdgeColor }}>
+                        { message.substring(0, 19) }:
+                    </span>
+                    { message.substring(20) }
+                </Typography>
+            ) }
+        </div>
+        <Button
+            endIcon={<SaveIcon />}
+            disabled={isProcessRunning || log.length === 0}
+            variant="contained"
+            onClick={() => {
+                onSave(`log.txt`, JSON.stringify(log, null, 2), `downloadFile-log`)
+            }}
+        >
+            <a id={`downloadFile-log`} style={{ display: "none"}} />
+            Download Log
+        </Button>
     </div>
 }

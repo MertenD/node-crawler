@@ -5,6 +5,7 @@ export default function Engine() {
 
     const [nodeContent, setNodeContent] = useState<React.ReactNode | null>(null);
     const currentNode = usePlayStore((state) => state.currentNode);
+    const isProcessRunning = usePlayStore(state => state.isProcessRunning)
 
     useEffect(() => {
         const runCurrentNode = async () => {
@@ -14,7 +15,9 @@ export default function Engine() {
             }
         };
 
-        runCurrentNode();
+        if (isProcessRunning) {
+            runCurrentNode();
+        }
     }, [currentNode]);
 
     return <div>{nodeContent || <></>}</div>;

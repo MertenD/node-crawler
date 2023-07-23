@@ -10,6 +10,9 @@ import {useReactFlow} from "reactflow";
 import PageNavigation from "@/components/editor/headerbar/PageNavigation";
 import HomeIcon from '@mui/icons-material/Home';
 import Link from "next/link";
+import PlayCircleFilledIcon from '@mui/icons-material/PlayCircleFilled';
+import {usePlayStore} from "@/stores/editor/PlayStore";
+import StopCircleIcon from '@mui/icons-material/StopCircle';
 
 export default function HeaderBar() {
 
@@ -17,6 +20,9 @@ export default function HeaderBar() {
     const inputFile = useRef<HTMLInputElement | null>(null);
 
     const { nodes, edges } = useReactFlowStore();
+    const setup = usePlayStore(state => state.setup)
+    const stop = usePlayStore(state => state.stop)
+    const isProcessRunning = usePlayStore(state => state.isProcessRunning)
 
     return <div style={{
         height: `${TOOLBAR_HEIGHT}vh`,
@@ -60,6 +66,21 @@ export default function HeaderBar() {
                     <input accept={".ncp"} type='file' id='uploadCrawlerProject' ref={inputFile} hidden onChange={(event) => {
                         loadCrawlerProject(event, reactFlowInstance)
                     }}/>
+                </IconButton>
+            </Tooltip>
+            <Tooltip title="Run crawler" >
+                <IconButton disabled={isProcessRunning} onClick={() =>{
+                    setup()
+                }}>
+                    <PlayCircleFilledIcon />
+                </IconButton>
+            </Tooltip>
+            <Tooltip title="Stop crawler" >
+                <IconButton disabled={!isProcessRunning} onClick={() =>{
+                    usePlayStore.getState().writeToLog("Crawler was stopped manually")
+                    stop()
+                }}>
+                    <StopCircleIcon />
                 </IconButton>
             </Tooltip>
         </div>

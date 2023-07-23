@@ -77,18 +77,22 @@ export const usePlayStore = create<PlayStoreState>((set, get) => ({
     },
     stop: () => {
         if (get().isProcessRunning) {
-            get().writeToLog("Crawler stopped")
+            get().writeToLog('Crawler stopped. You can see the created outputs in the "Output"-tab')
             set({
                 nodeMap: new Map(),
                 currentNode: null,
                 isProcessRunning: false
             })
+            useReactFlowStore.getState().setNodeSelected(null)
         }
     },
     setCurrentNode: (newNode: NodeMapValue | null) => {
         set({
             currentNode: newNode
         })
+        if (newNode !== null) {
+            useReactFlowStore.getState().setNodeSelected(newNode.node.id)
+        }
     },
     getFirstNode: (): NodeMapValue | null => {
         const firstNode = Array.from(get().nodeMap.values()).find(({node}) =>
@@ -163,6 +167,7 @@ export const usePlayStore = create<PlayStoreState>((set, get) => ({
         set({
             log: [...get().log, `${getFormattedTimestamp()}: ${message}`]
         })
+        console.log("log", message)
     },
     addOutgoingPipelines: (from: string, value: any = null) => {
         set({

@@ -13,13 +13,14 @@ import ReactFlow, {
 import 'reactflow/dist/style.css';
 import shallow from 'zustand/shallow';
 import {selectedColor, toolbarBackgroundColor, useReactFlowStore} from "@/stores/editor/ReactFlowStore";
-import React, {useCallback, useRef, useState} from "react";
+import React, {useCallback, useRef} from "react";
 import {NodeTypes} from "@/model/NodeTypes";
 import {v4 as uuidv4} from 'uuid';
 import NodesToolbar from "@/components/editor/pages/edit/toolbars/NodesToolbar";
 import './DragAndDropFlowStyles.css'
 import OptionsToolbar from "@/components/editor/pages/edit/toolbars/OptionsToolbar";
 import getNodesInformation from "@/components/editor/pages/edit/nodes/util/NodesInformation";
+import {usePlayStore} from "@/stores/editor/PlayStore";
 
 const selector = (state: any) => ({
     nodes: state.nodes,
@@ -39,6 +40,8 @@ export default function DragAndDropFlow() {
     const connectStartParams = useRef<OnConnectStartParams | null>(null);
     const reactFlowWrapper = useRef(null);
     const reactFlowInstance = useReactFlow();
+
+    const isProcessRunning = usePlayStore(state => state.isProcessRunning)
 
     const onDragOver = useCallback((event: any) => {
         event.preventDefault();
@@ -108,6 +111,12 @@ export default function DragAndDropFlow() {
                    }}
                    deleteKeyCode={["Backspace", "Delete"]}
                    onSelectionChange={setSelectedNodes}
+                   edgesUpdatable={!isProcessRunning}
+                   edgesFocusable={!isProcessRunning}
+                   nodesDraggable={!isProcessRunning}
+                   nodesConnectable={!isProcessRunning}
+                   nodesFocusable={!isProcessRunning}
+                   elementsSelectable={!isProcessRunning}
         >
             <Controls />
             <Background variant={BackgroundVariant.Dots} />

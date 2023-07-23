@@ -32,7 +32,7 @@ export class EngineFetchWebsiteNode implements BasicNode {
             })
             .then(data => {
                 usePlayStore.getState().addOutgoingPipelines(this.id, data)
-                usePlayStore.getState().writeToLog(`Website content (First 1000 characters): ${data.substring(0, 999)}`);
+                usePlayStore.getState().writeToLog(`Website content (First 500 characters): ${data.substring(0, 499)}`);
                 usePlayStore.getState().nextNode();
             })
             .catch(error => {
