@@ -35,8 +35,9 @@ export type PlayStoreState = {
     setVariable: (name: string, value: any) => void
     addFile: (name: string, extension: string, content: string) => void
     writeToLog: (message: string) => void
-    addPipeline: (from: string, value: any) => void
-    getInput: (nodeId: string, handleId: string) => string[]
+    addOutgoingPipelines: (from: string, value: any) => void
+    removeIngoingPipelines: (to: string) => void
+    getInput: (nodeId: string, handleId: string) => string[] | undefined
     setIsProcessRunning: (newValue: boolean) => void
 }
 
@@ -68,7 +69,6 @@ export const usePlayStore = create<PlayStoreState>((set, get) => ({
 
         const firstNode = get().getFirstNode()
         if (firstNode !== null) {
-            console.log("First node is", firstNode)
             get().setCurrentNode(firstNode)
         } else {
             get().writeToLog("Error: There is no start node")
@@ -96,21 +96,41 @@ export const usePlayStore = create<PlayStoreState>((set, get) => ({
         );
         return firstNode as NodeMapValue || null
     },
-    nextNode: (nextNodeKey: NextNodeKey = NextNodeKey.ONLY) => {
+    nextNode: (nextNodeKey: NextNodeKey = NextNodeKey.ALWAYS) => {
         if (!get().currentNode || get().currentNode?.next === null) {
-            get().stop()
+            get().backtrackToNextPossibleNode()
             return
         }
 
+        // Remove ingoing pipelines from current node before going to the next one
+        get().removeIngoingPipelines(get().currentNode.node.id)
+        // Adding empty outgoing pipeline if there is none already
+        if (!get().pipelines.find(pipeline => pipeline.from === get().currentNode.node.id)) {
+            get().addOutgoingPipelines(get().currentNode.node.id)
+        }
+
         const nextNode = get().currentNode?.next
-        if (nextNode !== null && nextNode !== undefined) {
-            const newNode = get().nodeMap.get(nextNode[nextNodeKey]?.nodeId)
+        if (nextNode !== null && nextNode && nextNode[nextNodeKey] && nextNode[nextNodeKey][0]) {
+            const newNode = get().nodeMap.get(nextNode[nextNodeKey][0].nodeId)
             if (newNode) {
                 get().setCurrentNode(newNode)
             } else {
-                get().stop()
+                get().backtrackToNextPossibleNode()
             }
         } else {
+            get().backtrackToNextPossibleNode()
+        }
+    },
+    backtrackToNextPossibleNode: () => {
+        const nextNodeId = get().pipelines.find(pipeline =>
+            pipeline.to !== get().currentNode.node.id
+        )?.to
+        if (nextNodeId) {
+
+            get().writeToLog(`Going back to last node with all inputs available, which is a "${get().getNode(nextNodeId).node.nodeType}"`)
+            get().setCurrentNode(get().getNode(nextNodeId))
+        } else {
+            get().writeToLog("There are no more nodes left")
             get().stop()
         }
     },
@@ -144,9 +164,9 @@ export const usePlayStore = create<PlayStoreState>((set, get) => ({
             log: [...get().log, `${getFormattedTimestamp()}: ${message}`]
         })
     },
-    addPipeline: (from: string, value: any) => {
+    addOutgoingPipelines: (from: string, value: any = null) => {
         set({
-            pipelines: [...get().pipelines, Object.values(get().getNode(from).next).map(to => {
+            pipelines: [...get().pipelines, Object.values(get().getNode(from).next).flat().map(to => {
                 return {
                     from: from,
                     to: to.nodeId,
@@ -156,16 +176,39 @@ export const usePlayStore = create<PlayStoreState>((set, get) => ({
             })].flat()
         })
     },
-    getInput: (nodeId: string, handleId: string): string[] => {
+    removeIngoingPipelines: (to: string) => {
+        set({
+            pipelines: get().pipelines.filter(pipeline =>
+                pipeline.to !== to
+            )
+        })
+    },
+    getInput: (nodeId: string, handleId: string): string[] | undefined => {
+        // Get input values from the pipelines of the targetHandle
         const input =  get().pipelines.filter(pipeline => {
             return pipeline.to === nodeId && pipeline.toHandleId === handleId
         }).map(pipeline => pipeline.value)
 
-        if (input.length > 0 && input.every(value => value !== undefined)) {
+        // Get amount of connected pipelines to the targetHandle
+        const ingoingConnections = Array.from(get().nodeMap.values()).filter((value: NodeMapValue) => {
+            if (value.next !== null) {
+                return Object.values(value.next).some(nextValue => nextValue.map(n => n.nodeId).includes(nodeId));
+            }
+            return false;
+        }).length;
+
+        // If the input array contains exactly the required amount of inputs and if none of those inputs are undefined
+        // Then everything is okay and the value will be returned
+        if (input.length === ingoingConnections && input.every(value => value !== undefined)) {
             return input
         } else {
-            get().writeToLog(`Error: One ore more inputs of the node "${nodeId}" are undefined`)
-            get().stop()
+
+            // If any input value is missing or is undefined the crawler will backtrack to the next node that
+            // has all input values available
+
+            get().writeToLog(`One ore more inputs of the current node "${get().getNode(nodeId).node.nodeType}" are undefined`)
+            get().backtrackToNextPossibleNode()
+            return undefined
         }
     }
 }))

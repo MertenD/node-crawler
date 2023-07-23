@@ -33,8 +33,6 @@ export function loadCrawlerProject(changeEvent: any, reactFlowInstance: ReactFlo
                 return { ...edge, source: newIdPairs[edge.source], target: newIdPairs[edge.target]}
             })
 
-            console.log(newNodes, newEdges)
-
             reactFlowInstance.setNodes(newNodes)
             reactFlowInstance.setEdges(newEdges)
         }

@@ -59,7 +59,7 @@ export default function Files() {
             gap: 10,
         }}>
             { files.map(({name, extension, content}, index) =>
-                <div style={{
+                <div key={"filesdiv" + index} style={{
                     display: "flex",
                     flexDirection: "row",
                     justifyContent: "flex-start",

@@ -31,22 +31,26 @@ export function getNodeMap(nodes: Node[], edges: Edge[]): Map<NodeMapKey, NodeMa
         }
         nodeMap.set(id, {
             node: basicNode,
-            next: edges.filter((edge: Edge) => edge.source === id).reduce<Record<NextNodeKey, {nodeId: NodeMapKey, targetHandleId: string}>>((accumulator, edge: Edge) => {
+            next: edges.filter((edge: Edge) => edge.source === id).reduce<Record<NextNodeKey, {nodeId: NodeMapKey, targetHandleId: string}[]>>((accumulator, edge: Edge) => {
                 // sourceHandle is "True" or "False" when dealing with gateway nodes
 
                 const newAccumulatorValue = {nodeId: edge.target, targetHandleId: edge.targetHandle} as {nodeId: NodeMapKey, targetHandleId: string}
 
                 if (type === NodeTypes.GATEWAY_NODE && edge.sourceHandle !== null) {
                     if (edge.sourceHandle === "True") {
-                        accumulator[NextNodeKey.TRUE] = newAccumulatorValue
+                        accumulator[NextNodeKey.TRUE] = [...accumulator[NextNodeKey.TRUE], newAccumulatorValue]
                     } else {
-                        accumulator[NextNodeKey.FALSE] = newAccumulatorValue
+                        accumulator[NextNodeKey.FALSE] = [...accumulator[NextNodeKey.FALSE], newAccumulatorValue]
                     }
                 } else {
-                    accumulator[NextNodeKey.ONLY] = newAccumulatorValue
+                    accumulator[NextNodeKey.ALWAYS] = [...accumulator[NextNodeKey.ALWAYS], newAccumulatorValue]
                 }
                 return accumulator
-            }, {} as Record<NextNodeKey, {nodeId: NodeMapKey, targetHandleId: string}>) || null
+            }, {
+                [NextNodeKey.TRUE]: [],
+                [NextNodeKey.FALSE]: [],
+                [NextNodeKey.ALWAYS]: []
+            } as Record<NextNodeKey, {nodeId: NodeMapKey, targetHandleId: string}[]>) || null
         })
     })
 

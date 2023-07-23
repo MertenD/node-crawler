@@ -14,10 +14,12 @@ import SaveIcon from '@mui/icons-material/Save';
 import {setNodeWithUpdatedDataValue} from "@/components/editor/pages/edit/nodes/util/OptionsUtil";
 import {NodeData} from "@/model/NodeData";
 import FileNameInputOption from "@/components/form/FileNameInputOption";
+import TextInputOption from "@/components/form/TextInputOption";
 
 export interface SaveNodeData extends NodeData {
     fileName: string
     extension: string
+    separator: string
 }
 
 export default function SaveNode({ id, selected, data}: NodeProps<SaveNodeData>) {
@@ -71,6 +73,13 @@ export function SaveOptions(props: {id: string}) {
                 extension={localNode.data.extension}
                 onExtensionChange={(event) => {
                     setNodeWithUpdatedDataValue(setLocalNode, "extension", event.target.value)
+                }}
+            />
+            <TextInputOption
+                label={"Separator (if there are multiple inputs)"}
+                value={localNode.data.separator}
+                onChange={(event) => {
+                    setNodeWithUpdatedDataValue(setLocalNode, "separator", event.target.value)
                 }}
             />
         </OptionsContainer>

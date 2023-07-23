@@ -18,8 +18,10 @@ export class EngineSaveNode implements BasicNode {
 
         const input = usePlayStore.getState().getInput(this.id, "input")
 
-        usePlayStore.getState().writeToLog(`Saving file as "${this.data.fileName}"`)
-        usePlayStore.getState().addFile(this.data.fileName, this.data.extension, input.join(", "))
-        usePlayStore.getState().nextNode()
+        if (input) {
+            usePlayStore.getState().writeToLog(`Saving file as "${this.data.fileName}"`)
+            usePlayStore.getState().addFile(this.data.fileName, this.data.extension, input.join(this.data.separator))
+            usePlayStore.getState().nextNode()
+        }
     }
 }

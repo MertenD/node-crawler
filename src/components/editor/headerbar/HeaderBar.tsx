@@ -59,7 +59,6 @@ export default function HeaderBar() {
                     <UploadIcon />
                     <input accept={".ncp"} type='file' id='uploadCrawlerProject' ref={inputFile} hidden onChange={(event) => {
                         loadCrawlerProject(event, reactFlowInstance)
-                        console.log("loaded")
                     }}/>
                 </IconButton>
             </Tooltip>
