@@ -53,7 +53,7 @@ export const usePlayStore = create<PlayStoreState>((set, get) => ({
         set({
             nodeMap: new Map(),
             currentNode: null,
-            variables: null,
+            variables: {},
             files: [],
             log: [],
             pipelines: [],
