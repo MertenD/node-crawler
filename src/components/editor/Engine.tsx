@@ -11,7 +11,12 @@ export default function Engine() {
         const runCurrentNode = async () => {
             if (currentNode !== null) {
                 const content = await currentNode.node.run();
-                setNodeContent(content);
+                if (content !== undefined) {
+                    setNodeContent(content);
+                } else {
+                    // You could set a default value here if you want
+                    setNodeContent(null);
+                }
             }
         };
 
