@@ -2,6 +2,7 @@
 
 import {createTheme, ThemeProvider} from "@mui/material/styles";
 import {disabledColor, selectedColor, selectedColorHover, toolbarBackgroundColor} from "@/stores/editor/ReactFlowStore";
+import {ReactNode} from "react";
 
 const appTheme = createTheme({
     palette: {
@@ -36,7 +37,11 @@ const appTheme = createTheme({
     }
 });
 
-export default function AppTheme({ children }) {
+interface AppThemeProps {
+    children: ReactNode;
+}
+
+export default function AppTheme({ children }: AppThemeProps) {
     return<ThemeProvider theme={appTheme} >
         { children }
     </ThemeProvider>

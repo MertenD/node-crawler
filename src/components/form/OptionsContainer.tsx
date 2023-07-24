@@ -1,9 +1,9 @@
 import React from "react"
 import {IconButton, Tooltip, Typography} from "@mui/material";
 import CloseIcon from '@mui/icons-material/Close';
-import {CANVAS_HEIGHT} from "@/app/editor/page";
 import useReactFlowStore from "@/stores/editor/ReactFlowStore";
 import {usePlayStore} from "@/stores/editor/PlayStore";
+import {CANVAS_HEIGHT} from "@/components/editor/headerbar/HeaderBar";
 
 export interface OptionsContainerProps {
     title: string
