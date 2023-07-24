@@ -39,7 +39,15 @@ export const useEditorPageState = create<EditorPageState>((set, get) => ({
         })
     },
     getPage: (pageId: string) => {
-        return get().pages.get(pageId)
+        const page = get().pages.get(pageId);
+        if (!page) {
+            // Return a default value if no page is found
+            return {
+                label: '',
+                child: <></>,
+            };
+        }
+        return page;
     },
     isSnackBarOpen: false,
     setIsSnackBarOpen: (isOpen: boolean) => {
