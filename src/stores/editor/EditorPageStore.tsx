@@ -4,6 +4,7 @@ import create from "zustand";
 import EditIcon from '@mui/icons-material/Edit';
 import OutputPage from "@/components/editor/pages/output/OutputPage";
 import OutputIcon from '@mui/icons-material/Output';
+import {AlertColor} from "@mui/material";
 
 export type EditorPageState = {
     pages: Map<string, {label: string, child: React.ReactNode, icon?: React.ReactNode }>
@@ -12,8 +13,8 @@ export type EditorPageState = {
     getPage: (pageId: string) => {label: string, child: React.ReactNode, icon?: React.ReactNode }
     isSnackBarOpen: boolean,
     setIsSnackBarOpen: (isOpen: boolean) => void
-    snackBarSeverity: string,
-    setSnackBarSeverity: (severity: string) => void
+    snackBarSeverity: AlertColor,
+    setSnackBarSeverity: (severity: AlertColor) => void
     snackBarText: string,
     setSnackBarText: (text: string) => void
 }
@@ -47,7 +48,7 @@ export const useEditorPageState = create<EditorPageState>((set, get) => ({
         })
     },
     snackBarSeverity: "warning",
-    setSnackBarSeverity: (severity: string) => {
+    setSnackBarSeverity: (severity: AlertColor) => {
         set({
             snackBarSeverity: severity
         })
