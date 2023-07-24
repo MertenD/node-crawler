@@ -7,7 +7,7 @@
 
 Node-Crawler is a highly customizable, Node-based web application for creating web crawlers and further processing and transforming the retrieved data. Users can build tailor-made web crawlers and manipulate and transform the collected data as needed. The output data format can be set to a wide range of formats including JSON, CSV, and various database formats.
 
-The front end is developed using [Next.js](https://nextjs.org/), and the editor is based on the [React Flow](https://reactflow.dev/) library, which provides a framework for creating node-based editors.
+The front end is developed using [Next.js](https://nextjs.org/) and the [React Flow](https://reactflow.dev/) library provides a framework for creating the node-based editor.
 
 ![Overview](public/node-crawler-overview-canvas.png)
 ![Overview](public/node-crawler-overview-output.png)
