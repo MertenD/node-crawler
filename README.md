@@ -45,7 +45,7 @@ npm run dev
 
 Now you should be able to see the web application on `http://localhost:3000` in your browser.
 
-## Creating a New Node
+## Implementing a New Node
 
 Follow these steps when you need to create a new Node:
 
