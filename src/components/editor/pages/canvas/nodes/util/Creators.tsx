@@ -74,7 +74,9 @@ export function createOptionsComponent<DataType>(
                 id={props.id}
                 data={localNode.data}
                 onDataUpdated={(attributeName, newValue) => {
-                    setNodeWithUpdatedDataValue(setLocalNode, attributeName, newValue)
+                    if(typeof attributeName === "string") {
+                        setNodeWithUpdatedDataValue(setLocalNode, attributeName, newValue)
+                    }
                 }}
             />
         </OptionsContainer>
