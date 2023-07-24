@@ -10,13 +10,8 @@ export default function Engine() {
     useEffect(() => {
         const runCurrentNode = async () => {
             if (currentNode !== null) {
-                const content = await currentNode.node.run();
-                if (content !== undefined) {
-                    setNodeContent(content);
-                } else {
-                    // You could set a default value here if you want
-                    setNodeContent(null);
-                }
+                const content = await currentNode.node.run() || null;
+                setNodeContent(content);
             }
         };
 
