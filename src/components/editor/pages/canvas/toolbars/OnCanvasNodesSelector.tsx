@@ -66,11 +66,11 @@ export default function OnCanvasNodesToolbar(props: OnCanvasNodesToolbarProps) {
                     const currentNodeInputRules = connectionRules.find(rule => rule.nodeType === nodeInfo.type)?.inputRules
 
                     // TODO Nochmal weiter überlegen, wie ich das handhabe, sobald ich einen node mit mehr als einem Eingang hab
-                    if ((currentNodeInputRules?.length || 0) > 1) {
+                    if ((currentNodeInputRules?.length || 0) > 1 || !sourceOutputValue) {
                         return false
                     }
 
-                    return (currentNodeInputRules?.[0]?.allowedValueTypes ?? []).includes(sourceOutputValue ?? "")
+                    return (currentNodeInputRules?.[0]?.allowedValueTypes ?? []).includes(sourceOutputValue);
                 }).map(info => (
                     <Tooltip title={info.title}>
                         <div draggable style={{
