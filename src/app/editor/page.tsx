@@ -2,13 +2,10 @@
 
 import {ReactFlowProvider} from "reactflow";
 import React from "react";
-import HeaderBar from "@/components/editor/headerbar/HeaderBar";
+import HeaderBar, {CANVAS_HEIGHT} from "@/components/editor/headerbar/HeaderBar";
 import useEditorPageState from "@/stores/editor/EditorPageStore";
 import {Alert, Snackbar} from "@mui/material";
 import Engine from "@/components/editor/Engine";
-
-export const TOOLBAR_HEIGHT = 8
-export const CANVAS_HEIGHT = 100 - TOOLBAR_HEIGHT
 
 export default function Canvas() {
 

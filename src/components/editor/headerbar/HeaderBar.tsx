@@ -1,6 +1,5 @@
 import {toolbarBackgroundColor, useReactFlowStore} from "@/stores/editor/ReactFlowStore";
 import React, {useRef} from "react";
-import {TOOLBAR_HEIGHT} from "@/app/editor/page";
 import {IconButton, Tooltip} from "@mui/material";
 import SaveIcon from '@mui/icons-material/Save';
 import UploadIcon from '@mui/icons-material/Upload'
@@ -14,7 +13,14 @@ import PlayCircleFilledIcon from '@mui/icons-material/PlayCircleFilled';
 import {usePlayStore} from "@/stores/editor/PlayStore";
 import StopCircleIcon from '@mui/icons-material/StopCircle';
 
+export const TOOLBAR_HEIGHT = 8
+export const CANVAS_HEIGHT = 100 - TOOLBAR_HEIGHT
+
 export default function HeaderBar() {
+
+    // TODO Ich will einen Schritt für Schritt Debug mode, in dem bei jedem Schritt die Inputs und Outputs angezeigt werden, wöhrend man
+    // beim aktuellen Knoten die Möglichkeit hat die Optionen anzupassen
+    // + Live Preview des vorläugfigen Ergebnis was rauskomen würde
 
     const reactFlowInstance = useReactFlow();
     const inputFile = useRef<HTMLInputElement | null>(null);
