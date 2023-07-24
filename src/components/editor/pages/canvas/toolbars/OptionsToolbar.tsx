@@ -35,11 +35,13 @@ export default function OptionsToolbar() {
             return
         }
 
-        setOptions(
-            getNodesInformation(currentNode.id)
-                .find(info => info.type === currentNode.type)
-                .options
-        )
+        const nodeInfo = getNodesInformation(currentNode.id).find(info => info.type === currentNode.type)
+
+        if (nodeInfo) {
+            setOptions(nodeInfo.options)
+        } else {
+            setOptions(<></>)
+        }
     }, [currentNode])
 
     return (
