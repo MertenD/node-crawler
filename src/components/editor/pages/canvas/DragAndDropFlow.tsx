@@ -96,7 +96,10 @@ export default function DragAndDropFlow() {
         let yOffset = 0
         let zIndex = 0
 
-        yOffset += getNodesInformation().find(info => info.type === nodeType).style.minHeight / 2
+        let nodeInfo = getNodesInformation().find(info => info.type === nodeType);
+        if(nodeInfo) {
+            yOffset += nodeInfo.style.minHeight / 2
+        }
 
         const id = uuidv4();
         const newNode = {
