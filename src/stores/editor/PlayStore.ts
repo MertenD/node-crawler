@@ -30,6 +30,7 @@ export type PlayStoreState = {
     getFirstNode: () => NodeMapValue | null
     setCurrentNode: (newNode: NodeMapValue | null) => void
     nextNode: (nextNodeKey?: NextNodeKey) => void
+    backtrackToNextPossibleNode: () => void
     getNode: (nodeId: string) => void
     getVariable: (name: string) => any
     setVariable: (name: string, value: any) => void
