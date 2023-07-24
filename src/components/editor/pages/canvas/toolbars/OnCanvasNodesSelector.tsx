@@ -2,7 +2,7 @@ import * as React from 'react';
 import DialogTitle from '@mui/material/DialogTitle';
 import Dialog from '@mui/material/Dialog';
 import getNodesInformation from "@/config/NodesInformation";
-import {Typography} from "@mui/material";
+import {Tooltip, Typography} from "@mui/material";
 import {NodeType} from "@/config/NodeType";
 import {Node} from "reactflow";
 import {connectionRules} from "@/config/ConnectionRules";
@@ -40,7 +40,7 @@ export default function OnCanvasNodesToolbar(props: OnCanvasNodesToolbarProps) {
             }
         }} onClose={handleClose} open={open}>
             <DialogTitle>
-                <Typography variant={"h4"}>Select Node</Typography>
+                <Typography variant={"h5"}>Select Node</Typography>
             </DialogTitle>
             <div style={{
                 paddingLeft: 16,
@@ -72,14 +72,23 @@ export default function OnCanvasNodesToolbar(props: OnCanvasNodesToolbarProps) {
 
                     return currentNodeInputRules[0].allowedValueTypes.includes(sourceOutputValue)
                 }).map(info => (
-                    <div>
-                        <Typography variant="body1">
-                            { info.title }
-                        </Typography>
-                        <div draggable style={{ ...info.style, marginTop: 10 }} onClick={() =>
+                    <Tooltip title={info.title}>
+                        <div draggable style={{
+                            ...info.style,
+                            minHeight: 50,
+                            minWidth: 50,
+                            height: 50,
+                            width: 50,
+                            marginTop: 10,
+                            display: "flex",
+                            justifyContent: "center",
+                            alignItems: "center"
+                        }} onClick={() =>
                             handleNodeSelected(info.type)
-                        } />
-                    </div>
+                        } >
+                            { info.icon }
+                        </div>
+                    </Tooltip>
                 )) }
             </div>
         </Dialog>

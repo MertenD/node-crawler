@@ -1,6 +1,6 @@
 'use client'
 
-import {Typography} from "@mui/material";
+import {Tooltip} from "@mui/material";
 import getNodesInformation from "@/config/NodesInformation";
 import useReactFlowStore from "@/stores/editor/ReactFlowStore";
 import {useEffect, useState} from "react";
@@ -32,18 +32,33 @@ export default function NodesToolbar() {
                 justifyContent: 'center',
                 gap: 20,
                 paddingBottom: 20,
-                textAlign: "center"
+                textAlign: "center",
             }}>
                 { getNodesInformation().filter(nodeInfo =>
                     nodeInfo.type !== NodeType.START_NODE || !isStartAlreadyPlaced
                 ).map(info => (
-                   <div>
-                       <Typography variant="body1">
-                           { info.title }
-                       </Typography>
-                       <div draggable style={{ ...info.style, marginTop: 10 }} onDragStart={(event) =>
-                           onDragStart(event, info.type, {})
-                       } />
+                   <div style={{
+                       width: "100%",
+                       display: "flex",
+                       flexDirection: "column",
+                       alignItems: "center"
+                   }}>
+                       <Tooltip title={info.title} >
+                           <div draggable style={{ ...info.style,
+                               minHeight: 50,
+                               minWidth: 50,
+                               height: 50,
+                               width: 50,
+                               marginTop: 10,
+                               display: "flex",
+                               justifyContent: "center",
+                               alignItems: "center"
+                           }} onDragStart={(event) =>
+                               onDragStart(event, info.type, {})
+                           }>
+                               { info.icon }
+                           </div>
+                       </Tooltip>
                    </div>
                 )) }
             </div>
