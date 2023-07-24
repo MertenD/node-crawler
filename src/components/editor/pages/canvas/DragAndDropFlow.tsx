@@ -164,13 +164,15 @@ export default function DragAndDropFlow() {
 
                     if (nodeType !== null && connectStartParams.current !== null && connectStartParams.current?.nodeId !== null) {
                         const id = addNodeAtPosition(reactFlowInstance.project(lastEventPosition), nodeType)
-                        reactFlowInstance.addEdges({
-                            id,
-                            source: connectStartParams.current?.nodeId,
-                            sourceHandle: connectStartParams.current?.handleId,
-                            target: id,
-                            targetHandle: connectionRules.find(rule => rule.nodeType === nodeType).inputRules[0].handleId
-                        } as Edge);
+                        let rule = connectionRules.find(rule => rule.nodeType === nodeType);
+                        if(rule && rule.inputRules && rule.inputRules.length > 0) {
+                            reactFlowInstance.addEdges({
+                                source: connectStartParams.current?.nodeId,
+                                sourceHandle: connectStartParams.current?.handleId,
+                                target: id,
+                                targetHandle: rule.inputRules[0].handleId
+                            } as Edge)
+                        }
                     }
                 }}
             />
