@@ -5,7 +5,7 @@
 
 ## Overview
 
-!Work in progress!
+! Work in progress !
 
 Node-Crawler is a highly customizable, Node-based web application for creating web crawlers and further processing and transforming the retrieved data. Users can build tailor-made web crawlers and manipulate and transform the collected data as needed. The output data format can be set to a wide range of formats including JSON, CSV, and various database formats.
 
