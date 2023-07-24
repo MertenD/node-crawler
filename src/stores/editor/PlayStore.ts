@@ -38,7 +38,6 @@ export type PlayStoreState = {
     addOutgoingPipelines: (from: string, value: any) => void
     removeIngoingPipelines: (to: string) => void
     getInput: (nodeId: string, handleId: string) => string[] | undefined
-    setIsProcessRunning: (newValue: boolean) => void
 }
 
 export const usePlayStore = create<PlayStoreState>((set, get) => ({
