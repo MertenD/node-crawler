@@ -1,4 +1,11 @@
 export async function POST(request: Request) {
+
+    const responseHeaders = {
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
+        'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+    }
+
     try {
         const body = await request.json();
 
@@ -11,20 +18,19 @@ export async function POST(request: Request) {
 
         return new Response(data, {
             status: 200,
-            headers: {
-                'Access-Control-Allow-Origin': '*',
-                'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
-                'Access-Control-Allow-Headers': 'Content-Type, Authorization',
-            },
+            headers: responseHeaders
         });
     } catch (error) {
-        return new Response(error.toString(), {
-            status: 500,
-            headers: {
-                'Access-Control-Allow-Origin': '*',
-                'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
-                'Access-Control-Allow-Headers': 'Content-Type, Authorization',
-            },
-        });
+        if (error instanceof Error) {
+            return new Response(error.toString(), {
+                status: 500,
+                headers: responseHeaders
+            });
+        } else {
+            return new Response("An unexpected error occurred", {
+                status: 500,
+                headers: responseHeaders
+            });
+        }
     }
 }
