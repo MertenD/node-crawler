@@ -97,7 +97,7 @@ export default function DragAndDropFlow() {
         let zIndex = 0
 
         let nodeInfo = getNodesInformation().find(info => info.type === nodeType);
-        if(nodeInfo && nodeInfo.style.minHeight) {
+        if(nodeInfo && nodeInfo.style.minHeight && typeof nodeInfo.style.minHeight === "number") {
             yOffset += nodeInfo.style.minHeight / 2
         }
 
