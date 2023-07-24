@@ -70,7 +70,7 @@ export default function OnCanvasNodesToolbar(props: OnCanvasNodesToolbarProps) {
                         return false
                     }
 
-                    return (currentNodeInputRules?.[0]?.allowedValueTypes ?? []).includes(sourceOutputValue)
+                    return (currentNodeInputRules?.[0]?.allowedValueTypes ?? []).includes(sourceOutputValue ?? "")
                 }).map(info => (
                     <Tooltip title={info.title}>
                         <div draggable style={{
