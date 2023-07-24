@@ -6,5 +6,5 @@ export interface BasicNode {
     id: string
     nodeType: NodeType,
     data: NodeData
-    run: () => Promise<React.ReactNode> | void
+    run: () => Promise<React.ReactNode> | Promise<void>
 }
