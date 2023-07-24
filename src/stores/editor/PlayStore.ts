@@ -21,7 +21,7 @@ export type PlayStoreState = {
     nodeMap: NodeMap
     currentNode: NodeMapValue | null
     variables: Record<string, any>
-    files: {name: string, content: string}[]
+    files: {name: string, extension: string, content: string}[]
     log: string[]
     pipelines: {from: string, to: string, toHandleId: string, value: any}[]
     isProcessRunning: boolean
