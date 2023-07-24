@@ -24,7 +24,7 @@ export default function Log(props: LogProps) {
     }, [log])
 
     function smoothScrollToBottom(element: HTMLDivElement | null, target: number | undefined, duration: number) {
-        if (element !== null) {
+        if (element !== null && target !== undefined) {
             const startTime = Date.now()
             const start = element.scrollTop
             const distance = target - start
