@@ -51,7 +51,7 @@ export default function OptionsContainer(props: OptionsContainerProps) {
                         <CloseIcon />
                     </IconButton>
                 </Tooltip>
-            < /div>
+            </div>
             { props.children }
         </div>
     )
