@@ -16,10 +16,11 @@ import ManageSearchIcon from "@mui/icons-material/ManageSearch";
 import SaveIcon from "@mui/icons-material/Save";
 import CloudDownloadTwoToneIcon from "@mui/icons-material/CloudDownloadTwoTone";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
+import {NodeProps} from "reactflow";
 
 export default function getNodesInformation(
     nodeId: string = ""
-): {type: NodeType, node: React.ReactNode, title: string, options: React.ReactNode, style: CSSProperties, icon: React.ReactNode}[] {
+): {type: NodeType, node: ({id, selected, data}: NodeProps) => React.ReactNode, title: string, options: React.ReactNode, style: CSSProperties, icon: React.ReactNode}[] {
 
     return [
         {
