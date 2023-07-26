@@ -3,7 +3,8 @@
 import ReactFlow, {
     Background,
     BackgroundVariant,
-    Controls, Edge,
+    Connection,
+    Controls,
     MiniMap,
     Node,
     OnConnectStartParams,
@@ -166,12 +167,12 @@ export default function DragAndDropFlow() {
                         const id = addNodeAtPosition(reactFlowInstance.project(lastEventPosition), nodeType)
                         let rule = connectionRules.find(rule => rule.nodeType === nodeType);
                         if(rule && rule.inputRules && rule.inputRules.length > 0) {
-                            reactFlowInstance.addEdges({
+                            onConnect({
                                 source: connectStartParams.current?.nodeId,
-                                sourceHandle: connectStartParams.current?.handleId,
                                 target: id,
+                                sourceHandle: connectStartParams.current?.handleId,
                                 targetHandle: rule.inputRules[0].handleId
-                            } as Edge)
+                            } as Connection)
                         }
                     }
                 }}
