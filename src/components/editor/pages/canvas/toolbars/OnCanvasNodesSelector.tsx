@@ -1,3 +1,5 @@
+'use Client'
+
 import * as React from 'react';
 import DialogTitle from '@mui/material/DialogTitle';
 import Dialog from '@mui/material/Dialog';
@@ -20,6 +22,20 @@ export default function OnCanvasNodesToolbar(props: OnCanvasNodesToolbarProps) {
     const width = 160
     const height = 500
 
+    const [windowDimensions, setWindowDimensions] = React.useState<{ width: number, height: number }>({
+        width: typeof window !== "undefined" ? window.innerWidth : 900, // Fall back to 900 if window is not defined
+        height: typeof window !== "undefined" ? window.innerHeight : 600, // Fall back to 600 if window is not defined
+    });
+
+    React.useEffect(() => {
+        function handleResize() {
+            setWindowDimensions({ width: window.innerWidth, height: window.innerHeight });
+        }
+
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
+
     const handleClose = () => {
         onClose(null)
     }
@@ -33,8 +49,8 @@ export default function OnCanvasNodesToolbar(props: OnCanvasNodesToolbarProps) {
             sx: {
                 position: "fixed",
                 m: 0,
-                left: Math.min(position.x, window.innerWidth - width - 16),
-                top: Math.min(position.y, window.innerHeight - height - 16),
+                left: Math.min(position.x, windowDimensions.width - width - 16),
+                top: Math.min(position.y, windowDimensions.height - height - 16),
                 background: "#1A202C",
                 borderRadius: 2,
             }
