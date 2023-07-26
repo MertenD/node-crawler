@@ -41,10 +41,14 @@ export function createNodeComponent<DataType>(
             ...shapeStyle(selected),
         }}>
             { connectionRules.find(rule => rule.nodeType === nodeType)?.inputRules.map(rule => {
-                return <Handle id={rule.handleId} style={handleStyle(selected)} type="target" position={Position.Left} />
+                return <Tooltip title={"Allowed input values: " + rule.allowedValueTypes.join(", ")} >
+                    <Handle id={rule.handleId} style={handleStyle(selected)} type="target" position={Position.Left} />
+                </Tooltip>
             }) }
             { connectionRules.find(rule => rule.nodeType === nodeType)?.outputValueType && (
-                <Handle id="output" style={handleStyle(selected)} type="source" position={Position.Right}/>
+                <Tooltip title={"Output value: " + connectionRules.find(rule => rule.nodeType === nodeType)?.outputValueType} >
+                    <Handle id="output" style={handleStyle(selected)} type="source" position={Position.Right}/>
+                </Tooltip>
             ) }
             { content(id, selected, data) }
         </div>
