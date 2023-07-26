@@ -23,7 +23,7 @@ export type PlayStoreState = {
     variables: Record<string, any>
     files: {name: string, extension: string, content: string}[]
     log: string[]
-    pipelines: {from: string, to: string, toHandleId: string, value: any}[]
+    pipelines: {from: string, to: string, toHandleId: string, value: any, isActivated: boolean}[]
     isProcessRunning: boolean
     setup: () => void
     stop: () => void
@@ -37,7 +37,7 @@ export type PlayStoreState = {
     addFile: (name: string, extension: string, content: string) => void
     writeToLog: (message: string) => void
     addOutgoingPipelines: (from: string, value: any) => void
-    removeIngoingPipelines: (to: string) => void
+    deactivateIngoingPipelines: (to: string) => void
     getInput: (nodeId: string, handleId: string) => string[] | undefined
 }
 
@@ -85,6 +85,7 @@ export const usePlayStore = create<PlayStoreState>((set, get) => ({
             })
             useReactFlowStore.getState().setNodeSelected(null)
         }
+        console.log("Pipelines", get().pipelines)
     },
     setCurrentNode: (newNode: NodeMapValue | null) => {
         set({
@@ -107,7 +108,7 @@ export const usePlayStore = create<PlayStoreState>((set, get) => ({
         }
 
         // Remove ingoing pipelines from current node before going to the next one
-        get().removeIngoingPipelines(get().currentNode.node.id)
+        get().deactivateIngoingPipelines(get().currentNode.node.id)
         // Adding empty outgoing pipeline if there is none already
         if (!get().pipelines.find(pipeline => pipeline.from === get().currentNode.node.id)) {
             get().addOutgoingPipelines(get().currentNode.node.id)
@@ -127,6 +128,7 @@ export const usePlayStore = create<PlayStoreState>((set, get) => ({
     },
     backtrackToNextPossibleNode: () => {
         const nextNodeId = get().pipelines.find(pipeline =>
+            pipeline.isActivated &&
             pipeline.to !== get().currentNode.node.id
         )?.to
         if (nextNodeId) {
@@ -175,16 +177,20 @@ export const usePlayStore = create<PlayStoreState>((set, get) => ({
                     from: from,
                     to: to.nodeId,
                     toHandleId: to.targetHandleId,
-                    value: value
+                    value: value,
+                    isActivated: true
                 }
             })].flat()
         })
     },
-    removeIngoingPipelines: (to: string) => {
+    deactivateIngoingPipelines: (to: string) => {
         set({
-            pipelines: get().pipelines.filter(pipeline =>
-                pipeline.to !== to
-            )
+            pipelines: get().pipelines.map(pipeline => {
+                if (pipeline.to === to) {
+                    pipeline.isActivated = false
+                }
+                return pipeline
+            })
         })
     },
     getInput: (nodeId: string, handleId: string): string[] | undefined => {

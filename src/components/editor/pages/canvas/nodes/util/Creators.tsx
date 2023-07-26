@@ -12,6 +12,9 @@ import {connectionRules} from "@/config/ConnectionRules";
 import OptionsContainer from "@/components/form/OptionsContainer";
 import {SaveNodeData} from "@/components/editor/pages/canvas/nodes/SaveNode";
 import {setNodeWithUpdatedDataValue} from "@/components/editor/pages/canvas/nodes/util/OptionsUtil";
+import {usePlayStore} from "@/stores/editor/PlayStore";
+import CacheTextField from "@/components/form/CacheTextField";
+import {Tooltip} from "@mui/material";
 
 export const createNodeShapeStyle = (additionalCSS: CSSProperties = {}): (selected: boolean) => CSSProperties => {
     return function(selected) {
@@ -56,6 +59,18 @@ export function createOptionsComponent<DataType>(
         const updateNodeData = useReactFlowStore((state) => state.updateNodeData)
         const getNodeById = useReactFlowStore((state) => state.getNodeById)
 
+        const pipelines = usePlayStore(state => state.pipelines)
+        const [cachedOutput, setCachedOutput] = useState<any | null>(null)
+
+        useEffect(() => {
+            const ownOutgoingPipeline = pipelines.find(pipeline => pipeline.from === props.id)
+            if (ownOutgoingPipeline) {
+                setCachedOutput(ownOutgoingPipeline.value)
+            } else {
+                setCachedOutput(null)
+            }
+        }, [pipelines])
+
         const [localNode, setLocalNode] = useState<Node | null>(null)
 
         useEffect(() => {
@@ -79,6 +94,13 @@ export function createOptionsComponent<DataType>(
                     }
                 }}
             />
+            { cachedOutput !== null &&
+                <CacheTextField
+                    label={"Cache"}
+                    value={cachedOutput}
+                    onChange={() => console.log("Change")}
+                />
+            }
         </OptionsContainer>
     }
 }
