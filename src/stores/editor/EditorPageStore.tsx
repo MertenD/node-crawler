@@ -69,4 +69,16 @@ export const useEditorPageState = create<EditorPageState>((set, get) => ({
     }
 }));
 
+export function openSuccessSnackBar(message: string) {
+    useEditorPageState.getState().setSnackBarSeverity("success")
+    useEditorPageState.getState().setSnackBarText(message)
+    useEditorPageState.getState().setIsSnackBarOpen(true)
+}
+
+export function openWarningSnackBar(message: string) {
+    useEditorPageState.getState().setSnackBarSeverity("warning")
+    useEditorPageState.getState().setSnackBarText(message)
+    useEditorPageState.getState().setIsSnackBarOpen(true)
+}
+
 export default useEditorPageState;

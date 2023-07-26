@@ -17,7 +17,7 @@ import SelectedIncomingEdge from "@/components/editor/pages/canvas/edges/Selecte
 import SelectedOutgoingEdge from "@/components/editor/pages/canvas/edges/SelectedOutgoingEdge";
 import BothSelectedEdge from "@/components/editor/pages/canvas/edges/BothSelectedEdge";
 import {connectionRules} from "@/config/ConnectionRules";
-import useEditorPageState from "@/stores/editor/EditorPageStore";
+import {openWarningSnackBar} from "@/stores/editor/EditorPageStore";
 import getNodesInformation from "@/config/NodesInformation";
 import React from "react";
 
@@ -194,11 +194,5 @@ export const useReactFlowStore = create<ReactFlowState>((set, get) => ({
         })
     }
 }));
-
-function openWarningSnackBar(message: string) {
-    useEditorPageState.getState().setSnackBarSeverity("warning")
-    useEditorPageState.getState().setSnackBarText(message)
-    useEditorPageState.getState().setIsSnackBarOpen(true)
-}
 
 export default useReactFlowStore;
