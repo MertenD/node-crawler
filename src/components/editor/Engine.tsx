@@ -16,6 +16,7 @@ export default function Engine() {
         };
 
         if (isProcessRunning) {
+            // noinspection JSIgnoredPromiseFromCall
             runCurrentNode();
         }
     }, [currentNode]);

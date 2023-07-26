@@ -69,5 +69,13 @@ function getNodeFromType(type: NodeType, id: string, data: NodeData | undefined)
             return new EngineSaveNode(id, data as SaveNodeData)
         case NodeType.EXTRACTOR_NODE:
             return new EngineExtractorNode(id, data as ExtractorNodeData)
+        case NodeType.GATEWAY_NODE:
+            return null
+        default:
+            assertNever(type)
     }
+}
+
+function assertNever(x: never): never {
+    throw new Error('Unexpected object: ' + x);
 }

@@ -8,6 +8,7 @@ import {
     EdgeChange,
     Node,
     NodeChange,
+    NodeProps,
     OnConnect,
     OnEdgesChange,
     OnNodesChange
@@ -19,7 +20,7 @@ import BothSelectedEdge from "@/components/editor/pages/canvas/edges/BothSelecte
 import {connectionRules} from "@/config/ConnectionRules";
 import {openWarningSnackBar} from "@/stores/editor/EditorPageStore";
 import getNodesInformation from "@/config/NodesInformation";
-import React from "react";
+import {ReactNode} from "react";
 
 export const selectedColor = "#F98E35"
 export const selectedColorHover = "#AE6325"
@@ -32,7 +33,7 @@ export const toolbarBackgroundColor = "#1A202C"
 
 export const defaultEdgeColor = "#9BA8BD"
 
-export const handleStyle = (isNodeSelected) => {
+export const handleStyle = (isNodeSelected: boolean) => {
     return {
         width: 12,
         height: 12,
@@ -49,8 +50,8 @@ export type ReactFlowState = {
     onConnect: OnConnect;
     updateNodeData: <NodeData>(nodeId: string, data: NodeData) => void;
     getNodeById: (nodeId: string) => Node | null;
-    setNodeSelected: (nodeId) => void
-    setSelectedNodes: () => Node[]
+    setNodeSelected: (nodeId: string | null) => void
+    setSelectedNodes: () => void
     updateEdgesGradient: () => void
 }
 
@@ -58,7 +59,7 @@ export const useReactFlowStore = create<ReactFlowState>((set, get) => ({
     nodes: [],
     selectedNodes: [],
     edges: [],
-    nodeTypes: getNodesInformation().reduce<Record<string, React.ReactNode>>((acc, info) => {
+    nodeTypes: getNodesInformation().reduce<Record<string, ({ id, selected, data }: NodeProps) => ReactNode>>((acc, info) => {
         acc[info.type] = info.node
         return acc
     }, {}),
@@ -80,18 +81,29 @@ export const useReactFlowStore = create<ReactFlowState>((set, get) => ({
     },
     onConnect: (connection: Connection) => {
 
-        const sourceNode = get().getNodeById(connection.source)
-        const targetNode = get().getNodeById(connection.target)
+        const source = connection.source
+        const target = connection.target
+
+        if (!source || !target) {
+            return
+        }
+
+        const sourceNode = get().getNodeById(source)
+        const targetNode = get().getNodeById(target)
+
+        if (!sourceNode || !targetNode) {
+            return
+        }
 
         // Check connectivity rules
 
-        if (connection.source === connection.target) {
+        if (source === target) {
             openWarningSnackBar("You can't connect a node to itself")
             return
         }
 
         const pipelineValueType = connectionRules.find(rule => rule.nodeType === sourceNode.type)?.outputValueType
-        const isConnectionAllowed = connectionRules.find(rule =>
+        const isConnectionAllowed = pipelineValueType && connectionRules.find(rule =>
             rule.nodeType === targetNode.type
         )?.inputRules.find(rule => {
             return rule.handleId === connection.targetHandle
@@ -103,17 +115,18 @@ export const useReactFlowStore = create<ReactFlowState>((set, get) => ({
             }" output to a "${
                 connectionRules.find(rule => rule.nodeType === targetNode.type)?.inputRules.find(rule => 
                     rule.handleId === connection.targetHandle
-                ).allowedValueTypes.join("/")
+                )?.allowedValueTypes.join("/")
             }" input`)
             return
         }
 
-        const existingConnectionsToTarget = get().edges.filter(edge => edge.target === connection.target && edge.targetHandle === connection.targetHandle).length
-        const isMaxConnectionsReached = existingConnectionsToTarget >= connectionRules.find(rule =>
+        const existingConnectionsToTarget = get().edges.filter(edge => edge.target === target && edge.targetHandle === connection.targetHandle).length
+        const maxConnectionsToTarget = connectionRules.find(rule =>
             rule.nodeType === targetNode.type
         )?.inputRules.find(rule => {
             return rule.handleId === connection.targetHandle
-        }).maxConnections
+        })?.maxConnections
+        const isMaxConnectionsReached = maxConnectionsToTarget && existingConnectionsToTarget >= maxConnectionsToTarget
 
         if (isMaxConnectionsReached) {
             openWarningSnackBar("The max amount of inputs for this node is reached")

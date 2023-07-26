@@ -6,7 +6,7 @@ import {Node, Edge} from "reactflow";
 export function onSave(fileName: string, content: string, anchorElementName: string) {
     const downloadableContent = "data:text/json;charset=utf-8," + encodeURIComponent(content)
     const anchorElement = document.getElementById(anchorElementName);
-    if (anchorElement !== null) {
+    if (anchorElement) {
         anchorElement.setAttribute("href", downloadableContent);
         anchorElement.setAttribute("download", fileName);
         anchorElement.click();
@@ -17,7 +17,7 @@ export function loadCrawlerProject(changeEvent: any, reactFlowInstance: ReactFlo
     const fileReader = new FileReader();
     fileReader.readAsText(changeEvent.target.files[0], "UTF-8");
     fileReader.onload = progressEvent => {
-        if (progressEvent.target !== null) {
+        if (progressEvent.target) {
             const bpmnDto = JSON.parse(String(progressEvent.target.result)) as CrawlerProjectDto
 
             // This whole process changes the id's of the nodes and adapts the edges as well to that change.

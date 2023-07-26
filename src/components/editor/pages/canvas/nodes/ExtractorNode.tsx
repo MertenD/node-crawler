@@ -1,5 +1,3 @@
-
-
 // --- Data ---
 import {
     createNodeComponent,
@@ -8,7 +6,6 @@ import {
 } from "@/components/editor/pages/canvas/nodes/util/Creators";
 import {NodeData} from "@/model/NodeData";
 import {NodeType} from "@/config/NodeType";
-import SaveIcon from "@mui/icons-material/Save";
 import React from "react";
 import ManageSearchIcon from '@mui/icons-material/ManageSearch';
 import TextInputOption from "@/components/form/TextInputOption";

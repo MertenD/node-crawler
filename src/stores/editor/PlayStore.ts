@@ -31,12 +31,12 @@ export type PlayStoreState = {
     setCurrentNode: (newNode: NodeMapValue | null) => void
     nextNode: (nextNodeKey?: NextNodeKey) => void
     backtrackToNextPossibleNode: () => void
-    getNode: (nodeId: string) => void
+    getNode: (nodeId: string) => NodeMapValue | null
     getVariable: (name: string) => any
     setVariable: (name: string, value: any) => void
     addFile: (name: string, extension: string, content: string) => void
     writeToLog: (message: string) => void
-    addOutgoingPipelines: (from: string, value: any) => void
+    addOutgoingPipelines: (from: string, value?: any) => void
     deactivateIngoingPipelines: (to: string) => void
     getInput: (nodeId: string, handleId: string) => string[] | undefined
 }
@@ -131,19 +131,19 @@ export const usePlayStore = create<PlayStoreState>((set, get) => ({
     backtrackToNextPossibleNode: () => {
         const nextNodeId = get().pipelines.find(pipeline =>
             pipeline.isActivated &&
-            pipeline.to !== get().currentNode.node.id
+            pipeline.to !== get().currentNode?.node.id
         )?.to
         if (nextNodeId) {
 
-            get().writeToLog(`Going back to last node with all inputs available, which is a "${get().getNode(nextNodeId).node.nodeType}"`)
+            get().writeToLog(`Going back to last node with all inputs available, which is a "${get().getNode(nextNodeId)?.node.nodeType}"`)
             get().setCurrentNode(get().getNode(nextNodeId))
         } else {
             get().writeToLog("There are no more nodes left")
             get().stop()
         }
     },
-    getNode: (nodeId: string): NodeMapValue => {
-        return get().nodeMap.get(nodeId)
+    getNode: (nodeId: string): NodeMapValue | null => {
+        return get().nodeMap.get(nodeId) || null
     },
     getVariable: (name: string) => {
         return get().variables[name]
@@ -173,7 +173,7 @@ export const usePlayStore = create<PlayStoreState>((set, get) => ({
         })
     },
     addOutgoingPipelines: (from: string, value: any = null) => {
-        const next = Object.values(get().getNode(from).next).flat()
+        const next = Object.values(get().getNode(from)?.next || {}).flat()
         if (next.length > 0) {
             set({
                 pipelines: [...get().pipelines, next.map(to => {
@@ -232,7 +232,7 @@ export const usePlayStore = create<PlayStoreState>((set, get) => ({
             // If any input value is missing or is undefined the crawler will backtrack to the next node that
             // has all input values available
 
-            get().writeToLog(`One ore more inputs of the current node "${get().getNode(nodeId).node.nodeType}" are undefined`)
+            get().writeToLog(`One ore more inputs of the current node "${get().getNode(nodeId)?.node.nodeType}" are undefined`)
             get().backtrackToNextPossibleNode()
             return undefined
         }

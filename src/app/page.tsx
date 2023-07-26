@@ -8,7 +8,8 @@ import useEditorPageState from "@/stores/editor/EditorPageStore";
 // TODO Es wäre geil Verbindungsregeln in einer Config Datei setzten zu können. Vielleicht kann ich dort ja auch die NodeType und co. setzen. Eine einheitliche Struktur wäre auf jeden Fall schön
 
 export default function Home() {
-  return <div style={{
+  // noinspection HtmlUnknownTarget
+    return <div style={{
     height: "100vh",
     width: "100vw",
     display: "flex",

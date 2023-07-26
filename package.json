@@ -33,6 +33,7 @@
     "zustand": "4.3.3"
   },
   "devDependencies": {
-    "@types/uuid": "^9.0.2"
+    "@types/uuid": "^9.0.2",
+    "eslint": "^8.45.0"
   }
 }
