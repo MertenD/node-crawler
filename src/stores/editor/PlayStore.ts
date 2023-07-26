@@ -107,8 +107,9 @@ export const usePlayStore = create<PlayStoreState>((set, get) => ({
             return
         }
 
-        // Remove ingoing pipelines from current node before going to the next one
-        get().deactivateIngoingPipelines(get().currentNode.node.id)
+        // Deactivate ingoing pipelines from current node before going to the next one
+        get().deactivateIngoingPipelines(get().currentNode?.node.id || "")
+
         // Adding empty outgoing pipeline if there is none already
         if (!get().pipelines.find(pipeline => pipeline.from === get().currentNode.node.id)) {
             get().addOutgoingPipelines(get().currentNode.node.id)
