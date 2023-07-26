@@ -23,7 +23,7 @@ export type PlayStoreState = {
     variables: Record<string, any>
     files: {name: string, extension: string, content: string}[]
     log: string[]
-    pipelines: {from: string, to: string, toHandleId: string, value: any, isActivated: boolean}[]
+    pipelines: {from: string, to: string | null, toHandleId: string | null, value: any, isActivated: boolean}[]
     isProcessRunning: boolean
     setup: () => void
     stop: () => void
@@ -171,17 +171,31 @@ export const usePlayStore = create<PlayStoreState>((set, get) => ({
         })
     },
     addOutgoingPipelines: (from: string, value: any = null) => {
-        set({
-            pipelines: [...get().pipelines, Object.values(get().getNode(from).next).flat().map(to => {
-                return {
+        const next = Object.values(get().getNode(from).next).flat()
+        if (next.length > 0) {
+            set({
+                pipelines: [...get().pipelines, next.map(to => {
+                    return {
+                        from: from,
+                        to: to.nodeId,
+                        toHandleId: to.targetHandleId,
+                        value: value,
+                        isActivated: true
+                    }
+                })].flat()
+            })
+        } else {
+            console.log("from has no next nodes", from)
+            set({
+                pipelines: [...get().pipelines, {
                     from: from,
-                    to: to.nodeId,
-                    toHandleId: to.targetHandleId,
+                    to: null,
+                    toHandleId: null,
                     value: value,
-                    isActivated: true
-                }
-            })].flat()
-        })
+                    isActivated: false
+                }]
+            })
+        }
     },
     deactivateIngoingPipelines: (to: string) => {
         set({

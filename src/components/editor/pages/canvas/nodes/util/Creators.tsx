@@ -88,7 +88,7 @@ export function createOptionsComponent<DataType>(
             }
         }, [localNode, updateNodeData])
 
-        return localNode !== null && <OptionsContainer title={optionsTitle}>
+        return localNode !== null && <OptionsContainer title={optionsTitle} nodeId={props.id}>
             <Options
                 id={props.id}
                 data={localNode.data}

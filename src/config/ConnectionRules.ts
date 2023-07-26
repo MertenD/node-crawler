@@ -33,7 +33,7 @@ export const connectionRules: ConnectionRule[] = [
                     OutputValueType.TEXT,
                     OutputValueType.JSON
                 ],
-                maxConnections: 999
+                maxConnections: 1
             }
         ]
     },
