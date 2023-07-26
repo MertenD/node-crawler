@@ -111,7 +111,7 @@ export const usePlayStore = create<PlayStoreState>((set, get) => ({
         get().deactivateIngoingPipelines(get().currentNode?.node.id || "")
 
         // Adding empty outgoing pipeline if there is none already
-        const currentNodeId = get()?.currentNode.node.id
+        const currentNodeId = get().currentNode?.node.id
         if (currentNodeId && !get().pipelines.find(pipeline => pipeline.from === currentNodeId)) {
             get().addOutgoingPipelines(currentNodeId)
         }
