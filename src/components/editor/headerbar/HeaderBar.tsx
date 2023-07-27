@@ -1,4 +1,4 @@
-import {toolbarBackgroundColor, useReactFlowStore} from "@/stores/editor/ReactFlowStore";
+import {useReactFlowStore} from "@/stores/editor/ReactFlowStore";
 import React, {useRef} from "react";
 import {IconButton, Tooltip} from "@mui/material";
 import SaveIcon from '@mui/icons-material/Save';
@@ -12,6 +12,7 @@ import Link from "next/link";
 import PlayCircleFilledIcon from '@mui/icons-material/PlayCircleFilled';
 import {usePlayStore} from "@/stores/editor/PlayStore";
 import StopCircleIcon from '@mui/icons-material/StopCircle';
+import {toolbarBackgroundColor} from "@/app/layout";
 
 export const TOOLBAR_HEIGHT = 8
 export const CANVAS_HEIGHT = 100 - TOOLBAR_HEIGHT

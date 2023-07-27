@@ -1,6 +1,6 @@
 import React from 'react';
 import {EdgeProps, getSmoothStepPath} from 'reactflow';
-import {selectedColor} from "@/stores/editor/ReactFlowStore";
+import {selectedColor} from "@/app/layout";
 
 export default function BothSelectedEdge({
     id,

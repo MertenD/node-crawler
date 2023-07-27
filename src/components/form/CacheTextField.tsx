@@ -28,7 +28,7 @@ export default function CacheTextField(props: CacheTextFieldProps) {
                 fullWidth
                 label={props.label}
                 variant="outlined"
-                value={(isExpanded ? props.value : props.value?.substring(0, 90) + "...") || ""}
+                value={(isExpanded ? props.value.trim() : props.value.trim().substring(0, 90) + "...") || ""}
                 onChange={props.onChange}
                 InputProps={props.inputProps || {}}
                 disabled={!isExpanded}

@@ -1,6 +1,5 @@
 'use client'
 
-import {defaultEdgeColor, selectedColor} from "@/stores/editor/ReactFlowStore";
 import React from "react";
 import TextInputOption from "@/components/form/TextInputOption";
 import {Badge, Typography} from "@mui/material";
@@ -11,7 +10,10 @@ import {
     createNodeShapeStyle,
     createOptionsComponent
 } from "@/components/editor/pages/canvas/nodes/util/Creators";
+import {EngineFetchWebsiteNode} from "@/engine/nodes/EngineFetchWebsiteNode";
 import {NodeType} from "@/config/NodeType";
+import {defaultEdgeColor, selectedColor} from "@/app/layout";
+import {NodeMetadata} from "@/config/NodesMetadata";
 
 
 // --- Data ---
@@ -71,3 +73,17 @@ export const FetchWebsiteOptions = createOptionsComponent<FetchWebsiteNodeData>(
         />
     </>
 })
+
+
+// --- Metadata ---
+export const fetchWebsiteNodeMetadata = {
+    title: "Fetch Website",
+    type: NodeType.FETCH_WEBSITE_NODE,
+    getNodeComponent: FetchWebsiteNode,
+    getOptionsComponent: (id: string) => <FetchWebsiteOptions id={id}/>,
+    style: fetchWebsiteShapeStyle(true),
+    icon: <CloudDownloadTwoToneIcon />,
+    getEngineNode: (id: string, data: NodeData) => {
+        return new EngineFetchWebsiteNode(id, data as FetchWebsiteNodeData)
+    }
+} as NodeMetadata

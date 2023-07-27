@@ -1,4 +1,4 @@
-import {NodeType} from "@/config/NodeType";
+import {NodeType} from "@/config/NodeType.ts";
 import {OutputValueType} from "@/config/OutputValueType";
 
 export const connectionRules: ConnectionRule[] = [
@@ -47,6 +47,21 @@ export const connectionRules: ConnectionRule[] = [
                     OutputValueType.HTML
                 ],
                 maxConnections: 1
+            }
+        ]
+    },
+    {
+        nodeType: NodeType.MERGE_NODE,
+        outputValueType: OutputValueType.JSON,
+        inputRules: [
+            {
+                handleId: "input",
+                allowedValueTypes: [
+                    OutputValueType.HTML,
+                    OutputValueType.TEXT,
+                    OutputValueType.JSON
+                ],
+                maxConnections: 999
             }
         ]
     }

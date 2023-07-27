@@ -1,13 +1,6 @@
-import {NodeType} from "@/config/NodeType";
 import {Handle, Node, NodeProps, Position} from "reactflow";
 import React, {CSSProperties, useEffect, useState} from "react";
-import {
-    handleStyle,
-    nodeBackgroundColor,
-    nodeShadowColor,
-    selectedColor,
-    useReactFlowStore
-} from "@/stores/editor/ReactFlowStore";
+import {handleStyle, useReactFlowStore} from "@/stores/editor/ReactFlowStore";
 import {connectionRules} from "@/config/ConnectionRules";
 import OptionsContainer from "@/components/form/OptionsContainer";
 import {SaveNodeData} from "@/components/editor/pages/canvas/nodes/SaveNode";
@@ -15,6 +8,8 @@ import {setNodeWithUpdatedDataValue} from "@/components/editor/pages/canvas/node
 import {usePlayStore} from "@/stores/editor/PlayStore";
 import CacheTextField from "@/components/form/CacheTextField";
 import {Tooltip} from "@mui/material";
+import {NodeType} from "@/config/NodeType";
+import {nodeBackgroundColor, nodeShadowColor, selectedColor} from "@/app/layout";
 
 export const createNodeShapeStyle = (additionalCSS: CSSProperties = {}): (selected: boolean) => CSSProperties => {
     return function(selected) {
@@ -108,3 +103,4 @@ export function createOptionsComponent<DataType>(
         </OptionsContainer>
     }
 }
+

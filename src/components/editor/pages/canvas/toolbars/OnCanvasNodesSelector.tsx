@@ -3,11 +3,11 @@
 import * as React from 'react';
 import DialogTitle from '@mui/material/DialogTitle';
 import Dialog from '@mui/material/Dialog';
-import getNodesInformation from "@/config/NodesInformation";
 import {Tooltip, Typography} from "@mui/material";
-import {NodeType} from "@/config/NodeType";
+import {NodeType} from "@/config/NodeType.ts";
 import {Node} from "reactflow";
 import {connectionRules} from "@/config/ConnectionRules";
+import {getAllNodesMetadata} from "@/config/NodesMetadata";
 
 export interface OnCanvasNodesToolbarProps {
     open: boolean;
@@ -70,7 +70,7 @@ export default function OnCanvasNodesToolbar(props: OnCanvasNodesToolbarProps) {
                 marginBottom: 20,
                 textAlign: "center"
             }}>
-                { getNodesInformation().filter(nodeInfo => {
+                { getAllNodesMetadata().filter(nodeInfo => {
                     if (nodeInfo.type === NodeType.START_NODE) {
                         return false
                     }

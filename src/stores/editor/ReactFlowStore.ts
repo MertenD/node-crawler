@@ -19,19 +19,9 @@ import SelectedOutgoingEdge from "@/components/editor/pages/canvas/edges/Selecte
 import BothSelectedEdge from "@/components/editor/pages/canvas/edges/BothSelectedEdge";
 import {connectionRules} from "@/config/ConnectionRules";
 import {openWarningSnackBar} from "@/stores/editor/EditorPageStore";
-import getNodesInformation from "@/config/NodesInformation";
 import {ReactNode} from "react";
-
-export const selectedColor = "#F98E35"
-export const selectedColorHover = "#AE6325"
-export const disabledColor = "#9BA8BD33"
-
-export const nodeBackgroundColor = "#1A202C"
-export const nodeShadowColor = "#1b2631"
-
-export const toolbarBackgroundColor = "#1A202C"
-
-export const defaultEdgeColor = "#9BA8BD"
+import {selectedColor} from "@/app/layout";
+import {getAllNodesMetadata, NodeMetadata} from "@/config/NodesMetadata";
 
 export const handleStyle = (isNodeSelected: boolean) => {
     return {
@@ -59,8 +49,8 @@ export const useReactFlowStore = create<ReactFlowState>((set, get) => ({
     nodes: [],
     selectedNodes: [],
     edges: [],
-    nodeTypes: getNodesInformation().reduce<Record<string, ({ id, selected, data }: NodeProps) => ReactNode>>((acc, info) => {
-        acc[info.type] = info.node
+    nodeTypes: getAllNodesMetadata().reduce<Record<string, ({ id, selected, data }: NodeProps) => ReactNode>>((acc, info: NodeMetadata) => {
+        acc[info.type] = info.getNodeComponent
         return acc
     }, {}),
     edgeTypes: {

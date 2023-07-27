@@ -1,5 +1,5 @@
 import {BasicNode} from "@/engine/nodes/BasicNode";
-import {NodeType} from "@/config/NodeType";
+import {NodeType} from "@/config/NodeType.ts";
 import {ExtractorNodeData} from "@/components/editor/pages/canvas/nodes/ExtractorNode";
 import {usePlayStore} from "@/stores/editor/PlayStore";
 import * as cheerio from 'cheerio';

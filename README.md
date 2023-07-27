@@ -95,9 +95,9 @@ export const [NAME]Options = createOptionsComponent<[NAME]NodeData>("Start", ({ 
 })
 ```
 
-### Step 3: Add Metadata to NodesInformation.tsx
+### Step 3: Add Metadata to NodesMetadata.tsx
 
-Add all metadata of the new Node to the **config/NodesInformation.tsx** file.
+Add all metadata of the new Node to the **config/NodesMetadata.tsx** file.
 
 ### Step 4: Add Connection Rules
 

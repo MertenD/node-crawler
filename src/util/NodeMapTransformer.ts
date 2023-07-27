@@ -9,17 +9,11 @@
  */
 import {Edge, Node} from "reactflow";
 import {NodeMapKey, NodeMapValue} from "@/model/NodeMap";
-import {NodeType} from "@/config/NodeType";
+import {NodeType} from "@/config/NodeType.ts";
 import {NextNodeKey} from "@/model/NextNodeKey";
 import {NodeData} from "@/model/NodeData";
 import {BasicNode} from "@/engine/nodes/BasicNode";
-import {EngineStartNode} from "@/engine/nodes/EngineStartNode";
-import {EngineFetchWebsiteNode} from "@/engine/nodes/EngineFetchWebsiteNode";
-import {FetchWebsiteNodeData} from "@/components/editor/pages/canvas/nodes/FetchWebsiteNode";
-import {EngineSaveNode} from "@/engine/nodes/EngineSaveNode";
-import {SaveNodeData} from "@/components/editor/pages/canvas/nodes/SaveNode";
-import {EngineExtractorNode} from "@/engine/nodes/EngineExtractorNode";
-import {ExtractorNodeData} from "@/components/editor/pages/canvas/nodes/ExtractorNode";
+import {nodesMetadataMap} from "@/config/NodesMetadata";
 
 export function getNodeMap(nodes: Node[], edges: Edge[]): Map<NodeMapKey, NodeMapValue> {
 
@@ -59,23 +53,7 @@ export function getNodeMap(nodes: Node[], edges: Edge[]): Map<NodeMapKey, NodeMa
     return nodeMap
 }
 
-function getNodeFromType(type: NodeType, id: string, data: NodeData | undefined): BasicNode | null {
-    switch (type) {
-        case NodeType.START_NODE:
-            return new EngineStartNode(id)
-        case NodeType.FETCH_WEBSITE_NODE:
-            return new EngineFetchWebsiteNode(id, data as FetchWebsiteNodeData)
-        case NodeType.SAVE_NODE:
-            return new EngineSaveNode(id, data as SaveNodeData)
-        case NodeType.EXTRACTOR_NODE:
-            return new EngineExtractorNode(id, data as ExtractorNodeData)
-        case NodeType.GATEWAY_NODE:
-            return null
-        default:
-            assertNever(type)
-    }
-}
+function getNodeFromType(type: NodeType, id: string, data: NodeData): BasicNode | null {
 
-function assertNever(x: never): never {
-    throw new Error('Unexpected object: ' + x);
+    return nodesMetadataMap[type]?.getEngineNode(id, data) || null
 }

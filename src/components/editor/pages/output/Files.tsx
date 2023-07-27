@@ -1,10 +1,10 @@
 import {usePlayStore} from "@/stores/editor/PlayStore";
 import React, {useEffect, useRef} from "react";
-import {toolbarBackgroundColor} from "@/stores/editor/ReactFlowStore";
 import {IconButton, Tooltip, Typography} from "@mui/material";
 import {onSave} from "@/util/IOUtil";
 import SaveIcon from "@mui/icons-material/Save";
 import {smoothScrollToBottom} from "@/components/editor/pages/output/util/SmoothScrollUtil";
+import {toolbarBackgroundColor} from "@/app/layout";
 
 export default function Files() {
 
