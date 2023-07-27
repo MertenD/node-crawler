@@ -7,10 +7,12 @@ import TextInputOption from "@/components/form/TextInputOption";
 import {
     createNodeComponent,
     createNodeShapeStyle,
-    createOptionsComponent
+    createOptionsComponent,
+    NodeMetadata
 } from "@/components/editor/pages/canvas/nodes/util/Creators";
-import {NodeType} from "@/config/NodeType";
+import {NodeType} from "@/config/NodeType.ts";
 import SaveIcon from '@mui/icons-material/Save';
+import {EngineSaveNode} from "@/engine/nodes/EngineSaveNode";
 
 
 // --- Data ---
@@ -65,3 +67,17 @@ export const SaveOptions = createOptionsComponent<SaveNodeData>("Save", ({id, da
         />
     </>
 })
+
+
+// --- Metadata ---
+export const saveNodeMetadata = {
+    title: "Save",
+    type: NodeType.SAVE_NODE,
+    getNodeComponent: SaveNode,
+    getOptionsComponent: (id: string) => <SaveOptions id={id} />,
+    style: saveShapeStyle(true),
+    icon: <SaveIcon />,
+    getEngineNode: (id: string, data: NodeData) => {
+        return new EngineSaveNode(id, data as SaveNodeData)
+    }
+} as NodeMetadata

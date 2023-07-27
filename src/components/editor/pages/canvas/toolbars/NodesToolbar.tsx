@@ -1,10 +1,11 @@
 'use client'
 
 import {Tooltip} from "@mui/material";
-import getNodesInformation from "@/config/NodesInformation";
 import useReactFlowStore from "@/stores/editor/ReactFlowStore";
 import {useEffect, useState} from "react";
-import {NodeType} from "@/config/NodeType";
+import {NodeType} from "@/config/NodeType.ts";
+import {getAllNodesMetadata} from "@/config/NodesMetadata";
+import {NodeMetadata} from "@/components/editor/pages/canvas/nodes/util/Creators";
 
 export default function NodesToolbar() {
 
@@ -34,7 +35,7 @@ export default function NodesToolbar() {
                 paddingBottom: 20,
                 textAlign: "center",
             }}>
-                { getNodesInformation().filter(nodeInfo =>
+                { getAllNodesMetadata().filter((nodeInfo: NodeMetadata) =>
                     nodeInfo.type !== NodeType.START_NODE || !isStartAlreadyPlaced
                 ).map(info => (
                    <div style={{

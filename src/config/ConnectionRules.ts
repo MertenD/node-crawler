@@ -1,4 +1,4 @@
-import {NodeType} from "@/config/NodeType";
+import {NodeType} from "@/config/NodeType.ts";
 import {OutputValueType} from "@/config/OutputValueType";
 
 export const connectionRules: ConnectionRule[] = [

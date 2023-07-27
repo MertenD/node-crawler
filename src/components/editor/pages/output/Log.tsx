@@ -1,10 +1,10 @@
 import {usePlayStore} from "@/stores/editor/PlayStore";
 import {Button, Typography} from "@mui/material";
-import {defaultEdgeColor, toolbarBackgroundColor} from "@/stores/editor/ReactFlowStore";
 import React, {useEffect, useRef} from "react";
 import SaveIcon from "@mui/icons-material/Save";
 import {onSave} from "@/util/IOUtil";
 import {smoothScrollToBottom} from "@/components/editor/pages/output/util/SmoothScrollUtil";
+import {defaultEdgeColor, toolbarBackgroundColor} from "@/app/layout";
 
 export interface LogProps {
     hasPadding?: boolean

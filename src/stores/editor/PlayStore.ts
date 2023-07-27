@@ -1,7 +1,7 @@
 import create from 'zustand';
 import {NodeMap, NodeMapValue} from "@/model/NodeMap";
 import {NextNodeKey} from "@/model/NextNodeKey";
-import {NodeType} from "@/config/NodeType";
+import {NodeType} from "@/config/NodeType.ts";
 import {getNodeMap} from "@/util/NodeMapTransformer";
 import useReactFlowStore from "@/stores/editor/ReactFlowStore";
 

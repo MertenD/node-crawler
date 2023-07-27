@@ -1,6 +1,6 @@
 import React from 'react';
 import {EdgeProps, getSmoothStepPath} from 'reactflow';
-import {defaultEdgeColor} from "@/stores/editor/ReactFlowStore";
+import {defaultEdgeColor} from "@/app/layout";
 
 export default function DefaultEdge({
     id,

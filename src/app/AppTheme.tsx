@@ -1,8 +1,8 @@
 'use client'
 
 import {createTheme, ThemeProvider} from "@mui/material/styles";
-import {disabledColor, selectedColor, selectedColorHover, toolbarBackgroundColor} from "@/stores/editor/ReactFlowStore";
 import {ReactNode} from "react";
+import {disabledColor, selectedColor, selectedColorHover, toolbarBackgroundColor} from "@/app/layout";
 
 const appTheme = createTheme({
     palette: {

@@ -13,17 +13,18 @@ import ReactFlow, {
 } from 'reactflow';
 import 'reactflow/dist/style.css';
 import shallow from 'zustand/shallow';
-import {selectedColor, toolbarBackgroundColor, useReactFlowStore} from "@/stores/editor/ReactFlowStore";
+import {useReactFlowStore} from "@/stores/editor/ReactFlowStore";
 import React, {useCallback, useRef, useState} from "react";
-import {NodeType} from "@/config/NodeType";
+import {NodeType} from "@/config/NodeType.ts";
 import {v4 as uuidv4} from 'uuid';
 import NodesToolbar from "@/components/editor/pages/canvas/toolbars/NodesToolbar";
 import './DragAndDropFlowStyles.css'
 import OptionsToolbar from "@/components/editor/pages/canvas/toolbars/OptionsToolbar";
-import getNodesInformation from "@/config/NodesInformation";
 import {usePlayStore} from "@/stores/editor/PlayStore";
 import OnCanvasNodesToolbar from "@/components/editor/pages/canvas/toolbars/OnCanvasNodesSelector";
 import {connectionRules} from "@/config/ConnectionRules";
+import {selectedColor, toolbarBackgroundColor} from "@/app/layout";
+import {nodesMetadataMap} from "@/config/NodesMetadata";
 
 const selector = (state: any) => ({
     nodes: state.nodes,
@@ -97,7 +98,7 @@ export default function DragAndDropFlow() {
         let yOffset = 0
         let zIndex = 0
 
-        let nodeInfo = getNodesInformation().find(info => info.type === nodeType);
+        let nodeInfo = nodesMetadataMap[nodeType]
         if(nodeInfo && nodeInfo.style.minHeight && typeof nodeInfo.style.minHeight === "number") {
             yOffset += nodeInfo.style.minHeight / 2
         }

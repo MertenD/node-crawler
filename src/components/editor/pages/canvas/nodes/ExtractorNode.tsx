@@ -2,13 +2,14 @@
 import {
     createNodeComponent,
     createNodeShapeStyle,
-    createOptionsComponent
+    createOptionsComponent, NodeMetadata
 } from "@/components/editor/pages/canvas/nodes/util/Creators";
 import {NodeData} from "@/model/NodeData";
-import {NodeType} from "@/config/NodeType";
+import {NodeType} from "@/config/NodeType.ts";
 import React from "react";
 import ManageSearchIcon from '@mui/icons-material/ManageSearch';
 import TextInputOption from "@/components/form/TextInputOption";
+import {EngineExtractorNode} from "@/engine/nodes/EngineExtractorNode";
 
 export interface ExtractorNodeData extends NodeData {
     tag: string
@@ -47,3 +48,17 @@ export const ExtractorOptions = createOptionsComponent<ExtractorNodeData>("Start
         />
     </>
 })
+
+
+// --- Metadata ---
+export const extractorNodeMetadata = {
+    title: "Extractor",
+    type: NodeType.EXTRACTOR_NODE,
+    getNodeComponent: ExtractorNode,
+    getOptionsComponent: (id: string) => <ExtractorOptions id={id} />,
+    style: extractorShapeStyle(true),
+    icon: <ManageSearchIcon />,
+    getEngineNode: (id: string, data: NodeData) => {
+        return new EngineExtractorNode(id, data as ExtractorNodeData)
+    }
+} as NodeMetadata

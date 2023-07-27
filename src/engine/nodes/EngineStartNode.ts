@@ -1,5 +1,5 @@
 import {BasicNode} from "./BasicNode";
-import {NodeType} from "@/config/NodeType";
+import {NodeType} from "@/config/NodeType.ts";
 import {usePlayStore} from "@/stores/editor/PlayStore";
 import {StartNodeData} from "@/components/editor/pages/canvas/nodes/StartNode";
 
@@ -8,10 +8,10 @@ export class EngineStartNode implements BasicNode {
     nodeType: NodeType
     data: StartNodeData
 
-    constructor(id: string) {
+    constructor(id: string, data: StartNodeData) {
         this.id = id
         this.nodeType = NodeType.START_NODE
-        this.data = {}
+        this.data = data
     }
 
     async run() {

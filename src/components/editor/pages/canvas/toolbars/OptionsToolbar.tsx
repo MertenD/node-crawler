@@ -1,10 +1,10 @@
 import React, {useEffect, useState} from "react";
 import {useReactFlowStore} from "@/stores/editor/ReactFlowStore";
 import {Node,} from 'reactflow';
-import getNodesInformation from "@/config/NodesInformation";
 import {usePlayStore} from "@/stores/editor/PlayStore";
 import Log from "@/components/editor/pages/output/Log";
 import OptionsContainer from "@/components/form/OptionsContainer";
+import {nodesMetadataMap} from "@/config/NodesMetadata";
 
 export default function OptionsToolbar() {
 
@@ -35,10 +35,10 @@ export default function OptionsToolbar() {
             return
         }
 
-        const nodeInfo = getNodesInformation(currentNode.id).find(info => info.type === currentNode.type)
+        const nodeInfo = nodesMetadataMap[currentNode.type]
 
         if (nodeInfo) {
-            setOptions(nodeInfo.options)
+            setOptions(nodeInfo.getOptionsComponent(currentNode.id))
         } else {
             setOptions(<></>)
         }
