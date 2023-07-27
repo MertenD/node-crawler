@@ -22,6 +22,7 @@ import {openWarningSnackBar} from "@/stores/editor/EditorPageStore";
 import {ReactNode} from "react";
 import {selectedColor} from "@/app/layout";
 import {getAllNodesMetadata, NodeMetadata} from "@/config/NodesMetadata";
+import {NodeType} from "@/config/NodeType";
 
 export const handleStyle = (isNodeSelected: boolean) => {
     return {
@@ -35,6 +36,8 @@ export type ReactFlowState = {
     nodes: Node[];
     selectedNodes: Node[]
     edges: Edge[];
+    currentConnectionStartNodeType: NodeType | null
+    setCurrentConnectionStartNodeType: (nodeType: NodeType | null) => void
     onNodesChange: OnNodesChange;
     onEdgesChange: OnEdgesChange;
     onConnect: OnConnect;
@@ -53,6 +56,12 @@ export const useReactFlowStore = create<ReactFlowState>((set, get) => ({
         acc[info.type] = info.getNodeComponent
         return acc
     }, {}),
+    currentConnectionStartNodeType: null,
+    setCurrentConnectionStartNodeType: (nodeType: NodeType) => {
+        set({
+            currentConnectionStartNodeType: nodeType
+        })
+    },
     edgeTypes: {
         defaultEdge: DefaultEdge,
         selectedIncomingEdge: SelectedIncomingEdge,

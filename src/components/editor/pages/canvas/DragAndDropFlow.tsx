@@ -33,11 +33,13 @@ const selector = (state: any) => ({
     onEdgesChange: state.onEdgesChange,
     onConnect: state.onConnect,
     nodeTypes: state.nodeTypes,
-    edgeTypes: state.edgeTypes
+    edgeTypes: state.edgeTypes,
+    getNodeById: state.getNodeById,
+    setCurrentConnectionStartNodeType: state.setCurrentConnectionStartNodeType
 });
 
 export default function DragAndDropFlow() {
-    const { nodes, edges, onNodesChange, onEdgesChange, onConnect, nodeTypes, edgeTypes } = useReactFlowStore(selector, shallow)
+    const { nodes, edges, onNodesChange, onEdgesChange, onConnect, nodeTypes, edgeTypes, getNodeById, setCurrentConnectionStartNodeType } = useReactFlowStore(selector, shallow)
 
     const setSelectedNodes = useReactFlowStore((state) => state.setSelectedNodes)
 
@@ -77,10 +79,12 @@ export default function DragAndDropFlow() {
 
     const onConnectStart = useCallback((event: any, node: OnConnectStartParams) => {
         connectStartParams.current = node;
+        setCurrentConnectionStartNodeType(getNodeById(node.nodeId)?.type)
     }, []);
 
     const onConnectEnd = useCallback(
         (event: any) => {
+            setCurrentConnectionStartNodeType(null)
             const targetIsPane = event.target.classList.contains('react-flow__pane');
             const targetIsChallengeNode = event.target.parentElement.classList.contains("react-flow__node-challengeNode")
 

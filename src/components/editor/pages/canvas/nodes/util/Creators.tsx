@@ -1,5 +1,5 @@
 import {Handle, Node, NodeProps, Position} from "reactflow";
-import React, {CSSProperties, useEffect, useState} from "react";
+import React, {CSSProperties, useEffect, useMemo, useState} from "react";
 import {handleStyle, useReactFlowStore} from "@/stores/editor/ReactFlowStore";
 import {connectionRules} from "@/config/ConnectionRules";
 import OptionsContainer from "@/components/form/OptionsContainer";
@@ -31,13 +31,37 @@ export function createNodeComponent<DataType>(
     shapeStyle: (isSelected: boolean) => CSSProperties,
     content: (id: string, selected: boolean, data: DataType) => React.ReactNode
 ) {
+
+    const inputRules = connectionRules.find(rule => rule.nodeType === nodeType)?.inputRules
+
     return function({ id, selected, data }: NodeProps<DataType>) {
+
+        const currentConnectionStartNodeType = useReactFlowStore(state => state.currentConnectionStartNodeType)
+        const handleHighlightedMap = useMemo(() => {
+
+            // Find the rule for the currentConnectionStartNodeType once before the loop
+            const outputValueType = connectionRules.find(rule =>
+                rule.nodeType === currentConnectionStartNodeType
+            )?.outputValueType;
+
+            let newMap = new Map();
+            inputRules.forEach(rule => {
+                newMap.set(rule.handleId, rule.allowedValueTypes.includes(outputValueType));
+            });
+
+            return newMap;
+        }, [currentConnectionStartNodeType]);
+
         return <div style={{
             ...shapeStyle(selected),
         }}>
             { connectionRules.find(rule => rule.nodeType === nodeType)?.inputRules.map(rule => {
+                console.log("return", handleHighlightedMap[rule.handleId] === true, handleHighlightedMap, handleHighlightedMap.get(rule.handleId), rule.handleId)
                 return <Tooltip title={"Allowed input values: " + rule.allowedValueTypes.join(", ")} >
-                    <Handle id={rule.handleId} style={handleStyle(selected)} type="target" position={Position.Left} />
+                    <Handle id={rule.handleId} style={{
+                        ...handleStyle(selected),
+                        backgroundColor: handleHighlightedMap.get(rule.handleId) ? selectedColor : handleStyle(selected).backgroundColor
+                    }} type="target" position={Position.Left} />
                 </Tooltip>
             }) }
             { connectionRules.find(rule => rule.nodeType === nodeType)?.outputValueType && (
