@@ -8,11 +8,12 @@ import {NodeData} from "@/model/NodeData";
 import {
     createNodeComponent,
     createNodeShapeStyle,
-    createOptionsComponent, NodeMetadata
+    createOptionsComponent
 } from "@/components/editor/pages/canvas/nodes/util/Creators";
 import {EngineFetchWebsiteNode} from "@/engine/nodes/EngineFetchWebsiteNode";
 import {NodeType} from "@/config/NodeType";
 import {defaultEdgeColor, selectedColor} from "@/app/layout";
+import {NodeMetadata} from "@/config/NodesMetadata";
 
 
 // --- Data ---

@@ -49,6 +49,21 @@ export const connectionRules: ConnectionRule[] = [
                 maxConnections: 1
             }
         ]
+    },
+    {
+        nodeType: NodeType.MERGE_NODE,
+        outputValueType: OutputValueType.JSON,
+        inputRules: [
+            {
+                handleId: "input",
+                allowedValueTypes: [
+                    OutputValueType.HTML,
+                    OutputValueType.TEXT,
+                    OutputValueType.JSON
+                ],
+                maxConnections: 999
+            }
+        ]
     }
 ] as ConnectionRule[]
 

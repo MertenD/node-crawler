@@ -1,14 +1,13 @@
-import React from "react";
-import {startNodeMetadata} from "@/components/editor/pages/canvas/nodes/StartNode";
+import React, {CSSProperties} from "react";
 import {fetchWebsiteNodeMetadata} from "@/components/editor/pages/canvas/nodes/FetchWebsiteNode";
 import {saveNodeMetadata,} from "@/components/editor/pages/canvas/nodes/SaveNode";
 import {extractorNodeMetadata} from "@/components/editor/pages/canvas/nodes/ExtractorNode";
-import {NodeMetadata} from "@/components/editor/pages/canvas/nodes/util/Creators";
 import {NodeType} from "@/config/NodeType";
-
-type NodeMetadataType = {
-    [K in NodeType]: NodeMetadata | null
-}
+import {mergeNodeMetadata} from "@/components/editor/pages/canvas/nodes/MergeNode";
+import {NodeProps} from "reactflow";
+import {NodeData} from "@/model/NodeData";
+import {BasicNode} from "@/engine/nodes/BasicNode";
+import {startNodeMetadata} from "@/components/editor/pages/canvas/nodes/StartNode";
 
 export const nodesMetadataMap: NodeMetadataType = {
     [NodeType.START_NODE]: startNodeMetadata,
@@ -16,10 +15,27 @@ export const nodesMetadataMap: NodeMetadataType = {
     [NodeType.SAVE_NODE]: saveNodeMetadata,
     [NodeType.GATEWAY_NODE]: null,
     [NodeType.EXTRACTOR_NODE]: extractorNodeMetadata,
+    [NodeType.MERGE_NODE]: mergeNodeMetadata
 };
+
+// --- Do not change anything below --- \\
 
 export function getAllNodesMetadata(): NodeMetadata[] {
     return Object
         .values(nodesMetadataMap)
         .filter((metadata): metadata is NodeMetadata => metadata !== null);
+}
+
+export type NodeMetadata = {
+    title: string,
+    type: NodeType,
+    getNodeComponent: ({id, selected, data}: NodeProps) => React.ReactNode,
+    getOptionsComponent: (id: string) => React.ReactNode,
+    style: CSSProperties,
+    icon: React.ReactNode,
+    getEngineNode: (id: string, data: NodeData) => BasicNode
+}
+
+type NodeMetadataType = {
+    [K in NodeType]: NodeMetadata | null
 }

@@ -8,11 +8,12 @@ import {usePlayStore} from "@/stores/editor/PlayStore";
 import {
     createNodeComponent,
     createNodeShapeStyle,
-    createOptionsComponent, NodeMetadata
+    createOptionsComponent
 } from "@/components/editor/pages/canvas/nodes/util/Creators";
 import {NodeType} from "@/config/NodeType.ts";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import {EngineStartNode} from "@/engine/nodes/EngineStartNode";
+import {NodeMetadata} from "@/config/NodesMetadata";
 
 // --- Data ---
 export interface StartNodeData extends NodeData {
@@ -65,9 +66,9 @@ export const startNodeMetadata = {
     title: "Start",
     type: NodeType.START_NODE,
     getNodeComponent: StartNode,
-    getOptionsComponent: (id: string) => <StartOptions id={id} />,
+    getOptionsComponent: (id: string) => <StartOptions id={id}/>,
     style: startShapeStyle(true),
-    icon: <PlayArrowIcon />,
+    icon: <PlayArrowIcon/>,
     getEngineNode: (id: string, data: NodeData) => {
         return new EngineStartNode(id, data as StartNodeData)
     }

@@ -1,9 +1,6 @@
 import {Handle, Node, NodeProps, Position} from "reactflow";
 import React, {CSSProperties, useEffect, useState} from "react";
-import {
-    handleStyle,
-    useReactFlowStore
-} from "@/stores/editor/ReactFlowStore";
+import {handleStyle, useReactFlowStore} from "@/stores/editor/ReactFlowStore";
 import {connectionRules} from "@/config/ConnectionRules";
 import OptionsContainer from "@/components/form/OptionsContainer";
 import {SaveNodeData} from "@/components/editor/pages/canvas/nodes/SaveNode";
@@ -11,8 +8,6 @@ import {setNodeWithUpdatedDataValue} from "@/components/editor/pages/canvas/node
 import {usePlayStore} from "@/stores/editor/PlayStore";
 import CacheTextField from "@/components/form/CacheTextField";
 import {Tooltip} from "@mui/material";
-import {NodeData} from "@/model/NodeData";
-import {BasicNode} from "@/engine/nodes/BasicNode";
 import {NodeType} from "@/config/NodeType";
 import {nodeBackgroundColor, nodeShadowColor, selectedColor} from "@/app/layout";
 
@@ -109,12 +104,3 @@ export function createOptionsComponent<DataType>(
     }
 }
 
-export type NodeMetadata = {
-    title: string,
-    type: NodeType,
-    getNodeComponent: ({id, selected, data}: NodeProps) => React.ReactNode,
-    getOptionsComponent: (id: string) => React.ReactNode,
-    style: CSSProperties,
-    icon: React.ReactNode,
-    getEngineNode: (id: string, data: NodeData) => BasicNode
-}

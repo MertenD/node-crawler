@@ -21,8 +21,7 @@ import {connectionRules} from "@/config/ConnectionRules";
 import {openWarningSnackBar} from "@/stores/editor/EditorPageStore";
 import {ReactNode} from "react";
 import {selectedColor} from "@/app/layout";
-import {getAllNodesMetadata} from "@/config/NodesMetadata";
-import {NodeMetadata} from "@/components/editor/pages/canvas/nodes/util/Creators";
+import {getAllNodesMetadata, NodeMetadata} from "@/config/NodesMetadata";
 
 export const handleStyle = (isNodeSelected: boolean) => {
     return {

@@ -2,7 +2,7 @@
 import {
     createNodeComponent,
     createNodeShapeStyle,
-    createOptionsComponent, NodeMetadata
+    createOptionsComponent
 } from "@/components/editor/pages/canvas/nodes/util/Creators";
 import {NodeData} from "@/model/NodeData";
 import {NodeType} from "@/config/NodeType.ts";
@@ -10,6 +10,7 @@ import React from "react";
 import ManageSearchIcon from '@mui/icons-material/ManageSearch';
 import TextInputOption from "@/components/form/TextInputOption";
 import {EngineExtractorNode} from "@/engine/nodes/EngineExtractorNode";
+import {NodeMetadata} from "@/config/NodesMetadata";
 
 export interface ExtractorNodeData extends NodeData {
     tag: string

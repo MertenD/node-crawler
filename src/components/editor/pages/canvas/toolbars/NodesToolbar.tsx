@@ -4,8 +4,7 @@ import {Tooltip} from "@mui/material";
 import useReactFlowStore from "@/stores/editor/ReactFlowStore";
 import {useEffect, useState} from "react";
 import {NodeType} from "@/config/NodeType.ts";
-import {getAllNodesMetadata} from "@/config/NodesMetadata";
-import {NodeMetadata} from "@/components/editor/pages/canvas/nodes/util/Creators";
+import {getAllNodesMetadata, NodeMetadata} from "@/config/NodesMetadata";
 
 export default function NodesToolbar() {
 

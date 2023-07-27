@@ -7,12 +7,12 @@ import TextInputOption from "@/components/form/TextInputOption";
 import {
     createNodeComponent,
     createNodeShapeStyle,
-    createOptionsComponent,
-    NodeMetadata
+    createOptionsComponent
 } from "@/components/editor/pages/canvas/nodes/util/Creators";
 import {NodeType} from "@/config/NodeType.ts";
 import SaveIcon from '@mui/icons-material/Save';
 import {EngineSaveNode} from "@/engine/nodes/EngineSaveNode";
+import {NodeMetadata} from "@/config/NodesMetadata";
 
 
 // --- Data ---
