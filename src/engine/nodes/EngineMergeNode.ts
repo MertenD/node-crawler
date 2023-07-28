@@ -21,15 +21,7 @@ export class EngineMergeNode implements BasicNode {
 
             usePlayStore.getState().writeToLog(`Merging ${inputs.length} inputs together`)
 
-            const flattenedInputs = inputs.map(input => {
-                try {
-                    return JSON.parse(input).flat()
-                } catch(e) {
-                    return input
-                }
-            }).flat()
-
-            usePlayStore.getState().addOutgoingPipelines(this.id, JSON.stringify(flattenedInputs, null, 2))
+            usePlayStore.getState().addOutgoingPipelines(this.id, inputs)
 
             setTimeout(() => {  usePlayStore.getState().nextNode() }, 100);
         }

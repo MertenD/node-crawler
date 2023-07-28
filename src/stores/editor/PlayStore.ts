@@ -133,7 +133,6 @@ export const usePlayStore = create<PlayStoreState>((set, get) => ({
             pipeline.to !== get().currentNode?.node.id
         )?.to
         if (nextNodeId) {
-
             get().writeToLog(`Going back to last node with all inputs available, which is a "${get().getNode(nextNodeId)?.node.nodeType}"`)
             get().setCurrentNode(get().getNode(nextNodeId))
         } else {
@@ -180,7 +179,7 @@ export const usePlayStore = create<PlayStoreState>((set, get) => ({
                         from: from,
                         to: to.nodeId,
                         toHandleId: to.targetHandleId,
-                        value: value,
+                        value: Array.isArray(value) ? value.flat() : [value],
                         isActivated: true
                     }
                 })].flat()
@@ -191,7 +190,7 @@ export const usePlayStore = create<PlayStoreState>((set, get) => ({
                     from: from,
                     to: null,
                     toHandleId: null,
-                    value: value,
+                    value: Array.isArray(value) ? value.flat() : [value],
                     isActivated: false
                 }]
             })
@@ -209,7 +208,7 @@ export const usePlayStore = create<PlayStoreState>((set, get) => ({
     },
     getInput: (nodeId: string, handleId: string): string[] | undefined => {
         // Get input values from the pipelines of the targetHandle
-        const input =  get().pipelines.filter(pipeline => {
+        const inputs =  get().pipelines.filter(pipeline => {
             return pipeline.to === nodeId && pipeline.toHandleId === handleId
         }).map(pipeline => pipeline.value)
 
@@ -223,8 +222,8 @@ export const usePlayStore = create<PlayStoreState>((set, get) => ({
 
         // If the input array contains exactly the required amount of inputs and if none of those inputs are undefined
         // Then everything is okay and the value will be returned
-        if (input.length === ingoingConnections && input.every(value => value !== undefined)) {
-            return input
+        if (inputs.length === ingoingConnections && inputs.every(value => value !== undefined)) {
+            return inputs.flat()
         } else {
 
             // If any input value is missing or is undefined the crawler will backtrack to the next node that

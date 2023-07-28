@@ -17,25 +17,27 @@ export class EngineExtractorNode implements BasicNode {
 
     async run() {
         // TODO Hier vielleicht sinnvoll zusätzlich noch mitzugeben, welche OutputDataValue das ist, damit man im Fall hier Fallunterscheiden kann
-        const html = usePlayStore.getState().getInput(this.id, "input")
+        const inputs = usePlayStore.getState().getInput(this.id, "input")
 
-        if (html) {
+        if (inputs) {
 
             usePlayStore.getState().writeToLog(`Extracting "${this.data.tag}" from provided html`)
 
-            const tag = this.data.tag;
+            const elements = inputs.map(html => {
+                const tag = this.data.tag;
 
-            // Parse the HTML with Cheerio
-            const $ = cheerio.load(html[0]);
+                // Parse the HTML with Cheerio
+                const $ = cheerio.load(html);
 
-            // Extract all HTML elements that are inside a "tag"
-            const elements = $(tag).map((i, el) => $(el).html()).get();
+                // Extract all HTML elements that are inside a "tag"
+                return $(tag).map((i, el) => $(el).html()).get();
+            }).flat()
 
             usePlayStore.getState().writeToLog(`Extracted ${elements.length} elements`)
 
             // Here, 'elements' is an array that contains the inner HTML of each "tag" element
 
-            usePlayStore.getState().addOutgoingPipelines(this.id, JSON.stringify(elements, null, 2));
+            usePlayStore.getState().addOutgoingPipelines(this.id, elements);
 
             // End with calling the next node
             setTimeout(() => {  usePlayStore.getState().nextNode() }, 100);

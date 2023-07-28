@@ -28,24 +28,24 @@ export const connectionRules: { [K in ConnectionRule] } = {
                     OutputValueType.TEXT,
                     OutputValueType.JSON
                 ],
-                maxConnections: 1
+                maxConnections: 999
             }
         ]
     },
     [NodeType.EXTRACTOR_NODE]: {
-        outputValueType: OutputValueType.JSON,
+        outputValueType: OutputValueType.HTML,
         inputRules: [
             {
                 handleId: "input",
                 allowedValueTypes: [
                     OutputValueType.HTML
                 ],
-                maxConnections: 1
+                maxConnections: 999
             }
         ]
     },
     [NodeType.MERGE_NODE]: {
-        outputValueType: OutputValueType.JSON,
+        outputValueType: OutputValueType.HTML,
         inputRules: [
             {
                 handleId: "input",
