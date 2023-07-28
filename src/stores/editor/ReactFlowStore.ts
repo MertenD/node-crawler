@@ -93,6 +93,10 @@ export const useReactFlowStore = create<ReactFlowState>((set, get) => ({
     },
     onConnect: (connection: Connection) => {
 
+        // TODO Überlegen, ob ich bei Nodes mit mehreren Inputs verschiedene Typen von Inputs zulassen möchte (HTML und JSON kombiniert bspw.)
+        // Vielleicht wäre es eine sinnvolle ergänzung den Benutzer daran zu hindern ein HTML Edge an einen Node zu heften, der bereits einen JSON Edge hat
+        // Ich kann das dem Benutzer über ein Popup erklären und fragen, ob er die alten durch den neuen austauschen möchte
+
         const source = connection.source
         const target = connection.target
 

@@ -7,7 +7,7 @@ import UnfoldLessIcon from '@mui/icons-material/UnfoldLess';
 
 export interface CacheTextFieldProps {
     label: string,
-    value: string,
+    value: string[],
     onChange: (event: React.ChangeEvent<HTMLInputElement>) => void
     inputProps?: Partial<OutlinedInputProps>
 }
@@ -28,11 +28,12 @@ export default function CacheTextField(props: CacheTextFieldProps) {
                 fullWidth
                 label={props.label}
                 variant="outlined"
-                value={(isExpanded ? props.value.trim() : props.value.trim().substring(0, 90) + "...") || ""}
+                value={(isExpanded ? props.value.join(", ").trim() : props.value.join(", ").trim().substring(0, 90) + "...") || ""}
                 onChange={props.onChange}
                 InputProps={props.inputProps || {}}
                 disabled={!isExpanded}
                 multiline
+                minRows={2}
                 maxRows={isExpanded ? 10 : 2}
             />
             <div style={{
@@ -46,7 +47,7 @@ export default function CacheTextField(props: CacheTextFieldProps) {
                 </Tooltip>
                 <Tooltip title="Copy cache" >
                     <IconButton onClick={() =>{
-                        navigator.clipboard.writeText(props.value).then(() => {
+                        navigator.clipboard.writeText(props.value.join(", ")).then(() => {
                             openSuccessSnackBar("Cache copied to clipboard")
                         })
                     }}>
