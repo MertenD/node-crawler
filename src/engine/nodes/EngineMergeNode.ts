@@ -31,8 +31,6 @@ export class EngineMergeNode implements BasicNode {
 
             usePlayStore.getState().addOutgoingPipelines(this.id, JSON.stringify(flattenedInputs, null, 2))
 
-            console.log(JSON.parse(JSON.stringify(flattenedInputs, null, 2)))
-
             setTimeout(() => {  usePlayStore.getState().nextNode() }, 100);
         }
     }

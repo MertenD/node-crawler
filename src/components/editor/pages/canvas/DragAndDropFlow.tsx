@@ -19,6 +19,7 @@ import {NodeType} from "@/config/NodeType.ts";
 import {v4 as uuidv4} from 'uuid';
 import NodesToolbar from "@/components/editor/pages/canvas/toolbars/NodesToolbar";
 import './DragAndDropFlowStyles.css'
+import './edges/EdgeGradientStyles.css'
 import OptionsToolbar from "@/components/editor/pages/canvas/toolbars/OptionsToolbar";
 import {usePlayStore} from "@/stores/editor/PlayStore";
 import OnCanvasNodesToolbar from "@/components/editor/pages/canvas/toolbars/OnCanvasNodesSelector";
@@ -33,11 +34,13 @@ const selector = (state: any) => ({
     onEdgesChange: state.onEdgesChange,
     onConnect: state.onConnect,
     nodeTypes: state.nodeTypes,
-    edgeTypes: state.edgeTypes
+    edgeTypes: state.edgeTypes,
+    getNodeById: state.getNodeById,
+    setCurrentConnectionStartNodeType: state.setCurrentConnectionStartNodeType
 });
 
 export default function DragAndDropFlow() {
-    const { nodes, edges, onNodesChange, onEdgesChange, onConnect, nodeTypes, edgeTypes } = useReactFlowStore(selector, shallow)
+    const { nodes, edges, onNodesChange, onEdgesChange, onConnect, nodeTypes, edgeTypes, getNodeById, setCurrentConnectionStartNodeType } = useReactFlowStore(selector, shallow)
 
     const setSelectedNodes = useReactFlowStore((state) => state.setSelectedNodes)
 
@@ -77,10 +80,12 @@ export default function DragAndDropFlow() {
 
     const onConnectStart = useCallback((event: any, node: OnConnectStartParams) => {
         connectStartParams.current = node;
+        setCurrentConnectionStartNodeType(getNodeById(node.nodeId)?.type)
     }, []);
 
     const onConnectEnd = useCallback(
         (event: any) => {
+            setCurrentConnectionStartNodeType(null)
             const targetIsPane = event.target.classList.contains('react-flow__pane');
             const targetIsChallengeNode = event.target.parentElement.classList.contains("react-flow__node-challengeNode")
 
@@ -166,7 +171,7 @@ export default function DragAndDropFlow() {
 
                     if (nodeType !== null && connectStartParams.current !== null && connectStartParams.current?.nodeId !== null) {
                         const id = addNodeAtPosition(reactFlowInstance.project(lastEventPosition), nodeType)
-                        let rule = connectionRules.find(rule => rule.nodeType === nodeType);
+                        let rule = connectionRules[nodeType];
                         if(rule && rule.inputRules && rule.inputRules.length > 0) {
                             onConnect({
                                 source: connectStartParams.current?.nodeId,
