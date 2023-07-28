@@ -22,9 +22,3 @@ type HighlightEdgeInfoTypes = {
 }
 
 export type EdgeType = ({id, sourceX, sourceY, targetX, targetY, sourcePosition, targetPosition, style, markerEnd}: EdgeProps) => React.ReactNode | null
-
-export function getAllHighlightEdges(): EdgeType[] {
-    return Object
-        .values(highlightEdges)
-        .filter((edge): edge is EdgeType => edge !== null);
-}
