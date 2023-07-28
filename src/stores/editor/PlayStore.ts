@@ -85,7 +85,6 @@ export const usePlayStore = create<PlayStoreState>((set, get) => ({
             })
             useReactFlowStore.getState().setNodeSelected(null)
         }
-        console.log("Pipelines", get().pipelines)
     },
     setCurrentNode: (newNode: NodeMapValue | null) => {
         set({
@@ -187,7 +186,6 @@ export const usePlayStore = create<PlayStoreState>((set, get) => ({
                 })].flat()
             })
         } else {
-            console.log("from has no next nodes", from)
             set({
                 pipelines: [...get().pipelines, {
                     from: from,
