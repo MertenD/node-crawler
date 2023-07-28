@@ -19,6 +19,7 @@ import {NodeType} from "@/config/NodeType.ts";
 import {v4 as uuidv4} from 'uuid';
 import NodesToolbar from "@/components/editor/pages/canvas/toolbars/NodesToolbar";
 import './DragAndDropFlowStyles.css'
+import './edges/EdgeGradientStyles.css'
 import OptionsToolbar from "@/components/editor/pages/canvas/toolbars/OptionsToolbar";
 import {usePlayStore} from "@/stores/editor/PlayStore";
 import OnCanvasNodesToolbar from "@/components/editor/pages/canvas/toolbars/OnCanvasNodesSelector";
@@ -170,7 +171,7 @@ export default function DragAndDropFlow() {
 
                     if (nodeType !== null && connectStartParams.current !== null && connectStartParams.current?.nodeId !== null) {
                         const id = addNodeAtPosition(reactFlowInstance.project(lastEventPosition), nodeType)
-                        let rule = connectionRules.find(rule => rule.nodeType === nodeType);
+                        let rule = connectionRules[nodeType];
                         if(rule && rule.inputRules && rule.inputRules.length > 0) {
                             onConnect({
                                 source: connectStartParams.current?.nodeId,

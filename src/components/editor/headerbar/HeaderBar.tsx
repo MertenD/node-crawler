@@ -13,6 +13,8 @@ import PlayCircleFilledIcon from '@mui/icons-material/PlayCircleFilled';
 import {usePlayStore} from "@/stores/editor/PlayStore";
 import StopCircleIcon from '@mui/icons-material/StopCircle';
 import {toolbarBackgroundColor} from "@/app/layout";
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 
 export const TOOLBAR_HEIGHT = 8
 export const CANVAS_HEIGHT = 100 - TOOLBAR_HEIGHT
@@ -30,6 +32,8 @@ export default function HeaderBar() {
     const setup = usePlayStore(state => state.setup)
     const stop = usePlayStore(state => state.stop)
     const isProcessRunning = usePlayStore(state => state.isProcessRunning)
+    const isConnectionHighlightingActivated = useReactFlowStore(state => state.isConnectionHighlightingActivated)
+    const setIsConnectionHighlightingActivated = useReactFlowStore(state => state.setIsConnectionHighlightingActivated)
 
     return <div style={{
         height: `${TOOLBAR_HEIGHT}vh`,
@@ -88,6 +92,13 @@ export default function HeaderBar() {
                     stop()
                 }}>
                     <StopCircleIcon />
+                </IconButton>
+            </Tooltip>
+            <Tooltip title={isConnectionHighlightingActivated ? "Turn off connection highlighting" : "Turn on connection highlighting"} >
+                <IconButton onClick={() =>{
+                    setIsConnectionHighlightingActivated(!isConnectionHighlightingActivated)
+                }}>
+                    { isConnectionHighlightingActivated ? <VisibilityOffIcon /> : <VisibilityIcon /> }
                 </IconButton>
             </Tooltip>
         </div>

@@ -1,14 +1,12 @@
 import {NodeType} from "@/config/NodeType.ts";
 import {OutputValueType} from "@/config/OutputValueType";
 
-export const connectionRules: ConnectionRule[] = [
-    {
-        nodeType: NodeType.START_NODE,
+export const connectionRules: { [K in ConnectionRule] } = {
+    [NodeType.START_NODE]: {
         outputValueType: OutputValueType.NONE,
         inputRules: []
     },
-    {
-        nodeType: NodeType.FETCH_WEBSITE_NODE,
+    [NodeType.FETCH_WEBSITE_NODE]: {
         outputValueType: OutputValueType.HTML,
         inputRules: [
             {
@@ -17,13 +15,10 @@ export const connectionRules: ConnectionRule[] = [
                     OutputValueType.NONE
                 ],
                 maxConnections: 1
-                // TODO Hier noch sowas wie, "warten auf alle" oder "jedes einzeln" und dementsprechend auch die Logik anpassen
-                // TODO OOOOOder Alles ist immer automatisch "jedes einzeln" bearbeiten und um verschiedene Pipelines zu verbinden, gibt es einen Connector Node (Find ich besser)
             }
         ]
     },
-    {
-        nodeType: NodeType.SAVE_NODE,
+    [NodeType.SAVE_NODE]: {
         outputValueType: OutputValueType.NONE,
         inputRules: [
             {
@@ -37,8 +32,7 @@ export const connectionRules: ConnectionRule[] = [
             }
         ]
     },
-    {
-        nodeType: NodeType.EXTRACTOR_NODE,
+    [NodeType.EXTRACTOR_NODE]: {
         outputValueType: OutputValueType.JSON,
         inputRules: [
             {
@@ -50,8 +44,7 @@ export const connectionRules: ConnectionRule[] = [
             }
         ]
     },
-    {
-        nodeType: NodeType.MERGE_NODE,
+    [NodeType.MERGE_NODE]: {
         outputValueType: OutputValueType.JSON,
         inputRules: [
             {
@@ -65,10 +58,9 @@ export const connectionRules: ConnectionRule[] = [
             }
         ]
     }
-] as ConnectionRule[]
+}
 
 export type ConnectionRule = {
-    nodeType: NodeType
     outputValueType: OutputValueType | null
     inputRules: InputRule[]
 }

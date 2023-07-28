@@ -78,8 +78,8 @@ export default function OnCanvasNodesToolbar(props: OnCanvasNodesToolbarProps) {
                         return true
                     }
 
-                    const sourceOutputValue = connectionRules.find(rule => rule.nodeType === props.sourceNode?.type)?.outputValueType
-                    const currentNodeInputRules = connectionRules.find(rule => rule.nodeType === nodeInfo.type)?.inputRules
+                    const sourceOutputValue = connectionRules[props.sourceNode?.type]?.outputValueType
+                    const currentNodeInputRules = connectionRules[nodeInfo.type]?.inputRules
 
                     // TODO Nochmal weiter überlegen, wie ich das handhabe, sobald ich einen node mit mehr als einem Eingang hab
                     if ((currentNodeInputRules?.length || 0) > 1 || !sourceOutputValue) {

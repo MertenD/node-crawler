@@ -13,16 +13,19 @@ import {
     OnEdgesChange,
     OnNodesChange
 } from 'reactflow';
-import DefaultEdge from "@/components/editor/pages/canvas/edges/DefaultEdge";
-import SelectedIncomingEdge from "@/components/editor/pages/canvas/edges/SelectedIncomingEdge";
-import SelectedOutgoingEdge from "@/components/editor/pages/canvas/edges/SelectedOutgoingEdge";
-import BothSelectedEdge from "@/components/editor/pages/canvas/edges/BothSelectedEdge";
 import {connectionRules} from "@/config/ConnectionRules";
 import {openWarningSnackBar} from "@/stores/editor/EditorPageStore";
 import {ReactNode} from "react";
 import {selectedColor} from "@/app/layout";
 import {getAllNodesMetadata, NodeMetadata} from "@/config/NodesMetadata";
 import {NodeType} from "@/config/NodeType";
+import {
+    BothSelectedEdge,
+    DefaultEdge,
+    highlightEdges,
+    SelectedIncomingEdge,
+    SelectedOutgoingEdge
+} from "@/components/editor/pages/canvas/edges/Edges";
 
 export const handleStyle = (isNodeSelected: boolean) => {
     return {
@@ -37,7 +40,9 @@ export type ReactFlowState = {
     selectedNodes: Node[]
     edges: Edge[];
     currentConnectionStartNodeType: NodeType | null
+    isConnectionHighlightingActivated: boolean
     setCurrentConnectionStartNodeType: (nodeType: NodeType | null) => void
+    setIsConnectionHighlightingActivated: (isActivated: boolean) => void
     onNodesChange: OnNodesChange;
     onEdgesChange: OnEdgesChange;
     onConnect: OnConnect;
@@ -57,16 +62,24 @@ export const useReactFlowStore = create<ReactFlowState>((set, get) => ({
         return acc
     }, {}),
     currentConnectionStartNodeType: null,
+    isConnectionHighlightingActivated: false,
     setCurrentConnectionStartNodeType: (nodeType: NodeType) => {
         set({
             currentConnectionStartNodeType: nodeType
         })
     },
+    setIsConnectionHighlightingActivated: (isActivated: boolean) => {
+        set({
+            isConnectionHighlightingActivated: isActivated
+        })
+        get().updateEdgesGradient()
+    },
     edgeTypes: {
         defaultEdge: DefaultEdge,
         selectedIncomingEdge: SelectedIncomingEdge,
         selectedOutgoingEdge: SelectedOutgoingEdge,
-        bothSelectedEdge: BothSelectedEdge
+        bothSelectedEdge: BothSelectedEdge,
+        ...highlightEdges,
     },
     onNodesChange: (changes: NodeChange[]) => {
         set({
@@ -101,18 +114,16 @@ export const useReactFlowStore = create<ReactFlowState>((set, get) => ({
             return
         }
 
-        const pipelineValueType = connectionRules.find(rule => rule.nodeType === sourceNode.type)?.outputValueType
-        const isConnectionAllowed = pipelineValueType && connectionRules.find(rule =>
-            rule.nodeType === targetNode.type
-        )?.inputRules.find(rule => {
+        const pipelineValueType = connectionRules[sourceNode.type]?.outputValueType
+        const isConnectionAllowed = pipelineValueType && connectionRules[targetNode.type]?.inputRules.find(rule => {
             return rule.handleId === connection.targetHandle
         })?.allowedValueTypes?.includes(pipelineValueType)
 
         if (!isConnectionAllowed) {
             openWarningSnackBar(`You can't connect a "${
-                connectionRules.find(rule => rule.nodeType === sourceNode.type)?.outputValueType
+                connectionRules[sourceNode.type]?.outputValueType
             }" output to a "${
-                connectionRules.find(rule => rule.nodeType === targetNode.type)?.inputRules.find(rule => 
+                connectionRules[targetNode.type]?.inputRules.find(rule => 
                     rule.handleId === connection.targetHandle
                 )?.allowedValueTypes.join("/")
             }" input`)
@@ -120,9 +131,7 @@ export const useReactFlowStore = create<ReactFlowState>((set, get) => ({
         }
 
         const existingConnectionsToTarget = get().edges.filter(edge => edge.target === target && edge.targetHandle === connection.targetHandle).length
-        const maxConnectionsToTarget = connectionRules.find(rule =>
-            rule.nodeType === targetNode.type
-        )?.inputRules.find(rule => {
+        const maxConnectionsToTarget = connectionRules[targetNode.type]?.inputRules.find(rule => {
             return rule.handleId === connection.targetHandle
         })?.maxConnections
         const isMaxConnectionsReached = maxConnectionsToTarget && existingConnectionsToTarget >= maxConnectionsToTarget
@@ -178,32 +187,49 @@ export const useReactFlowStore = create<ReactFlowState>((set, get) => ({
     updateEdgesGradient() {
         const selectedNodeIds = get().selectedNodes.map(node => node.id)
 
-        set({
-            edges: get().edges.map(edge => {
-                if (selectedNodeIds.includes(edge.source) && selectedNodeIds.includes(edge.target)) {
+        if (!get().isConnectionHighlightingActivated) {
+
+            set({
+                edges: get().edges.map(edge => {
+                    if (selectedNodeIds.includes(edge.source) && selectedNodeIds.includes(edge.target)) {
+                        return {
+                            ...edge,
+                            type: "bothSelectedEdge"
+                        }
+                    }
+                    if (selectedNodeIds.includes(edge.source)) {
+                        return {
+                            ...edge,
+                            type: "selectedOutgoingEdge"
+                        }
+                    }
+                    if (selectedNodeIds.includes(edge.target)) {
+                        return {
+                            ...edge,
+                            type: "selectedIncomingEdge"
+                        }
+                    }
                     return {
                         ...edge,
-                        type: "bothSelectedEdge"
+                        type: "defaultEdge"
                     }
-                }
-                if (selectedNodeIds.includes(edge.source)) {
-                    return {
-                        ...edge,
-                        type: "selectedOutgoingEdge"
-                    }
-                }
-                if (selectedNodeIds.includes(edge.target)) {
-                    return {
-                        ...edge,
-                        type: "selectedIncomingEdge"
-                    }
-                }
-                return {
-                    ...edge,
-                    type: "defaultEdge"
-                }
+                })
             })
-        })
+
+        } else {
+
+            set({
+                edges: get().edges.map(edge => {
+
+                    const sourceNodeType = get().getNodeById(edge.source)?.type
+                    return {
+                        ...edge,
+                        type: connectionRules[sourceNodeType].outputValueType
+                    }
+                })
+            })
+
+        }
     }
 }));
 

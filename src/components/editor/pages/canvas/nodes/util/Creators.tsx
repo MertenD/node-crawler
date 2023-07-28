@@ -32,7 +32,7 @@ export function createNodeComponent<DataType>(
     content: (id: string, selected: boolean, data: DataType) => React.ReactNode
 ) {
 
-    const inputRules = connectionRules.find(rule => rule.nodeType === nodeType)?.inputRules
+    const inputRules = connectionRules[nodeType]?.inputRules
 
     return function({ id, selected, data }: NodeProps<DataType>) {
 
@@ -40,9 +40,7 @@ export function createNodeComponent<DataType>(
         const handleHighlightedMap = useMemo(() => {
 
             // Find the rule for the currentConnectionStartNodeType once before the loop
-            const outputValueType = connectionRules.find(rule =>
-                rule.nodeType === currentConnectionStartNodeType
-            )?.outputValueType;
+            const outputValueType = connectionRules[currentConnectionStartNodeType]?.outputValueType;
 
             let newMap = new Map();
             inputRules.forEach(rule => {
@@ -55,8 +53,7 @@ export function createNodeComponent<DataType>(
         return <div style={{
             ...shapeStyle(selected),
         }}>
-            { connectionRules.find(rule => rule.nodeType === nodeType)?.inputRules.map(rule => {
-                console.log("return", handleHighlightedMap[rule.handleId] === true, handleHighlightedMap, handleHighlightedMap.get(rule.handleId), rule.handleId)
+            { connectionRules[nodeType]?.inputRules.map(rule => {
                 return <Tooltip title={"Allowed input values: " + rule.allowedValueTypes.join(", ")} >
                     <Handle id={rule.handleId} style={{
                         ...handleStyle(selected),
@@ -64,8 +61,8 @@ export function createNodeComponent<DataType>(
                     }} type="target" position={Position.Left} />
                 </Tooltip>
             }) }
-            { connectionRules.find(rule => rule.nodeType === nodeType)?.outputValueType && (
-                <Tooltip title={"Output value: " + connectionRules.find(rule => rule.nodeType === nodeType)?.outputValueType} >
+            { connectionRules[nodeType]?.outputValueType && (
+                <Tooltip title={"Output value: " + connectionRules[nodeType]?.outputValueType} >
                     <Handle id="output" style={handleStyle(selected)} type="source" position={Position.Right}/>
                 </Tooltip>
             ) }

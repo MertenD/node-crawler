@@ -1,0 +1,63 @@
+/* Incoming Edge */
+/*noinspection ALL,CssUnusedSymbol*/
+.react-flow__edge.incoming .react-flow__edge-path {
+    stroke: url(#incoming-edge-gradient);
+    stroke-width: 2;
+    stroke-opacity: 0.75;
+}
+
+/* Outgoing Edge */
+/*noinspection ALL,CssUnusedSymbol*/
+.react-flow__edge.outgoing .react-flow__edge-path {
+    stroke: url(#outgoing-edge-gradient);
+    stroke-width: 2;
+    stroke-opacity: 0.75;
+}
+
+/* Both Selected Edge */
+/*noinspection ALL,CssUnusedSymbol*/
+.react-flow__edge.bothSelected .react-flow__edge-path {
+    stroke: url(#bothSelected-edge-gradient);
+    stroke-width: 2;
+    stroke-opacity: 0.75;
+}
+
+/* Default Edge */
+/*noinspection ALL,CssUnusedSymbol*/
+.react-flow__edge.default .react-flow__edge-path {
+    stroke: url(#default-edge-gradient);
+    stroke-width: 2;
+    stroke-opacity: 0.75;
+}
+
+/* HtmlHighlight Edge */
+/*noinspection ALL,CssUnusedSymbol*/
+.react-flow__edge.html .react-flow__edge-path {
+    stroke: url(#html-edge-gradient);
+    stroke-width: 2;
+    stroke-opacity: 0.75;
+}
+
+/* HtmlHighlight Edge */
+/*noinspection ALL,CssUnusedSymbol*/
+.react-flow__edge.text .react-flow__edge-path {
+    stroke: url(#text-edge-gradient);
+    stroke-width: 2;
+    stroke-opacity: 0.75;
+}
+
+/* HtmlHighlight Edge */
+/*noinspection ALL,CssUnusedSymbol*/
+.react-flow__edge.json .react-flow__edge-path {
+    stroke: url(#json-edge-gradient);
+    stroke-width: 2;
+    stroke-opacity: 0.75;
+}
+
+/* HtmlHighlight Edge */
+/*noinspection ALL,CssUnusedSymbol*/
+.react-flow__edge.none .react-flow__edge-path {
+    stroke: url(#none-edge-gradient);
+    stroke-width: 2;
+    stroke-opacity: 0.75;
+}
