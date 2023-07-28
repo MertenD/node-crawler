@@ -3,7 +3,6 @@ import {fetchWebsiteNodeMetadata} from "@/components/editor/pages/canvas/nodes/F
 import {saveNodeMetadata,} from "@/components/editor/pages/canvas/nodes/SaveNode";
 import {extractorNodeMetadata} from "@/components/editor/pages/canvas/nodes/ExtractorNode";
 import {NodeType} from "@/config/NodeType";
-import {mergeNodeMetadata} from "@/components/editor/pages/canvas/nodes/MergeNode";
 import {NodeProps} from "reactflow";
 import {NodeData} from "@/model/NodeData";
 import {BasicNode} from "@/engine/nodes/BasicNode";
@@ -14,8 +13,7 @@ export const nodesMetadataMap: NodeMetadataType = {
     [NodeType.FETCH_WEBSITE_NODE]: fetchWebsiteNodeMetadata,
     [NodeType.SAVE_NODE]: saveNodeMetadata,
     [NodeType.GATEWAY_NODE]: null,
-    [NodeType.EXTRACTOR_NODE]: extractorNodeMetadata,
-    [NodeType.MERGE_NODE]: mergeNodeMetadata
+    [NodeType.EXTRACTOR_NODE]: extractorNodeMetadata
 };
 
 // --- Do not change anything below --- \\

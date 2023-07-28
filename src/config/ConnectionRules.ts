@@ -43,20 +43,6 @@ export const connectionRules: { [K in ConnectionRule] } = {
                 maxConnections: 999
             }
         ]
-    },
-    [NodeType.MERGE_NODE]: {
-        outputValueType: OutputValueType.HTML,
-        inputRules: [
-            {
-                handleId: "input",
-                allowedValueTypes: [
-                    OutputValueType.HTML,
-                    OutputValueType.TEXT,
-                    OutputValueType.JSON
-                ],
-                maxConnections: 999
-            }
-        ]
     }
 }
 
