@@ -116,7 +116,7 @@ export function createOptionsComponent<DataType>(
             />
             { cachedOutput !== null &&
                 <CacheTextField
-                    label={"Cache"}
+                    label={"Cached Output"}
                     value={cachedOutput}
                     onChange={() => console.log("Change")}
                 />

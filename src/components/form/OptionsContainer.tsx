@@ -21,6 +21,7 @@ export default function OptionsContainer(props: OptionsContainerProps) {
     return (
         <div style={{
             borderRadius: 10,
+            borderTopRightRadius: isProcessRunning ? 0 : 10,
             background: "#1A202C",
             display: "flex",
             flexDirection: "column",
@@ -54,8 +55,8 @@ export default function OptionsContainer(props: OptionsContainerProps) {
                         </Typography>
                     </Tooltip> }
                 </div>
-                <Tooltip title="Close window" >
-                    <IconButton disabled={isProcessRunning} onClick={() =>{
+                { !isProcessRunning && <Tooltip title="Close window" >
+                    <IconButton onClick={() =>{
                         if (props.onClose !== undefined && props.onClose !== null) {
                             props.onClose()
                         } else {
@@ -64,7 +65,7 @@ export default function OptionsContainer(props: OptionsContainerProps) {
                     }}>
                         <CloseIcon />
                     </IconButton>
-                </Tooltip>
+                </Tooltip> }
             </div>
             { props.children }
         </div>
