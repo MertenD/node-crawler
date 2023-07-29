@@ -33,6 +33,13 @@ const appTheme = createTheme({
                     },
                 }
             }
+        },
+        MuiMenu: {
+            styleOverrides: {
+                paper: {
+                    backgroundColor: toolbarBackgroundColor
+                }
+            }
         }
     }
 });

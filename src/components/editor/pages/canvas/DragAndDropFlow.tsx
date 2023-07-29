@@ -146,8 +146,6 @@ export default function DragAndDropFlow() {
                    edgesFocusable={!isProcessRunning}
                    nodesDraggable={!isProcessRunning}
                    nodesConnectable={!isProcessRunning}
-                   nodesFocusable={!isProcessRunning}
-                   elementsSelectable={!isProcessRunning}
         >
             <Controls />
             <Background variant={BackgroundVariant.Dots} />

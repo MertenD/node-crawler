@@ -2,6 +2,7 @@ import {ReactFlowInstance} from "reactflow";
 import {CrawlerProjectDto} from "@/model/CrawlerProjectDto";
 import {v4 as uuidv4} from 'uuid';
 import {Node, Edge} from "reactflow";
+import useReactFlowStore from "@/stores/editor/ReactFlowStore";
 
 export function onSave(fileName: string, content: string, anchorElementName: string) {
     const downloadableContent = "data:text/json;charset=utf-8," + encodeURIComponent(content)
@@ -35,6 +36,7 @@ export function loadCrawlerProject(changeEvent: any, reactFlowInstance: ReactFlo
 
             reactFlowInstance.setNodes(newNodes)
             reactFlowInstance.setEdges(newEdges)
+            useReactFlowStore.getState().updateEdgesGradient()
         }
     };
 }
