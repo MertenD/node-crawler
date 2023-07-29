@@ -9,12 +9,13 @@ import {useReactFlow} from "reactflow";
 import PageNavigation from "@/components/editor/headerbar/PageNavigation";
 import HomeIcon from '@mui/icons-material/Home';
 import Link from "next/link";
-import PlayCircleFilledIcon from '@mui/icons-material/PlayCircleFilled';
 import {usePlayStore} from "@/stores/editor/PlayStore";
-import StopCircleIcon from '@mui/icons-material/StopCircle';
-import {toolbarBackgroundColor} from "@/app/layout";
+import {disabledColor, toolbarBackgroundColor} from "@/app/layout";
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
+import SkipNextIcon from '@mui/icons-material/SkipNext';
+import PlayArrowIcon from '@mui/icons-material/PlayArrow';
+import StopIcon from '@mui/icons-material/Stop';
 
 export const TOOLBAR_HEIGHT = 8
 export const CANVAS_HEIGHT = 100 - TOOLBAR_HEIGHT
@@ -34,6 +35,7 @@ export default function HeaderBar() {
     const isProcessRunning = usePlayStore(state => state.isProcessRunning)
     const isConnectionHighlightingActivated = useReactFlowStore(state => state.isConnectionHighlightingActivated)
     const setIsConnectionHighlightingActivated = useReactFlowStore(state => state.setIsConnectionHighlightingActivated)
+    const { isStepByStep, setIsStepByStep, isNextStepReady, executeNextStep } = usePlayStore()
 
     return <div style={{
         height: `${TOOLBAR_HEIGHT}vh`,
@@ -48,6 +50,7 @@ export default function HeaderBar() {
         <div style={{
             display: "flex",
             flexDirection: "row",
+            alignItems: "center",
             gap: 5,
             width: "33%",
         }}>
@@ -79,11 +82,24 @@ export default function HeaderBar() {
                     }}/>
                 </IconButton>
             </Tooltip>
+            <div style={{ height: 30, marginLeft: 5, marginRight: 5, width: 2, borderRadius: 10, backgroundColor: disabledColor }} />
             <Tooltip title="Run crawler" >
                 <IconButton disabled={isProcessRunning} onClick={() =>{
                     setup()
                 }}>
-                    <PlayCircleFilledIcon />
+                    <PlayArrowIcon />
+                </IconButton>
+            </Tooltip>
+            <Tooltip title={isStepByStep ? "Next step" : "Run step by step"} >
+                <IconButton disabled={!isNextStepReady && isStepByStep} onClick={() => {
+                    if (!isStepByStep) {
+                        setIsStepByStep(true)
+                        setup()
+                    } else {
+                        executeNextStep()
+                    }
+                }}>
+                    <SkipNextIcon />
                 </IconButton>
             </Tooltip>
             <Tooltip title="Stop crawler" >
@@ -91,9 +107,10 @@ export default function HeaderBar() {
                     usePlayStore.getState().writeToLog("Crawler was stopped manually")
                     stop()
                 }}>
-                    <StopCircleIcon />
+                    <StopIcon />
                 </IconButton>
             </Tooltip>
+            <div style={{ height: 30, marginLeft: 5, marginRight: 5, width: 2, borderRadius: 10, backgroundColor: disabledColor }} />
             <Tooltip title={isConnectionHighlightingActivated ? "Turn off connection highlighting" : "Turn on connection highlighting"} >
                 <IconButton onClick={() =>{
                     setIsConnectionHighlightingActivated(!isConnectionHighlightingActivated)

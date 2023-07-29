@@ -25,11 +25,16 @@ export type PlayStoreState = {
     log: string[]
     pipelines: {from: string, to: string | null, toHandleId: string | null, value: any, isActivated: boolean}[]
     isProcessRunning: boolean
+    isStepByStep: boolean
+    isNextStepReady: boolean,
+    stepByStepNextNodeKeyCache: NextNodeKey,
     setup: () => void
     stop: () => void
+    setIsStepByStep: (isStepByStep: boolean) => void
     getFirstNode: () => NodeMapValue | null
     setCurrentNode: (newNode: NodeMapValue | null) => void
     nextNode: (nextNodeKey?: NextNodeKey) => void
+    executeNextStep: () => void
     backtrackToNextPossibleNode: () => void
     getNode: (nodeId: string) => NodeMapValue | null
     getVariable: (name: string) => any
@@ -49,6 +54,9 @@ export const usePlayStore = create<PlayStoreState>((set, get) => ({
     log: [],
     pipelines: [],
     isProcessRunning: false,
+    isStepByStep: false,
+    isNextStepReady: false,
+    stepByStepNextNodeKeyCache: NextNodeKey.ALWAYS,
     setup: () => {
         // reset store
         set({
@@ -81,10 +89,17 @@ export const usePlayStore = create<PlayStoreState>((set, get) => ({
             set({
                 nodeMap: new Map(),
                 currentNode: null,
-                isProcessRunning: false
+                isProcessRunning: false,
+                isStepByStep: false,
+                isNextStepReady: false
             })
             useReactFlowStore.getState().setNodeSelected(null)
         }
+    },
+    setIsStepByStep: (isStepByStep: boolean) => {
+        set({
+            isStepByStep: isStepByStep
+        })
     },
     setCurrentNode: (newNode: NodeMapValue | null) => {
         set({
@@ -100,7 +115,16 @@ export const usePlayStore = create<PlayStoreState>((set, get) => ({
         );
         return firstNode as NodeMapValue || null
     },
-    nextNode: (nextNodeKey: NextNodeKey = NextNodeKey.ALWAYS) => {
+    nextNode: (nextNodeKey: NextNodeKey = NextNodeKey.ALWAYS, executeNextStep: boolean = false) => {
+        if (!executeNextStep && get().isStepByStep) {
+            set({
+                stepByStepNextNodeKeyCache: nextNodeKey,
+                isNextStepReady: true
+            })
+            get().writeToLog("Step by step is activated. Waiting for next step...")
+            return
+        }
+
         if (!get().currentNode || get().currentNode?.next === null) {
             get().backtrackToNextPossibleNode()
             return
@@ -126,6 +150,14 @@ export const usePlayStore = create<PlayStoreState>((set, get) => ({
         } else {
             get().backtrackToNextPossibleNode()
         }
+    },
+    executeNextStep: () => {
+        const cache = get().stepByStepNextNodeKeyCache
+        set({
+            stepByStepNextNodeKeyCache: NextNodeKey.ALWAYS,
+            isNextStepReady: false
+        })
+        get().nextNode(cache, true)
     },
     backtrackToNextPossibleNode: () => {
         const nextNodeId = get().pipelines.find(pipeline =>
