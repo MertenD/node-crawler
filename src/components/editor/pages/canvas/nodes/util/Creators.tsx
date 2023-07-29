@@ -3,13 +3,13 @@ import React, {CSSProperties, useEffect, useMemo, useState} from "react";
 import {handleStyle, useReactFlowStore} from "@/stores/editor/ReactFlowStore";
 import {connectionRules} from "@/config/ConnectionRules";
 import OptionsContainer from "@/components/form/OptionsContainer";
-import {SaveNodeData} from "@/components/editor/pages/canvas/nodes/SaveNode";
 import {setNodeWithUpdatedDataValue} from "@/components/editor/pages/canvas/nodes/util/OptionsUtil";
 import {usePlayStore} from "@/stores/editor/PlayStore";
 import CacheTextField from "@/components/form/CacheTextField";
 import {Tooltip} from "@mui/material";
 import {NodeType} from "@/config/NodeType";
 import {nodeBackgroundColor, nodeShadowColor, selectedColor} from "@/app/layout";
+import {NodeData} from "@/model/NodeData";
 
 export const createNodeShapeStyle = (additionalCSS: CSSProperties = {}): (selected: boolean) => CSSProperties => {
     return function(selected) {
@@ -71,7 +71,7 @@ export function createNodeComponent<DataType>(
     }
 }
 
-export function createOptionsComponent<DataType>(
+export function createOptionsComponent<DataType extends NodeData>(
     optionsTitle: string,
     Options: React.ComponentType<{ id: string, data: DataType, onDataUpdated: (attributeName: keyof DataType, newValue: any) => void }>
 ) {
@@ -100,7 +100,15 @@ export function createOptionsComponent<DataType>(
 
         useEffect(() => {
             if (localNode !== null) {
-                updateNodeData(props.id, localNode.data as SaveNodeData)
+                updateNodeData(props.id, localNode.data as DataType)
+
+                // Change node data inside of node in nodemap when process is running
+                // Allows to edit node options while the process runs
+                if (usePlayStore.getState().isProcessRunning) {
+                    const newNode = usePlayStore.getState().nodeMap.get(props.id)
+                    newNode.node.data = localNode.data as DataType
+                    usePlayStore.getState().nodeMap.set(props.id, newNode)
+                }
             }
         }, [localNode, updateNodeData])
 

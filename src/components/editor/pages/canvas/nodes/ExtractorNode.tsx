@@ -38,7 +38,7 @@ export const ExtractorNode = createNodeComponent<ExtractorNodeData>(
 )
 
 // --- Options ---
-export const ExtractorOptions = createOptionsComponent<ExtractorNodeData>("Start", ({ id, data, onDataUpdated }) => {
+export const ExtractorOptions = createOptionsComponent<ExtractorNodeData>("Extractor", ({ id, data, onDataUpdated }) => {
     return <>
         <TextInputOption
             label={"HTML Tag"}
