@@ -39,6 +39,7 @@ export default function HeaderBar() {
 
     return <div style={{
         height: `${TOOLBAR_HEIGHT}vh`,
+        minHeight: 75,
         width: "100%",
         backgroundColor: toolbarBackgroundColor,
         display: "flex",
