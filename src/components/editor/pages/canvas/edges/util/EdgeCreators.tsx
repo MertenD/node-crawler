@@ -12,8 +12,7 @@ export function createEdge(startColor: string, endColor: string, edgeId: string)
         targetY,
         sourcePosition,
         targetPosition,
-        style = {},
-        markerEnd,
+        style = {}
     }: EdgeProps) => {
 
         const xEqual = sourceX === targetX;
@@ -31,7 +30,14 @@ export function createEdge(startColor: string, endColor: string, edgeId: string)
         return (
             <g className={`react-flow__edge ${edgeId}`}>
                 <defs>
-                    <linearGradient id={`${edgeId}-edge-gradient`}>
+                    <linearGradient
+                        id={`${edgeId}-edge-gradient`}
+                        gradientUnits="userSpaceOnUse"
+                        x1={sourceX}
+                        y1={sourceY}
+                        x2={targetX}
+                        y2={targetY}
+                    >
                         <stop offset="0%" stopColor={startColor} />
                         <stop offset="100%" stopColor={endColor} />
                     </linearGradient>
