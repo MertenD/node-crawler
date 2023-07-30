@@ -43,7 +43,7 @@ export type PlayStoreState = {
     writeToLog: (message: string) => void
     addOutgoingPipelines: (from: string, value?: any) => void
     deactivateIngoingPipelines: (to: string) => void
-    getInput: (nodeId: string, handleId: string) => string[] | undefined
+    getInput: (nodeId: string, handleId: string, flattenInput?: boolean) => string[] | string[][] | undefined
 }
 
 export const usePlayStore = create<PlayStoreState>((set, get) => ({
@@ -238,7 +238,7 @@ export const usePlayStore = create<PlayStoreState>((set, get) => ({
             })
         })
     },
-    getInput: (nodeId: string, handleId: string): string[] | undefined => {
+    getInput: (nodeId: string, handleId: string, flattenInput: boolean = true): string[] | string[][] | undefined => {
         // Get input values from the pipelines of the targetHandle
         const inputs =  get().pipelines.filter(pipeline => {
             return pipeline.to === nodeId && pipeline.toHandleId === handleId
@@ -255,7 +255,11 @@ export const usePlayStore = create<PlayStoreState>((set, get) => ({
         // If the input array contains exactly the required amount of inputs and if none of those inputs are undefined
         // Then everything is okay and the value will be returned
         if (inputs.length === ingoingConnections && inputs.every(value => value !== undefined)) {
-            return inputs.flat()
+            if (flattenInput) {
+                return inputs.flat()
+            } else {
+                return inputs
+            }
         } else {
 
             // If any input value is missing or is undefined the crawler will backtrack to the next node that

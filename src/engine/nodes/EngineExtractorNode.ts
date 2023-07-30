@@ -17,7 +17,7 @@ export class EngineExtractorNode implements BasicNode {
 
     async run() {
         // TODO Hier vielleicht sinnvoll zusätzlich noch mitzugeben, welche OutputDataValue das ist, damit man im Fall hier Fallunterscheiden kann
-        const inputs = usePlayStore.getState().getInput(this.id, "input")
+        const inputs = usePlayStore.getState().getInput(this.id, "input") as string[]
 
         if (inputs) {
 
@@ -30,7 +30,7 @@ export class EngineExtractorNode implements BasicNode {
                 const $ = cheerio.load(html);
 
                 // Extract all HTML elements that are inside a "tag"
-                return $(tag).map((i, el) => $(el).html()).get();
+                return $(tag).map((i, el) => $(el).html()).get()[0]; // TODO Hier die [0] wieder entfernen und etwas anderes überlegen
             }).flat()
 
             usePlayStore.getState().writeToLog(`Extracted ${elements.length} elements`)

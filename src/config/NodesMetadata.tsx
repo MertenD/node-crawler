@@ -7,13 +7,17 @@ import {NodeProps} from "reactflow";
 import {NodeData} from "@/model/NodeData";
 import {BasicNode} from "@/engine/nodes/BasicNode";
 import {startNodeMetadata} from "@/components/editor/pages/canvas/nodes/StartNode";
+import {zipNodeMetadata} from "@/components/editor/pages/canvas/nodes/ZipNode";
+import {htmlToTextNodeMetadata} from "@/components/editor/pages/canvas/nodes/HtmlToTextNode";
 
 export const nodesMetadataMap: NodeMetadataType = {
     [NodeType.START_NODE]: startNodeMetadata,
     [NodeType.FETCH_WEBSITE_NODE]: fetchWebsiteNodeMetadata,
     [NodeType.SAVE_NODE]: saveNodeMetadata,
     [NodeType.GATEWAY_NODE]: null,
-    [NodeType.EXTRACTOR_NODE]: extractorNodeMetadata
+    [NodeType.EXTRACTOR_NODE]: extractorNodeMetadata,
+    [NodeType.ZIP_NODE]: zipNodeMetadata,
+    [NodeType.HTML_TO_TEXT_NODE]: htmlToTextNodeMetadata
 };
 
 // --- Do not change anything below --- \\
