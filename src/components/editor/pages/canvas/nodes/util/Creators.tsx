@@ -38,7 +38,6 @@ export function createNodeComponent<DataType>(
 
         const currentConnectionStartNodeType = useReactFlowStore(state => state.currentConnectionStartNodeType)
         const handleHighlightedMap = useMemo(() => {
-
             let newMap = new Map()
 
             if (inputRules && currentConnectionStartNodeType) {

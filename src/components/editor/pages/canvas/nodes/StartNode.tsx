@@ -47,6 +47,7 @@ export const StartNode = createNodeComponent<StartNodeData>(
 // --- Options ---
 export const StartOptions = createOptionsComponent<StartNodeData>("Start", () => {
     return <LoadingButton
+        disabled={usePlayStore.getState().isProcessRunning}
         endIcon={<PlayCircleFilledIcon />}
         variant="contained"
         onClick={() => {
