@@ -84,9 +84,14 @@ export default function HeaderBar() {
                 </IconButton>
             </Tooltip>
             <div style={{ height: 30, marginLeft: 5, marginRight: 5, width: 2, borderRadius: 10, backgroundColor: disabledColor }} />
-            <Tooltip title="Run crawler" >
-                <IconButton disabled={isProcessRunning} onClick={() =>{
-                    setup()
+            <Tooltip title={isStepByStep ? "Continue crawler normally" : "Run crawler"} >
+                <IconButton onClick={() =>{
+                    if (isStepByStep) {
+                        setIsStepByStep(false)
+                        executeNextStep()
+                    } else {
+                        setup()
+                    }
                 }}>
                     <PlayArrowIcon />
                 </IconButton>
