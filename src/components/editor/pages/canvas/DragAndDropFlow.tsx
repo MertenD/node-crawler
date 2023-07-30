@@ -15,7 +15,6 @@ import 'reactflow/dist/style.css';
 import shallow from 'zustand/shallow';
 import {useReactFlowStore} from "@/stores/editor/ReactFlowStore";
 import React, {useCallback, useRef, useState} from "react";
-import {NodeType} from "@/config/NodeType.ts";
 import {v4 as uuidv4} from 'uuid';
 import NodesToolbar from "@/components/editor/pages/canvas/toolbars/NodesToolbar";
 import './DragAndDropFlowStyles.css'
@@ -24,8 +23,9 @@ import OptionsToolbar from "@/components/editor/pages/canvas/toolbars/OptionsToo
 import {usePlayStore} from "@/stores/editor/PlayStore";
 import OnCanvasNodesToolbar from "@/components/editor/pages/canvas/toolbars/OnCanvasNodesSelector";
 import {connectionRules} from "@/config/ConnectionRules";
-import {selectedColor, toolbarBackgroundColor} from "@/app/layout";
 import {nodesMetadataMap} from "@/config/NodesMetadata";
+import {NodeType} from "@/config/NodeType";
+import {selectedColor, toolbarBackgroundColor} from "@/config/colors";
 
 const selector = (state: any) => ({
     nodes: state.nodes,
@@ -169,7 +169,7 @@ export default function DragAndDropFlow() {
 
                     if (nodeType !== null && connectStartParams.current !== null && connectStartParams.current?.nodeId !== null) {
                         const id = addNodeAtPosition(reactFlowInstance.project(lastEventPosition), nodeType)
-                        let rule = connectionRules[nodeType];
+                        let rule = connectionRules.get(nodeType)
                         if(rule && rule.inputRules && rule.inputRules.length > 0) {
                             onConnect({
                                 source: connectStartParams.current?.nodeId,

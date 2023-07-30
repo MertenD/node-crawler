@@ -3,7 +3,7 @@
 import {Tooltip} from "@mui/material";
 import useReactFlowStore from "@/stores/editor/ReactFlowStore";
 import {useEffect, useState} from "react";
-import {NodeType} from "@/config/NodeType.ts";
+import {NodeType} from "@/config/NodeType";
 import {getAllNodesMetadata, NodeMetadata} from "@/config/NodesMetadata";
 
 export default function NodesToolbar() {

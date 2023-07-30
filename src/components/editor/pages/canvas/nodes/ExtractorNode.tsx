@@ -5,7 +5,7 @@ import {
     createOptionsComponent
 } from "@/components/editor/pages/canvas/nodes/util/Creators";
 import {NodeData} from "@/model/NodeData";
-import {NodeType} from "@/config/NodeType.ts";
+import {NodeType} from "@/config/NodeType";
 import React from "react";
 import ManageSearchIcon from '@mui/icons-material/ManageSearch';
 import TextInputOption from "@/components/form/TextInputOption";

@@ -8,8 +8,8 @@ import {usePlayStore} from "@/stores/editor/PlayStore";
 import CacheTextField from "@/components/form/CacheTextField";
 import {Tooltip} from "@mui/material";
 import {NodeType} from "@/config/NodeType";
-import {nodeBackgroundColor, nodeShadowColor, selectedColor} from "@/app/layout";
 import {NodeData} from "@/model/NodeData";
+import {nodeBackgroundColor, nodeShadowColor, selectedColor} from "@/config/colors";
 
 export const createNodeShapeStyle = (additionalCSS: CSSProperties = {}): (selected: boolean) => CSSProperties => {
     return function(selected) {
@@ -32,20 +32,24 @@ export function createNodeComponent<DataType>(
     content: (id: string, selected: boolean, data: DataType) => React.ReactNode
 ) {
 
-    const inputRules = connectionRules[nodeType]?.inputRules
+    const inputRules = connectionRules.get(nodeType)?.inputRules
 
     return function({ id, selected, data }: NodeProps<DataType>) {
 
         const currentConnectionStartNodeType = useReactFlowStore(state => state.currentConnectionStartNodeType)
         const handleHighlightedMap = useMemo(() => {
 
-            // Find the rule for the currentConnectionStartNodeType once before the loop
-            const outputValueType = connectionRules[currentConnectionStartNodeType]?.outputValueType;
+            let newMap = new Map()
 
-            let newMap = new Map();
-            inputRules.forEach(rule => {
-                newMap.set(rule.handleId, rule.allowedValueTypes.includes(outputValueType));
-            });
+            if (inputRules && currentConnectionStartNodeType) {
+                // Find the rule for the currentConnectionStartNodeType once before the loop
+                const outputValueType = connectionRules.get(currentConnectionStartNodeType)?.outputValueType;
+                if (outputValueType) {
+                    inputRules.forEach(rule => {
+                        newMap.set(rule.handleId, rule.allowedValueTypes.includes(outputValueType));
+                    });
+                }
+            }
 
             return newMap;
         }, [currentConnectionStartNodeType]);
@@ -53,7 +57,7 @@ export function createNodeComponent<DataType>(
         return <div style={{
             ...shapeStyle(selected),
         }}>
-            { connectionRules[nodeType]?.inputRules.map(rule => {
+            { connectionRules.get(nodeType)?.inputRules.map(rule => {
                 return <Tooltip title={"Allowed input values: " + rule.allowedValueTypes.join(", ")} >
                     <Handle id={rule.handleId} style={{
                         ...handleStyle(selected),
@@ -61,8 +65,8 @@ export function createNodeComponent<DataType>(
                     }} type="target" position={Position.Left} />
                 </Tooltip>
             }) }
-            { connectionRules[nodeType]?.outputValueType && (
-                <Tooltip title={"Output value: " + connectionRules[nodeType]?.outputValueType} >
+            { connectionRules.get(nodeType)?.outputValueType && (
+                <Tooltip title={"Output value: " + connectionRules.get(nodeType)?.outputValueType} >
                     <Handle id="output" style={handleStyle(selected)} type="source" position={Position.Right}/>
                 </Tooltip>
             ) }
@@ -106,8 +110,10 @@ export function createOptionsComponent<DataType extends NodeData>(
                 // Allows to edit node options while the process runs
                 if (usePlayStore.getState().isProcessRunning) {
                     const newNode = usePlayStore.getState().nodeMap.get(props.id)
-                    newNode.node.data = localNode.data as DataType
-                    usePlayStore.getState().nodeMap.set(props.id, newNode)
+                    if (newNode) {
+                        newNode.node.data = localNode.data as DataType
+                        usePlayStore.getState().nodeMap.set(props.id, newNode)
+                    }
                 }
             }
         }, [localNode, updateNodeData])

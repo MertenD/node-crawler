@@ -1,9 +1,9 @@
 import {createEdge} from "@/components/editor/pages/canvas/edges/util/EdgeCreators";
-import {defaultEdgeColor, selectedColor} from "@/app/layout";
 import {EdgeProps} from "reactflow";
 import React from "react";
 import {OutputValueType} from "@/config/OutputValueType";
 import './EdgeGradientStyles.css'
+import {defaultEdgeColor, selectedColor} from "@/config/colors";
 
 export const DefaultEdge = createEdge(defaultEdgeColor, defaultEdgeColor, "default")
 export const SelectedIncomingEdge = createEdge(defaultEdgeColor, selectedColor, "incoming")

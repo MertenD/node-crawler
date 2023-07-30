@@ -1,5 +1,5 @@
 import {BasicNode} from "./BasicNode";
-import {NodeType} from "@/config/NodeType.ts";
+import {NodeType} from "@/config/NodeType";
 import {usePlayStore} from "@/stores/editor/PlayStore";
 import {FetchWebsiteNodeData} from "@/components/editor/pages/canvas/nodes/FetchWebsiteNode";
 

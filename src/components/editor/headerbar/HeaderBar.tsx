@@ -10,12 +10,12 @@ import PageNavigation from "@/components/editor/headerbar/PageNavigation";
 import HomeIcon from '@mui/icons-material/Home';
 import Link from "next/link";
 import {usePlayStore} from "@/stores/editor/PlayStore";
-import {disabledColor, toolbarBackgroundColor} from "@/app/layout";
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import SkipNextIcon from '@mui/icons-material/SkipNext';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import StopIcon from '@mui/icons-material/Stop';
+import {disabledColor, toolbarBackgroundColor} from "@/config/colors";
 
 export const TOOLBAR_HEIGHT = 8
 export const CANVAS_HEIGHT = 100 - TOOLBAR_HEIGHT

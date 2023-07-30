@@ -1,12 +1,12 @@
-import {NodeType} from "@/config/NodeType.ts";
+import {NodeType} from "@/config/NodeType";
 import {OutputValueType} from "@/config/OutputValueType";
 
-export const connectionRules: { [K in ConnectionRule] } = {
-    [NodeType.START_NODE]: {
+export const connectionRules: Map<NodeType, ConnectionRule> = new Map([
+    [NodeType.START_NODE, {
         outputValueType: OutputValueType.NONE,
         inputRules: []
-    },
-    [NodeType.FETCH_WEBSITE_NODE]: {
+    }],
+    [NodeType.FETCH_WEBSITE_NODE, {
         outputValueType: OutputValueType.HTML,
         inputRules: [
             {
@@ -17,8 +17,8 @@ export const connectionRules: { [K in ConnectionRule] } = {
                 maxConnections: 1
             }
         ]
-    },
-    [NodeType.SAVE_NODE]: {
+    }],
+    [NodeType.SAVE_NODE, {
         outputValueType: OutputValueType.NONE,
         inputRules: [
             {
@@ -31,8 +31,8 @@ export const connectionRules: { [K in ConnectionRule] } = {
                 maxConnections: 999
             }
         ]
-    },
-    [NodeType.EXTRACTOR_NODE]: {
+    }],
+    [NodeType.EXTRACTOR_NODE, {
         outputValueType: OutputValueType.HTML,
         inputRules: [
             {
@@ -43,8 +43,8 @@ export const connectionRules: { [K in ConnectionRule] } = {
                 maxConnections: 999
             }
         ]
-    }
-}
+    }]
+])
 
 export type ConnectionRule = {
     outputValueType: OutputValueType | null

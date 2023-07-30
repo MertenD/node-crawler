@@ -9,7 +9,7 @@ import {
     createNodeShapeStyle,
     createOptionsComponent
 } from "@/components/editor/pages/canvas/nodes/util/Creators";
-import {NodeType} from "@/config/NodeType.ts";
+import {NodeType} from "@/config/NodeType";
 import SaveIcon from '@mui/icons-material/Save';
 import {EngineSaveNode} from "@/engine/nodes/EngineSaveNode";
 import {NodeMetadata} from "@/config/NodesMetadata";

@@ -4,7 +4,7 @@ import {IconButton, Tooltip, Typography} from "@mui/material";
 import {onSave} from "@/util/IOUtil";
 import SaveIcon from "@mui/icons-material/Save";
 import {smoothScrollToBottom} from "@/components/editor/pages/output/util/SmoothScrollUtil";
-import {toolbarBackgroundColor} from "@/app/layout";
+import {toolbarBackgroundColor} from "@/config/colors";
 
 export default function Files() {
 

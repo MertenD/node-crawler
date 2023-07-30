@@ -1,7 +1,7 @@
 import create from 'zustand';
 import {NodeMap, NodeMapValue} from "@/model/NodeMap";
 import {NextNodeKey} from "@/model/NextNodeKey";
-import {NodeType} from "@/config/NodeType.ts";
+import {NodeType} from "@/config/NodeType";
 import {getNodeMap} from "@/util/NodeMapTransformer";
 import useReactFlowStore from "@/stores/editor/ReactFlowStore";
 
@@ -33,7 +33,7 @@ export type PlayStoreState = {
     setIsStepByStep: (isStepByStep: boolean) => void
     getFirstNode: () => NodeMapValue | null
     setCurrentNode: (newNode: NodeMapValue | null) => void
-    nextNode: (nextNodeKey?: NextNodeKey) => void
+    nextNode: (nextNodeKey?: NextNodeKey, executeNextStep?: boolean) => void
     executeNextStep: () => void
     backtrackToNextPossibleNode: () => void
     getNode: (nodeId: string) => NodeMapValue | null

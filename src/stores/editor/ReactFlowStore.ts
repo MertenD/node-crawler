@@ -16,7 +16,6 @@ import {
 import {connectionRules} from "@/config/ConnectionRules";
 import {openWarningSnackBar} from "@/stores/editor/EditorPageStore";
 import {ReactNode} from "react";
-import {selectedColor} from "@/app/layout";
 import {getAllNodesMetadata, NodeMetadata} from "@/config/NodesMetadata";
 import {NodeType} from "@/config/NodeType";
 import {
@@ -26,6 +25,7 @@ import {
     SelectedIncomingEdge,
     SelectedOutgoingEdge
 } from "@/components/editor/pages/canvas/edges/Edges";
+import {selectedColor} from "@/config/colors";
 
 export const handleStyle = (isNodeSelected: boolean) => {
     return {
@@ -63,7 +63,7 @@ export const useReactFlowStore = create<ReactFlowState>((set, get) => ({
     }, {}),
     currentConnectionStartNodeType: null,
     isConnectionHighlightingActivated: false,
-    setCurrentConnectionStartNodeType: (nodeType: NodeType) => {
+    setCurrentConnectionStartNodeType: (nodeType: NodeType | null) => {
         set({
             currentConnectionStartNodeType: nodeType
         })
@@ -118,16 +118,19 @@ export const useReactFlowStore = create<ReactFlowState>((set, get) => ({
             return
         }
 
-        const pipelineValueType = connectionRules[sourceNode.type]?.outputValueType
-        const isConnectionAllowed = pipelineValueType && connectionRules[targetNode.type]?.inputRules.find(rule => {
+        const sourceNodeType = sourceNode.type as NodeType
+        const targetNodeType = targetNode.type as NodeType
+
+        const pipelineValueType = connectionRules.get(sourceNodeType)?.outputValueType
+        const isConnectionAllowed = pipelineValueType && connectionRules.get(targetNodeType)?.inputRules.find(rule => {
             return rule.handleId === connection.targetHandle
         })?.allowedValueTypes?.includes(pipelineValueType)
 
         if (!isConnectionAllowed) {
             openWarningSnackBar(`You can't connect a "${
-                connectionRules[sourceNode.type]?.outputValueType
+                connectionRules.get(sourceNodeType)?.outputValueType
             }" output to a "${
-                connectionRules[targetNode.type]?.inputRules.find(rule => 
+                connectionRules.get(targetNodeType)?.inputRules.find(rule => 
                     rule.handleId === connection.targetHandle
                 )?.allowedValueTypes.join("/")
             }" input`)
@@ -135,7 +138,7 @@ export const useReactFlowStore = create<ReactFlowState>((set, get) => ({
         }
 
         const existingConnectionsToTarget = get().edges.filter(edge => edge.target === target && edge.targetHandle === connection.targetHandle).length
-        const maxConnectionsToTarget = connectionRules[targetNode.type]?.inputRules.find(rule => {
+        const maxConnectionsToTarget = connectionRules.get(targetNodeType)?.inputRules.find(rule => {
             return rule.handleId === connection.targetHandle
         })?.maxConnections
         const isMaxConnectionsReached = maxConnectionsToTarget && existingConnectionsToTarget >= maxConnectionsToTarget
@@ -225,10 +228,10 @@ export const useReactFlowStore = create<ReactFlowState>((set, get) => ({
             set({
                 edges: get().edges.map(edge => {
 
-                    const sourceNodeType = get().getNodeById(edge.source)?.type
+                    const sourceNodeType = get().getNodeById(edge.source)?.type as NodeType
                     return {
                         ...edge,
-                        type: connectionRules[sourceNodeType].outputValueType
+                        type: sourceNodeType && connectionRules.get(sourceNodeType)?.outputValueType?.toString() || "defaultEdge"
                     }
                 })
             })

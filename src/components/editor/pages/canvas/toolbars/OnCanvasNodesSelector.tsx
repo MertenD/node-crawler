@@ -4,7 +4,7 @@ import * as React from 'react';
 import DialogTitle from '@mui/material/DialogTitle';
 import Dialog from '@mui/material/Dialog';
 import {Tooltip, Typography} from "@mui/material";
-import {NodeType} from "@/config/NodeType.ts";
+import {NodeType} from "@/config/NodeType";
 import {Node} from "reactflow";
 import {connectionRules} from "@/config/ConnectionRules";
 import {getAllNodesMetadata} from "@/config/NodesMetadata";
@@ -78,8 +78,8 @@ export default function OnCanvasNodesToolbar(props: OnCanvasNodesToolbarProps) {
                         return true
                     }
 
-                    const sourceOutputValue = connectionRules[props.sourceNode?.type]?.outputValueType
-                    const currentNodeInputRules = connectionRules[nodeInfo.type]?.inputRules
+                    const sourceOutputValue = connectionRules.get(props.sourceNode.type as NodeType)?.outputValueType
+                    const currentNodeInputRules = connectionRules.get(nodeInfo.type)?.inputRules
 
                     // TODO Nochmal weiter überlegen, wie ich das handhabe, sobald ich einen node mit mehr als einem Eingang hab
                     if ((currentNodeInputRules?.length || 0) > 1 || !sourceOutputValue) {

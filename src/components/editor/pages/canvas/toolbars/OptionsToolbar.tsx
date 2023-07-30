@@ -5,10 +5,11 @@ import {usePlayStore} from "@/stores/editor/PlayStore";
 import Log from "@/components/editor/pages/output/Log";
 import OptionsContainer from "@/components/form/OptionsContainer";
 import {nodesMetadataMap} from "@/config/NodesMetadata";
-import {toolbarBackgroundColor} from "@/app/layout";
-import {BottomNavigation, BottomNavigationAction} from "@mui/material";
+import {BottomNavigation, BottomNavigationAction, Typography} from "@mui/material";
 import TuneIcon from '@mui/icons-material/Tune';
 import DescriptionIcon from '@mui/icons-material/Description';
+import {NodeType} from "@/config/NodeType";
+import {selectedColor, toolbarBackgroundColor} from "@/config/colors";
 
 export default function OptionsToolbar() {
 
@@ -46,12 +47,12 @@ export default function OptionsToolbar() {
     }, [selectedNodes])
 
     useEffect(() => {
-        if (currentNode === null) {
+        if (!currentNode) {
             setOptions(<></>)
             return
         }
 
-        const nodeInfo = nodesMetadataMap[currentNode.type]
+        const nodeInfo = nodesMetadataMap[currentNode.type as NodeType]
 
         if (nodeInfo) {
             setOptions(nodeInfo.getOptionsComponent(currentNode.id))
@@ -68,12 +69,20 @@ export default function OptionsToolbar() {
             gap: 0
         }}>
             { isProcessRunning && <div style={{
-                width: 200,
-                height: 60,
+                width: 430,
+                height: 65,
                 borderTopLeftRadius: 10,
                 borderTopRightRadius: 10,
-                backgroundColor: toolbarBackgroundColor
+                backgroundColor: toolbarBackgroundColor,
+                display: "flex",
+                flexDirection: "row",
+                alignItems: "center",
+                justifyContent: "space-between",
+                paddingLeft: 20
             }}>
+                <Typography variant={"h5"} color={selectedColor}>
+                    ! Crawler is running !
+                </Typography>
                 <BottomNavigation
                     showLabels
                     sx={{

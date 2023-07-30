@@ -10,7 +10,7 @@ import {
     createNodeShapeStyle,
     createOptionsComponent
 } from "@/components/editor/pages/canvas/nodes/util/Creators";
-import {NodeType} from "@/config/NodeType.ts";
+import {NodeType} from "@/config/NodeType";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import {EngineStartNode} from "@/engine/nodes/EngineStartNode";
 import {NodeMetadata} from "@/config/NodesMetadata";

@@ -9,7 +9,7 @@
  */
 import {Edge, Node} from "reactflow";
 import {NodeMapKey, NodeMapValue} from "@/model/NodeMap";
-import {NodeType} from "@/config/NodeType.ts";
+import {NodeType} from "@/config/NodeType";
 import {NextNodeKey} from "@/model/NextNodeKey";
 import {NodeData} from "@/model/NodeData";
 import {BasicNode} from "@/engine/nodes/BasicNode";

@@ -1,4 +1,4 @@
-"use client"
+'use client'
 
 import Typography from '@mui/material/Typography';
 import {Button} from "@mui/material";

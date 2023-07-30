@@ -12,8 +12,8 @@ import {
 } from "@/components/editor/pages/canvas/nodes/util/Creators";
 import {EngineFetchWebsiteNode} from "@/engine/nodes/EngineFetchWebsiteNode";
 import {NodeType} from "@/config/NodeType";
-import {defaultEdgeColor, selectedColor} from "@/app/layout";
 import {NodeMetadata} from "@/config/NodesMetadata";
+import {defaultEdgeColor, selectedColor} from "@/config/colors";
 
 
 // --- Data ---

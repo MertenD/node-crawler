@@ -4,7 +4,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import useReactFlowStore from "@/stores/editor/ReactFlowStore";
 import {usePlayStore} from "@/stores/editor/PlayStore";
 import {CANVAS_HEIGHT} from "@/components/editor/headerbar/HeaderBar";
-import {defaultEdgeColor} from "@/app/layout";
+import {defaultEdgeColor} from "@/config/colors";
 
 export interface OptionsContainerProps {
     title: string

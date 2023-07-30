@@ -2,7 +2,7 @@
 
 import {createTheme, ThemeProvider} from "@mui/material/styles";
 import {ReactNode} from "react";
-import {disabledColor, selectedColor, selectedColorHover, toolbarBackgroundColor} from "@/app/layout";
+import {disabledColor, selectedColor, selectedColorHover, toolbarBackgroundColor} from "@/config/colors";
 
 const appTheme = createTheme({
     palette: {
