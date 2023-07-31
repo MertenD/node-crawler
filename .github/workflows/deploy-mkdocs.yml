@@ -24,7 +24,14 @@ jobs:
           pip install mkdocs
           pip install mkdocs-material
 
+      - name: Configure Git
+        run: |
+          git config user.name "GitHub Actions"
+          git config user.email "actions@github.com"
+
       - name: Navigate to documentation directory and Deploy to GitHub Pages
         run: |
           cd documentation
           mkdocs gh-deploy --clean
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
