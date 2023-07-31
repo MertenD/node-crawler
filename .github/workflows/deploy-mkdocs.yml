@@ -23,17 +23,7 @@ jobs:
           python -m pip install --upgrade pip
           pip install mkdocs
 
-      - name: Listing all directories 1
-        run: ls
-
-      - name: Navigate to documentation directory 1
-        run: cd documentation
-        
-      - name: Listing all directories 2
-        run: ls
-        
-      - name: Navigate to documentation directory 2
-        run: cd documentation
-
-      - name: Deploy to GitHub Pages
-        run: mkdocs gh-deploy --clean
+      - name: Navigate to documentation directory and Deploy to GitHub Pages
+        run: |
+          cd documentation
+          mkdocs gh-deploy --clean
