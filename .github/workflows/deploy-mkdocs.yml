@@ -32,6 +32,5 @@ jobs:
       - name: Navigate to documentation directory and Deploy to GitHub Pages
         run: |
           cd documentation
+          git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/MertenD/node-crawler.git
           mkdocs gh-deploy --clean
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
