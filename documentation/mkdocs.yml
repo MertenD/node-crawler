@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://squidfunk.github.io/mkdocs-material/schema.json
+
+site_name: Node-Crawler Docs
+site_url: https://mertend.github.io/node-crawler/
+site_author: Merten Dieckmann
+site_description: "Node-Crawler is a highly customizable, Node-based web application for creating web crawlers and further processing and transforming the retrieved data. "
+repo_url: "https://github.com/MertenD/node-crawler"
+
+theme:
+  name: material
+
+extra_css:
+  - stylesheets/extra.css
+
+nav:
+  - Home: index.md
+  - Extend Project:
+      - 'Implementing a new Node': 'extend-project/implementing-a-new-node.md'
