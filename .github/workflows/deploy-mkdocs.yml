@@ -25,6 +25,9 @@ jobs:
 
       - name: Navigate to documentation directory
         run: cd documentation
+        
+      - name: Listing all directories
+        run: ls
 
       - name: Deploy to GitHub Pages
         run: mkdocs gh-deploy --clean
