@@ -23,5 +23,8 @@ jobs:
           python -m pip install --upgrade pip
           pip install mkdocs
 
+      - name: Navigate to documentation directory
+        run: cd documentation
+
       - name: Deploy to GitHub Pages
         run: mkdocs gh-deploy --clean
