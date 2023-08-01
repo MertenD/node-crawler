@@ -2,7 +2,7 @@
 
 import React from "react";
 import TextInputOption from "@/components/form/TextInputOption";
-import {Badge, Typography} from "@mui/material";
+import { Badge, Button, IconButton, Typography } from "@mui/material";
 import CloudDownloadTwoToneIcon from '@mui/icons-material/CloudDownloadTwoTone';
 import {NodeData} from "@/model/NodeData";
 import {
@@ -14,12 +14,13 @@ import {EngineFetchWebsiteNode} from "@/engine/nodes/EngineFetchWebsiteNode";
 import {NodeType} from "@/config/NodeType";
 import {NodeMetadata} from "@/config/NodesMetadata";
 import {defaultEdgeColor, selectedColor} from "@/config/colors";
+import CloseIcon from "@mui/icons-material/Close";
 
 
 // --- Data ---
 export interface FetchWebsiteNodeData extends NodeData {
     name: string
-    url: string
+    urls: string[]
 }
 
 
@@ -56,6 +57,13 @@ export const FetchWebsiteNode = createNodeComponent<FetchWebsiteNodeData>(
 
 // --- Options ---
 export const FetchWebsiteOptions = createOptionsComponent<FetchWebsiteNodeData>("Fetch Website", ({ id, data, onDataUpdated }) => {
+
+    const [urls, setUrls] = React.useState<string[]>(data.urls ?? [""])
+
+    function addValue() {
+        setUrls([...urls, ""])
+    }
+
     return <>
         <TextInputOption
             label="Name"
@@ -64,13 +72,39 @@ export const FetchWebsiteOptions = createOptionsComponent<FetchWebsiteNodeData>(
                 onDataUpdated("name", event.target.value)
             }}
         />
-        <TextInputOption
-            label="URL"
-            value={data.url}
-            onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                onDataUpdated("url", event.target.value)
-            }}
-        />
+        {
+            urls.map((url, index) => {
+                return <TextInputOption
+                    key={index}
+                    label={"URL " + (index > 0 ? index + 1 : "")}
+                    value={url}
+                    onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                        const newUrls = [...urls]
+                        newUrls[index] = event.target.value
+                        setUrls(newUrls)
+                        onDataUpdated("urls", newUrls)
+                    }}
+                    inputProps = {{
+                        endAdornment: (
+                            index > 0 ?
+                                <IconButton onClick={
+                                    () => {
+                                        const newUrls = [...urls]
+                                        newUrls.splice(index, 1)
+                                        setUrls(newUrls)
+                                        onDataUpdated("urls", newUrls)
+                                    }
+                                }>
+                                    <CloseIcon />
+                                </IconButton>
+                                :
+                                <></>
+                        )
+                    }}
+                />
+            })
+        }
+        <Button onClick={addValue}>Add Url</Button>
     </>
 })
 
