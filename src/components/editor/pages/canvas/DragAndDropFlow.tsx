@@ -52,6 +52,8 @@ export default function DragAndDropFlow() {
     const [lastEventPosition, setLastEventPosition] = useState<{x: number, y: number}>({x: 0, y: 0})
 
     const isProcessRunning = usePlayStore(state => state.isProcessRunning)
+    const isStepByStep = usePlayStore(state => state.isStepByStep)
+    const isNextStepReady = usePlayStore(state => state.isNextStepReady)
 
     const onDragOver = useCallback((event: any) => {
         event.preventDefault();
@@ -142,12 +144,12 @@ export default function DragAndDropFlow() {
                    }}
                    deleteKeyCode={["Backspace", "Delete"]}
                    onSelectionChange={setSelectedNodes}
-                   edgesUpdatable={!isProcessRunning}
-                   edgesFocusable={!isProcessRunning}
-                   nodesDraggable={!isProcessRunning}
-                   nodesConnectable={!isProcessRunning}
-                   nodesFocusable={!isProcessRunning}
-                   elementsSelectable={!isProcessRunning}
+                   edgesUpdatable={isProcessRunning ? (isStepByStep ? isNextStepReady : false) : true}
+                   edgesFocusable={isProcessRunning ? (isStepByStep ? isNextStepReady : false) : true}
+                   nodesDraggable={isProcessRunning ? (isStepByStep ? isNextStepReady : false) : true}
+                   nodesConnectable={isProcessRunning ? (isStepByStep ? isNextStepReady : false) : true}
+                   nodesFocusable={isProcessRunning ? (isStepByStep ? isNextStepReady : false) : true}
+                   elementsSelectable={isProcessRunning ? (isStepByStep ? isNextStepReady : false) : true}
         >
             <Controls />
             <Background variant={BackgroundVariant.Dots} />
