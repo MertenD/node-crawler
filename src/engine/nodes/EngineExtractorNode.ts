@@ -30,7 +30,7 @@ export class EngineExtractorNode implements BasicNode {
                 const $ = cheerio.load(html);
 
                 // Extract all HTML elements that are inside a "tag"
-                return $(tag).map((i, el) => $(el).html()).get()[0]; // TODO Hier die [0] wieder entfernen und etwas anderes überlegen
+                return $(tag).map((i, el) => $(el).html()).get()
             }).flat()
 
             usePlayStore.getState().writeToLog(`Extracted ${elements.length} elements`)

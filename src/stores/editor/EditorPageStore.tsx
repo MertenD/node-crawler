@@ -5,6 +5,8 @@ import EditIcon from '@mui/icons-material/Edit';
 import OutputPage from "@/components/editor/pages/output/OutputPage";
 import OutputIcon from '@mui/icons-material/Output';
 import {AlertColor} from "@mui/material";
+import HtmlSelectorPage from "@/components/editor/pages/html/HtmlSelectorPage";
+import ManageSearchIcon from '@mui/icons-material/ManageSearch';
 
 export type EditorPageState = {
     pages: Map<string, {label: string, child: React.ReactNode, icon?: React.ReactNode }>
@@ -25,6 +27,11 @@ export const useEditorPageState = create<EditorPageState>((set, get) => ({
             label: "Canvas",
             child: <DragAndDropFlow />,
             icon: <EditIcon />
+        }],
+        ["html", {
+            label: "HTML",
+            child: <HtmlSelectorPage />,
+            icon: <ManageSearchIcon />
         }],
         ["output", {
             label: "Output",
