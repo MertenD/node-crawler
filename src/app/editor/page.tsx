@@ -1,11 +1,12 @@
 'use client'
 
-import {ReactFlowProvider} from "reactflow";
-import React from "react";
+import {ReactFlowProvider, useReactFlow} from "reactflow";
+import React, {useEffect} from "react";
 import HeaderBar, {CANVAS_HEIGHT} from "@/components/editor/headerbar/HeaderBar";
 import useEditorPageState from "@/stores/editor/EditorPageStore";
 import {Alert, Snackbar} from "@mui/material";
 import Engine from "@/components/editor/Engine";
+import useReactFlowStore from "@/stores/editor/ReactFlowStore";
 
 export default function Canvas() {
 
@@ -19,6 +20,17 @@ export default function Canvas() {
 
     const handleOnSnackBarClosed = () => {
         setIsSnackBarOpen(false)
+    }
+
+    useEffect(() => {
+        window.addEventListener('beforeunload', preventReload)
+        return () => {
+            window.removeEventListener('beforeunload', preventReload)
+        }
+    }, [])
+
+    const preventReload = (e: Event) => {
+        e.preventDefault()
     }
 
     return <div style={{ height: "100vh"}}>
