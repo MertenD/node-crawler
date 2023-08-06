@@ -6,9 +6,10 @@ import CloudDownloadIcon from '@mui/icons-material/CloudDownload';
 import Typography from "@mui/material/Typography";
 import AddIcon from '@mui/icons-material/Add';
 import DoDisturbIcon from '@mui/icons-material/DoDisturb';
-import ClearIcon from '@mui/icons-material/Clear';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import useHtmlSelectorStore from "@/stores/editor/HtmlSelectorStore";
+import CssSelectorCard from "@/components/editor/pages/html/CssSelectorCard";
+import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 
 export enum SelectorSelectionModes {
     ADD_TO_SELECTION = "Add to selection",
@@ -17,7 +18,7 @@ export enum SelectorSelectionModes {
 
 export default function HtmlSelectorPage() {
 
-    const { url, setUrl, setHtml, cssSelector } = useHtmlSelectorStore()
+    const { url, html, setUrl, setHtml, cssSelector, resetSelector, selectedSelector, excludedSelector, setSelectedSelector, setExcludedSelector } = useHtmlSelectorStore()
     const [selectionMode, setSelectionMode] = useState(SelectorSelectionModes.ADD_TO_SELECTION)
 
     const fetchWebsite = async (url: string) => {
@@ -71,7 +72,10 @@ export default function HtmlSelectorPage() {
             <div style={{
                 display: "flex",
                 flexDirection: "column",
-                gap: 20
+                gap: 20,
+                width: "40vw",
+                overflowY: "auto",
+                padding: 10
             }}>
                 <TextField
                     fullWidth
@@ -116,10 +120,9 @@ export default function HtmlSelectorPage() {
                     </ToggleButtonGroup>
                     <Tooltip title="Clear Selection" style={{ marginLeft: 10 }} >
                         <IconButton onClick={() =>{
-                            console.log("Clear")
-                            // TODO
+                            resetSelector()
                         }}>
-                            <ClearIcon />
+                            <DeleteForeverIcon />
                         </IconButton>
                     </Tooltip>
                     <Tooltip title="Copy CSS-Selector" style={{ marginLeft: 10 }} >
@@ -132,17 +135,32 @@ export default function HtmlSelectorPage() {
                         </IconButton>
                     </Tooltip>
                 </div>
-                <div>
-                    <Typography variant="h5">
-                        Selected CSS-Selector
-                    </Typography>
-                    <Typography variant="body1" style={{
-                        width: 500,
-                        marginTop: 10
-                    }}>
-                        { cssSelector }
-                    </Typography>
-                </div>
+                <Typography variant="h5">
+                    Selected
+                </Typography>
+                { selectedSelector.map((selector, index) => {
+                    return <CssSelectorCard
+                        selector={selector}
+                        index={index}
+                        htmlString={html}
+                        allSelectors={selectedSelector}
+                        setAllSelectors={setSelectedSelector}
+                        isAttributeSelectionVisible={true}
+                    />
+                }) }
+                <Typography variant="h5">
+                    Excluded
+                </Typography>
+                { excludedSelector.map((selector, index) => {
+                    return <CssSelectorCard
+                        selector={selector}
+                        index={index}
+                        htmlString={html}
+                        allSelectors={excludedSelector}
+                        setAllSelectors={setExcludedSelector}
+                        isAttributeSelectionVisible={false}
+                    />
+                }) }
             </div>
         </div>
     </div>

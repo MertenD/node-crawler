@@ -2,24 +2,16 @@ import React, {useEffect, useRef} from "react";
 import "../canvas/toolbars/Html.css"
 import {SelectorSelectionModes} from "@/components/editor/pages/html/HtmlSelectorPage";
 import useHtmlSelectorStore from "@/stores/editor/HtmlSelectorStore";
+import {getUniqueSelector, isValidSelector, removeIDFromSelector} from "@/components/editor/pages/html/util/HtmlUtils";
 
 const highlightCss = ".selectedForSelector { background-color: lightgreen; } .excluded { background-color: tomato; }";
-
-const selector = (state: any) => ({
-    html: state.html,
-    setCssSelector: state.setCssSelector,
-    selectedSelector: state.selectedSelector as string[],
-    excludedSelector: state.excludedSelector as string[],
-    setSelectedSelector: state.setSelectedSelector,
-    setExcludedSelector: state.setExcludedSelector
-});
 
 export interface SelectableHtmlPreviewProps {
     selectionMode: SelectorSelectionModes
 }
 
 export function SelectableHtmlPreview(props: SelectableHtmlPreviewProps) {
-    const { html, setCssSelector, selectedSelector, excludedSelector, setSelectedSelector, setExcludedSelector } = useHtmlSelectorStore(state => selector(state))
+    const { html, setCssSelector, selectedSelector, excludedSelector, setSelectedSelector, setExcludedSelector } = useHtmlSelectorStore()
 
     const selectedSelectorRef = useRef(selectedSelector);
     const excludedSelectorRef = useRef(excludedSelector)
@@ -100,65 +92,4 @@ export function SelectableHtmlPreview(props: SelectableHtmlPreviewProps) {
         height: "100%",
         width: "100%"
     }} ref={iframeRef} sandbox="allow-same-origin" />;
-}
-
-/*function getUniqueSelector(el) {
-    let path = [];
-    while (el.nodeType === Node.ELEMENT_NODE) {
-        let selector = el.nodeName.toLowerCase();
-        console.log('Current Selector:', selector);
-
-        // Wenn der Name einen Bindestrich enthält, handelt es sich um ein benutzerdefiniertes Element
-        if (selector.includes('-')) {
-            path.unshift(selector);
-        } else if (el.id) {
-            selector += `#${el.id}`;
-            path.unshift(selector);
-            break;
-        } else {
-            let sib = el, nth = 1;
-            while (sib = sib.previousElementSibling) {
-                if (sib.nodeName.toLowerCase() === selector) nth++;
-            }
-            if (nth !== 1) selector += `:nth-of-type(${nth})`;
-            path.unshift(selector);
-        }
-        el = el.parentNode;
-    }
-    return path.join(' > ');
-}*/
-
-function getUniqueSelector(el) {
-    let path = [];
-    while (el.nodeType === Node.ELEMENT_NODE) {
-        let selector = el.nodeName.toLowerCase();
-
-        if (el.id) {
-            selector += `#${el.id}`;
-        } else {
-            let sib = el, nth = 1;
-            while (sib = sib.previousElementSibling) {
-                if (sib.nodeName.toLowerCase() === selector) nth++;
-            }
-            if (nth !== 1) selector += `:nth-of-type(${nth})`;
-        }
-
-        path.unshift(selector);
-        el = el.parentNode;
-    }
-    return path.join(' > ');
-}
-
-
-function removeIDFromSelector(selector) {
-    return selector.replace(/#[^\s]+/g, '');
-}
-
-function isValidSelector(iframeDoc, selector) {
-    try {
-        iframeDoc.querySelector(selector);
-        return true;
-    } catch (e) {
-        return false
-    }
 }

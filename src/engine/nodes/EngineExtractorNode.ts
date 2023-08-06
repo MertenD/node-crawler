@@ -1,6 +1,6 @@
 import {BasicNode} from "@/engine/nodes/BasicNode";
 import {NodeType} from "@/config/NodeType";
-import {ExtractorNodeData} from "@/components/editor/pages/canvas/nodes/ExtractorNode";
+import {ExtractionMode, ExtractorNodeData} from "@/components/editor/pages/canvas/nodes/ExtractorNode";
 import {usePlayStore} from "@/stores/editor/PlayStore";
 import * as cheerio from 'cheerio';
 
@@ -29,8 +29,13 @@ export class EngineExtractorNode implements BasicNode {
                 // Parse the HTML with Cheerio
                 const $ = cheerio.load(html);
 
-                // Extract all HTML elements that are inside a "tag"
-                return $(tag).map((i, el) => $(el).html()).get()
+                switch (this.data.extractionMode) {
+                    case ExtractionMode.ATTRIBUTE:
+                        return $(tag).map((i, el) => $(el).attr(this.data.attributeToExtract)).get()
+                    case ExtractionMode.CONTENT:
+                    default:
+                        return $(tag).map((i, el) => $(el).html()).get()
+                }
             }).flat()
 
             usePlayStore.getState().writeToLog(`Extracted ${elements.length} elements`)

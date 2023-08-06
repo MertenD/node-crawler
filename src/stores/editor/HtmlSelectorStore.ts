@@ -11,6 +11,7 @@ export type HtmlSelectorState = {
     setExcludedSelector: (selector: string[]) => void
     cssSelector: string
     setCssSelector: (newSelector: string) => void
+    resetSelector: () => void
 }
 
 export const useHtmlSelectorStore = create<HtmlSelectorState>((set, get) => ({
@@ -42,6 +43,13 @@ export const useHtmlSelectorStore = create<HtmlSelectorState>((set, get) => ({
     setCssSelector: (newSelector: string) => {
         set({
             cssSelector: newSelector
+        })
+    },
+    resetSelector: () => {
+        set({
+            selectedSelector: [],
+            excludedSelector: [],
+            cssSelector: ""
         })
     }
 }));
