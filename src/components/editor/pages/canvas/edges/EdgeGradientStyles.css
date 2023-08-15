@@ -22,6 +22,14 @@
     stroke-opacity: 0.75;
 }
 
+/* Both Selected Edge */
+/*noinspection ALL,CssUnusedSymbol*/
+.react-flow__edge.edgeSelected .react-flow__edge-path {
+    stroke: url(#edgeSelected-edge-gradient);
+    stroke-width: 2;
+    stroke-opacity: 0.75;
+}
+
 /* Default Edge */
 /*noinspection ALL,CssUnusedSymbol*/
 .react-flow__edge.default .react-flow__edge-path {

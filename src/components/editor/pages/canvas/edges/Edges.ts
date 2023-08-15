@@ -9,6 +9,7 @@ export const DefaultEdge = createEdge(defaultEdgeColor, defaultEdgeColor, "defau
 export const SelectedIncomingEdge = createEdge(defaultEdgeColor, selectedColor, "incoming")
 export const SelectedOutgoingEdge = createEdge(selectedColor, defaultEdgeColor, "outgoing")
 export const BothSelectedEdge = createEdge(selectedColor, selectedColor, "bothSelected")
+export const EdgeSelectedEdge = createEdge(selectedColor, selectedColor, "edgeSelected")
 
 export const highlightEdges: HighlightEdgeInfoTypes = {
     [OutputValueType.NONE]: createEdge(defaultEdgeColor, defaultEdgeColor, OutputValueType.NONE),
