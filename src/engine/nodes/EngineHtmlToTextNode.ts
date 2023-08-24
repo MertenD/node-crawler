@@ -2,6 +2,7 @@ import {BasicNode} from "@/engine/nodes/BasicNode";
 import {NodeType} from "@/config/NodeType";
 import {usePlayStore} from "@/stores/editor/PlayStore";
 import {HtmlToTextNodeData} from "@/components/editor/pages/canvas/nodes/HtmlToTextNode";
+import {HtmlOutput, TextOutput} from "@/config/OutputValueType";
 
 export class EngineHtmlToTextNode implements BasicNode {
     id: string;
@@ -15,17 +16,18 @@ export class EngineHtmlToTextNode implements BasicNode {
     }
 
     async run() {
-        // TODO Hier vielleicht sinnvoll zusätzlich noch mitzugeben, welche OutputDataValue das ist, damit man im Fall hier Fallunterscheiden kann
-        const inputs = usePlayStore.getState().getInput(this.id, "input")
+        const inputs = usePlayStore.getState().getInput(this.id, "input") as HtmlOutput[] | undefined
 
         if (inputs) {
 
             usePlayStore.getState().writeToLog(`Turning ${inputs.length} HTML elements to text`)
 
             const cheerio = require('cheerio');
-            const textElements: string[] = inputs.map(input => {
-                const $ = cheerio.load(input);
-                return $('body').text()
+            const textElements: TextOutput[] = inputs.map(input => {
+                const $ = cheerio.load(input.value);
+                return {
+                    value: $('body').text()
+                } as TextOutput
             })
 
             usePlayStore.getState().addOutgoingPipelines(this.id, textElements);

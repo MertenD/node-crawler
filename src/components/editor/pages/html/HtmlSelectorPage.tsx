@@ -125,7 +125,7 @@ export default function HtmlSelectorPage() {
                             <DeleteForeverIcon />
                         </IconButton>
                     </Tooltip>
-                    <Tooltip title="Copy CSS-Selector" style={{ marginLeft: 10 }} >
+                    <Tooltip title="Copy whole CSS-Selector" style={{ marginLeft: 10 }} >
                         <IconButton onClick={() =>{
                             navigator.clipboard.writeText(cssSelector).then(() => {
                                 openSuccessSnackBar("CSS-Selector copied to clipboard")

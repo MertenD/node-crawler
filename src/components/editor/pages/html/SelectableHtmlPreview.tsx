@@ -25,6 +25,7 @@ export function SelectableHtmlPreview(props: SelectableHtmlPreviewProps) {
 
     useEffect(() => {
         // Access the document within the iframe
+        // @ts-ignore
         const iframeDoc = iframeRef.current.contentDocument || iframeRef.current.contentWindow.document;
 
         // Set the HTML content inside the iframe
@@ -56,21 +57,22 @@ export function SelectableHtmlPreview(props: SelectableHtmlPreviewProps) {
         }
 
         // Get document from iFrame
+        // @ts-ignore
         const iframeDoc = iframeRef.current.contentDocument || iframeRef.current.contentWindow.document;
 
-        iframeDoc.querySelectorAll('.selectedForSelector').forEach(el => el.classList.remove('selectedForSelector'));
-        iframeDoc.querySelectorAll('.excluded').forEach(el => el.classList.remove('excluded'));
+        iframeDoc.querySelectorAll('.selectedForSelector').forEach((el: { classList: { remove: (arg0: string) => any; }; }) => el.classList.remove('selectedForSelector'));
+        iframeDoc.querySelectorAll('.excluded').forEach((el: { classList: { remove: (arg0: string) => any; }; }) => el.classList.remove('excluded'));
 
         if (isValidSelector(iframeDoc, selectedSelector.join())) {
-            iframeDoc.querySelectorAll(selectedSelector.join()).forEach(el => el.classList.add('selectedForSelector'));
+            iframeDoc.querySelectorAll(selectedSelector.join()).forEach((el: { classList: { add: (arg0: string) => any; }; }) => el.classList.add('selectedForSelector'));
         }
 
         if (isValidSelector(iframeDoc, excludedSelector.join())) {
-            iframeDoc.querySelectorAll(excludedSelector.join()).forEach(el => el.classList.add('excluded'));
+            iframeDoc.querySelectorAll(excludedSelector.join()).forEach((el: { classList: { add: (arg0: string) => any; }; }) => el.classList.add('excluded'));
         }
     }, [selectedSelector, excludedSelector, html]);
 
-    const handleElementClick = (event) => {
+    const handleElementClick = (event: { preventDefault: () => void; target: any; }) => {
         event.preventDefault();
         const element = event.target;
 

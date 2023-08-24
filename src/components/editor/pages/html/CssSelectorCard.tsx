@@ -27,20 +27,26 @@ export default function CssSelectorCard(props: CssSelectorCardProps) {
 
         // Create an invisible iFrame
         const iframe = document.createElement('iframe')
+
         iframe.style.display = 'none'
         document.body.appendChild(iframe)
 
         // Put the given html in the iFrame
+        // @ts-ignore
         iframe.contentDocument.open()
+        // @ts-ignore
         iframe.contentDocument.write(props.htmlString)
+        // @ts-ignore
         iframe.contentDocument.close()
 
         // Search for element in iFrame
+        // @ts-ignore
         let element = iframe.contentDocument.querySelector(props.selector)
 
         let attributeList = []
 
         if (element) {
+            // @ts-ignore
             for (let attr of element.attributes) {
                 attributeList.push(attr.name)
             }
@@ -94,7 +100,7 @@ export default function CssSelectorCard(props: CssSelectorCardProps) {
             </div>
         </div>
         { props.isAttributeSelectionVisible && <InputLabel style={{ marginTop: 20 }} id="selectAttributeLabel">
-            Select what should be extracted
+            Available attributes to extract
         </InputLabel> }
         { props.isAttributeSelectionVisible && <Select
             labelId="selectAttributeLabel"

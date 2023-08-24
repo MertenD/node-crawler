@@ -2,6 +2,8 @@ import {BasicNode} from "@/engine/nodes/BasicNode";
 import {NodeType} from "@/config/NodeType";
 import {usePlayStore} from "@/stores/editor/PlayStore";
 import {ZipNodeData} from "@/components/editor/pages/canvas/nodes/ZipNode";
+import {HtmlOutput, JsonOutput, TextOutput} from "@/config/OutputValueType";
+import {HtmlOutlined} from "@mui/icons-material";
 
 export class EngineZipNode implements BasicNode {
     id: string;
@@ -15,23 +17,25 @@ export class EngineZipNode implements BasicNode {
     }
 
     async run() {
-        // TODO Hier vielleicht sinnvoll zusätzlich noch mitzugeben, welche OutputDataValue das ist, damit man im Fall hier Fallunterscheiden kann
-        const inputs = usePlayStore.getState().getInput(this.id, "input", false)
-
-        // TODO HTML To Text node
+        const inputs = usePlayStore.getState().getInput(this.id, "input", false) as (HtmlOutput | TextOutput | JsonOutput)[][] | undefined
 
         if (inputs) {
 
             usePlayStore.getState().writeToLog(`Zipping ${inputs.length} inputs together`)
 
-            const zippedInputs = inputs[0].map((_,i) => inputs.map(row => row[i])).map(zippedList => {
-                return zippedList.reduce((acc, value, index) => {
-                    acc[index.toString()] = value;
-                    return acc;
-                }, {});
-            });
+            const zippedInputs = inputs[0].map((_, i) => inputs.map(row => row[i]))
+                .map(zippedList => {
+                    const jsonObject = zippedList.reduce((acc, value, index) => {
+                        acc[index.toString()] = value.value;
+                        return acc;
+                    }, {} as Record<string, any>);
 
-            usePlayStore.getState().addOutgoingPipelines(this.id, JSON.stringify(zippedInputs, null, 2));
+                    return {
+                        value: jsonObject
+                    };
+                }) as JsonOutput[]
+
+            usePlayStore.getState().addOutgoingPipelines(this.id, zippedInputs);
 
             // End with calling the next node
             setTimeout(() => {  usePlayStore.getState().nextNode() }, 100);
