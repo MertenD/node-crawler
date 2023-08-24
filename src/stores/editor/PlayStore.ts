@@ -4,7 +4,8 @@ import {NextNodeKey} from "@/model/NextNodeKey";
 import {NodeType} from "@/config/NodeType";
 import {getNodeMap} from "@/util/NodeMapTransformer";
 import useReactFlowStore from "@/stores/editor/ReactFlowStore";
-import {Output} from "@/config/OutputValueType";
+import {Output, OutputValueType} from "@/config/OutputValueType";
+import {connectionRules} from "@/config/ConnectionRules";
 
 function getFormattedTimestamp() {
     const now = new Date();
@@ -261,9 +262,28 @@ export const usePlayStore = create<PlayStoreState>((set, get) => ({
             return false;
         }).length;
 
+        let amountOfPrevNoneOutputValues = 0;
+        // Traverse the nodeMap to find the previous nodes for the given nodeId
+        // and count how many of them have an output value of NONE
+        get().nodeMap.forEach((value, key) => {
+            if (value.next) {
+                Object.values(value.next).forEach(arr => {
+                    arr.forEach(connection => {
+                        if (connection.nodeId === nodeId) {
+                            const prevNode = value.node;
+                            const rule = connectionRules.get(prevNode.nodeType);
+                            if (rule && rule.outputValueType === OutputValueType.NONE) {
+                                amountOfPrevNoneOutputValues++;
+                            }
+                        }
+                    });
+                });
+            }
+        });
+
         // If the input array contains exactly the required amount of inputs and if none of those inputs are undefined
         // Then everything is okay and the value will be returned
-        if (inputs.length === ingoingConnections && inputs.every(value => value !== undefined)) {
+        if (inputs.length === ingoingConnections - amountOfPrevNoneOutputValues && inputs.every(value => value !== undefined)) {
             if (flattenInput) {
                 return inputs.flat()
             } else {

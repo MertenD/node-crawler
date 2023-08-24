@@ -12,9 +12,11 @@ export const connectionRules: Map<NodeType, ConnectionRule> = new Map([
             {
                 handleId: "input",
                 allowedValueTypes: [
-                    OutputValueType.NONE
+                    OutputValueType.NONE,
+                    OutputValueType.TEXT,
+                    OutputValueType.HTML
                 ],
-                maxConnections: 1
+                maxConnections: 999
             }
         ]
     }],
