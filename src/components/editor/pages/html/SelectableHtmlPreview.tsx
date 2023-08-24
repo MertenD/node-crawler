@@ -11,7 +11,15 @@ export interface SelectableHtmlPreviewProps {
 }
 
 export function SelectableHtmlPreview(props: SelectableHtmlPreviewProps) {
-    const { html, setCssSelector, selectedSelector, excludedSelector, setSelectedSelector, setExcludedSelector } = useHtmlSelectorStore()
+    const {
+        html,
+        setAmountOfSelectedElements,
+        setCssSelector,
+        selectedSelector,
+        excludedSelector,
+        setSelectedSelector,
+        setExcludedSelector
+    } = useHtmlSelectorStore()
 
     const selectedSelectorRef = useRef(selectedSelector);
     const excludedSelectorRef = useRef(excludedSelector)
@@ -70,6 +78,8 @@ export function SelectableHtmlPreview(props: SelectableHtmlPreviewProps) {
         if (isValidSelector(iframeDoc, excludedSelector.join())) {
             iframeDoc.querySelectorAll(excludedSelector.join()).forEach((el: { classList: { add: (arg0: string) => any; }; }) => el.classList.add('excluded'));
         }
+
+        setAmountOfSelectedElements(iframeDoc.querySelectorAll('.selectedForSelector').length)
     }, [selectedSelector, excludedSelector, html]);
 
     const handleElementClick = (event: { preventDefault: () => void; target: any; }) => {

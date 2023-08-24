@@ -4,7 +4,9 @@ export type HtmlSelectorState = {
     url: string
     setUrl: (newUrl: string) => void
     html: string
+    amountOfSelectedElements: number
     setHtml: (newHtml: string) => void
+    setAmountOfSelectedElements: (amount: number) => void
     selectedSelector: string[]
     setSelectedSelector: (selector: string[]) => void
     excludedSelector: string[]
@@ -17,6 +19,7 @@ export type HtmlSelectorState = {
 export const useHtmlSelectorStore = create<HtmlSelectorState>((set, get) => ({
     url: "",
     html: "",
+    amountOfSelectedElements: 0,
     selectedSelector: [],
     excludedSelector: [],
     cssSelector: "",
@@ -28,6 +31,11 @@ export const useHtmlSelectorStore = create<HtmlSelectorState>((set, get) => ({
     setHtml: (newHtml: string) => {
         set({
             html: newHtml
+        })
+    },
+    setAmountOfSelectedElements: (amount: number) => {
+        set({
+            amountOfSelectedElements: amount
         })
     },
     setSelectedSelector: (selector: string[]) => {

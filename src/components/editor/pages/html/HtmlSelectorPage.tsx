@@ -18,7 +18,7 @@ export enum SelectorSelectionModes {
 
 export default function HtmlSelectorPage() {
 
-    const { url, html, setUrl, setHtml, cssSelector, resetSelector, selectedSelector, excludedSelector, setSelectedSelector, setExcludedSelector } = useHtmlSelectorStore()
+    const { url, html, amountOfSelectedElements, setUrl, setHtml, cssSelector, resetSelector, selectedSelector, excludedSelector, setSelectedSelector, setExcludedSelector } = useHtmlSelectorStore()
     const [selectionMode, setSelectionMode] = useState(SelectorSelectionModes.ADD_TO_SELECTION)
 
     const fetchWebsite = async (url: string) => {
@@ -135,6 +135,9 @@ export default function HtmlSelectorPage() {
                         </IconButton>
                     </Tooltip>
                 </div>
+                <Typography variant="body1">
+                    Total elements selected on this page: { amountOfSelectedElements }
+                </Typography>
                 <Typography variant="h5">
                     Selected
                 </Typography>
