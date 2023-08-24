@@ -1,12 +1,12 @@
 'use client'
 
-import {ReactFlowProvider, useReactFlow} from "reactflow";
+import {ReactFlowProvider} from "reactflow";
 import React, {useEffect} from "react";
 import HeaderBar, {CANVAS_HEIGHT} from "@/components/editor/headerbar/HeaderBar";
 import useEditorPageState from "@/stores/editor/EditorPageStore";
 import {Alert, Snackbar} from "@mui/material";
 import Engine from "@/components/editor/Engine";
-import useReactFlowStore from "@/stores/editor/ReactFlowStore";
+import {selectedColor} from "@/config/colors";
 
 export default function Canvas() {
 
@@ -32,6 +32,10 @@ export default function Canvas() {
     const preventReload = (e: Event) => {
         e.preventDefault()
     }
+
+    useEffect(() => {
+        document.documentElement.style.setProperty('--selected-color', selectedColor);
+    }, []);
 
     return <div style={{ height: "100vh"}}>
         <ReactFlowProvider>

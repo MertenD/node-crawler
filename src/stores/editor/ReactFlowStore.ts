@@ -21,6 +21,7 @@ import {NodeType} from "@/config/NodeType";
 import {
     BothSelectedEdge,
     DefaultEdge,
+    EdgeSelectedEdge,
     highlightEdges,
     SelectedIncomingEdge,
     SelectedOutgoingEdge
@@ -79,6 +80,7 @@ export const useReactFlowStore = create<ReactFlowState>((set, get) => ({
         selectedIncomingEdge: SelectedIncomingEdge,
         selectedOutgoingEdge: SelectedOutgoingEdge,
         bothSelectedEdge: BothSelectedEdge,
+        edgeSelectedEdge: EdgeSelectedEdge,
         ...highlightEdges,
     },
     onNodesChange: (changes: NodeChange[]) => {
@@ -198,6 +200,12 @@ export const useReactFlowStore = create<ReactFlowState>((set, get) => ({
 
             set({
                 edges: get().edges.map(edge => {
+                    if (selectedNodeIds.length === 0 && edge.selected) {
+                        return {
+                            ...edge,
+                            type: "edgeSelectedEdge"
+                        }
+                    }
                     if (selectedNodeIds.includes(edge.source) && selectedNodeIds.includes(edge.target)) {
                         return {
                             ...edge,
@@ -220,6 +228,20 @@ export const useReactFlowStore = create<ReactFlowState>((set, get) => ({
                         ...edge,
                         type: "defaultEdge"
                     }
+                }).sort((a, b) => {
+                    if (a.type === "edgeSelectedEdge") {
+                        return 1
+                    }
+                    if (b.type === "edgeSelectedEdge") {
+                        return -1
+                    }
+                    if (a.type === "defaultEdge") {
+                        return -1
+                    }
+                    if (b.type === "defaultEdge") {
+                        return 1
+                    }
+                    return 0
                 })
             })
 
