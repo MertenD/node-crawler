@@ -11,9 +11,12 @@ import ManageSearchIcon from '@mui/icons-material/ManageSearch';
 import TextInputOption from "@/components/form/TextInputOption";
 import {EngineExtractorNode} from "@/engine/nodes/EngineExtractorNode";
 import {NodeMetadata} from "@/config/NodesMetadata";
+import SelectOption from "@/components/form/SelectOption";
 
 export interface ExtractorNodeData extends NodeData {
     tag: string
+    extractionMode: ExtractionMode
+    attributeToExtract: string
 }
 
 // --- Style ---
@@ -47,6 +50,20 @@ export const ExtractorOptions = createOptionsComponent<ExtractorNodeData>("Extra
                 onDataUpdated("tag", event.target.value)
             }}
         />
+        <SelectOption
+            values={Object.values(ExtractionMode)}
+            selectedValue={data.extractionMode}
+            onSelectionChanged={(newSelection: string) => {
+                onDataUpdated("extractionMode", newSelection)
+            }}
+        />
+        { data.extractionMode === ExtractionMode.ATTRIBUTE && <TextInputOption
+            label={"Attribute Name"}
+            value={data.attributeToExtract}
+            onChange={(event) => {
+                onDataUpdated("attributeToExtract", event.target.value)
+            }}
+        /> }
     </>
 })
 
@@ -63,3 +80,9 @@ export const extractorNodeMetadata = {
         return new EngineExtractorNode(id, data as ExtractorNodeData)
     }
 } as NodeMetadata
+
+
+export enum ExtractionMode {
+    CONTENT = "Content",
+    ATTRIBUTE = "Attribute"
+}

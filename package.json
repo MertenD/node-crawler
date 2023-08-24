@@ -20,6 +20,9 @@
     "@types/react-dom": "18.2.6",
     "autoprefixer": "10.4.14",
     "cheerio": "^1.0.0-rc.12",
+    "css-selector-generator": "^3.6.4",
+    "dompurify": "^3.0.5",
+    "get-selector": "^1.0.4",
     "next": "13.4.8",
     "postcss": "8.4.24",
     "react": "18.2.0",
@@ -34,6 +37,7 @@
   },
   "devDependencies": {
     "@types/cheerio": "^0.22.31",
+    "@types/dompurify": "^3.0.2",
     "@types/uuid": "^9.0.2",
     "eslint": "^8.45.0"
   }

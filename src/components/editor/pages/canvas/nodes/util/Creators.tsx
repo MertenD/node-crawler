@@ -87,8 +87,8 @@ export function createOptionsComponent<DataType extends NodeData>(
 
         useEffect(() => {
             const ownOutgoingPipeline = pipelines.find(pipeline => pipeline.from === props.id)
-            if (ownOutgoingPipeline) {
-                setCachedOutput(ownOutgoingPipeline.value)
+            if (ownOutgoingPipeline && ownOutgoingPipeline.value) {
+                setCachedOutput(ownOutgoingPipeline.value.map(output => JSON.stringify(output.value)))
             } else {
                 setCachedOutput(null)
             }

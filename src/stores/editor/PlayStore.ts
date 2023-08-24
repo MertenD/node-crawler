@@ -4,6 +4,7 @@ import {NextNodeKey} from "@/model/NextNodeKey";
 import {NodeType} from "@/config/NodeType";
 import {getNodeMap} from "@/util/NodeMapTransformer";
 import useReactFlowStore from "@/stores/editor/ReactFlowStore";
+import {Output} from "@/config/OutputValueType";
 
 function getFormattedTimestamp() {
     const now = new Date();
@@ -17,13 +18,21 @@ function getFormattedTimestamp() {
     return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
 }
 
+type Pipeline = {
+    from: string;
+    to: string | null;
+    toHandleId: string | null;
+    value: Output[] | null;
+    isActivated: boolean;
+};
+
 export type PlayStoreState = {
     nodeMap: NodeMap
     currentNode: NodeMapValue | null
     variables: Record<string, any>
     files: {name: string, extension: string, content: string}[]
     log: string[]
-    pipelines: {from: string, to: string | null, toHandleId: string | null, value: any, isActivated: boolean}[]
+    pipelines: Pipeline[]
     isProcessRunning: boolean
     isStepByStep: boolean
     isNextStepReady: boolean,
@@ -41,9 +50,9 @@ export type PlayStoreState = {
     setVariable: (name: string, value: any) => void
     addFile: (name: string, extension: string, content: string) => void
     writeToLog: (message: string) => void
-    addOutgoingPipelines: (from: string, value?: any) => void
+    addOutgoingPipelines: (from: string, value?: Output[] | Output | null) => void
     deactivateIngoingPipelines: (to: string) => void
-    getInput: (nodeId: string, handleId: string, flattenInput?: boolean) => string[] | string[][] | undefined
+    getInput: (nodeId: string, handleId: string, flattenInput?: boolean) => Output[][] | Output[] | undefined
 }
 
 export const usePlayStore = create<PlayStoreState>((set, get) => ({
@@ -202,7 +211,7 @@ export const usePlayStore = create<PlayStoreState>((set, get) => ({
             log: [...get().log, `${getFormattedTimestamp()}: ${message}`]
         })
     },
-    addOutgoingPipelines: (from: string, value: any = null) => {
+    addOutgoingPipelines: (from: string, value: Output[] | Output | null = null) => {
         const next = Object.values(get().getNode(from)?.next || {}).flat()
         if (next.length > 0) {
             set({
@@ -211,7 +220,7 @@ export const usePlayStore = create<PlayStoreState>((set, get) => ({
                         from: from,
                         to: to.nodeId,
                         toHandleId: to.targetHandleId,
-                        value: Array.isArray(value) ? value.flat() : [value],
+                        value: value === null ? value : (Array.isArray(value) ? value.flat() : [value]),
                         isActivated: true
                     }
                 })].flat()
@@ -222,7 +231,7 @@ export const usePlayStore = create<PlayStoreState>((set, get) => ({
                     from: from,
                     to: null,
                     toHandleId: null,
-                    value: Array.isArray(value) ? value.flat() : [value],
+                    value: value === null ? value : (Array.isArray(value) ? value.flat() : [value]),
                     isActivated: false
                 }]
             })
@@ -238,11 +247,11 @@ export const usePlayStore = create<PlayStoreState>((set, get) => ({
             })
         })
     },
-    getInput: (nodeId: string, handleId: string, flattenInput: boolean = true): string[] | string[][] | undefined => {
+    getInput: (nodeId: string, handleId: string, flattenInput: boolean = true): Output[][] | Output[] | undefined => {
         // Get input values from the pipelines of the targetHandle
-        const inputs =  get().pipelines.filter(pipeline => {
-            return pipeline.to === nodeId && pipeline.toHandleId === handleId
-        }).map(pipeline => pipeline.value)
+        const inputs: Output[][] =  get().pipelines.filter(pipeline => {
+            return pipeline.to === nodeId && pipeline.toHandleId === handleId && pipeline.value !== null
+        }).map(pipeline => pipeline.value!)
 
         // Get amount of connected pipelines to the targetHandle
         const ingoingConnections = Array.from(get().nodeMap.values()).filter((value: NodeMapValue) => {

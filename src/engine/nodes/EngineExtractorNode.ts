@@ -1,8 +1,9 @@
 import {BasicNode} from "@/engine/nodes/BasicNode";
 import {NodeType} from "@/config/NodeType";
-import {ExtractorNodeData} from "@/components/editor/pages/canvas/nodes/ExtractorNode";
+import {ExtractionMode, ExtractorNodeData} from "@/components/editor/pages/canvas/nodes/ExtractorNode";
 import {usePlayStore} from "@/stores/editor/PlayStore";
 import * as cheerio from 'cheerio';
+import {HtmlOutput} from "@/config/OutputValueType";
 
 export class EngineExtractorNode implements BasicNode {
     id: string;
@@ -16,22 +17,53 @@ export class EngineExtractorNode implements BasicNode {
     }
 
     async run() {
-        // TODO Hier vielleicht sinnvoll zusätzlich noch mitzugeben, welche OutputDataValue das ist, damit man im Fall hier Fallunterscheiden kann
-        const inputs = usePlayStore.getState().getInput(this.id, "input") as string[]
+        const inputs = usePlayStore.getState().getInput(this.id, "input") as HtmlOutput[] | undefined
 
         if (inputs) {
 
             usePlayStore.getState().writeToLog(`Extracting "${this.data.tag}" from provided html`)
 
-            const elements = inputs.map(html => {
+            const elements = inputs.map(input => {
                 const tag = this.data.tag;
 
                 // Parse the HTML with Cheerio
-                const $ = cheerio.load(html);
+                const $ = cheerio.load(input.value);
 
-                // Extract all HTML elements that are inside a "tag"
-                return $(tag).map((i, el) => $(el).html()).get()[0]; // TODO Hier die [0] wieder entfernen und etwas anderes überlegen
-            }).flat()
+                const mapToHtmlOutput = (value: string, source_url: string): HtmlOutput => {
+                    return {
+                        metadata: {
+                            source_url: source_url
+                        },
+                        value: value
+                    } as HtmlOutput
+                }
+
+                switch (this.data.extractionMode) {
+                    case ExtractionMode.ATTRIBUTE:
+
+                        const extractAttribute = (el: cheerio.Element, attribute: string, baseOrigin: string): string | undefined => {
+                            let value = $(el).attr(attribute)
+                            if (attribute === "href" && value) {
+                                return new URL(value, baseOrigin).href
+                            }
+                            return value
+                        }
+
+                        const attributeToExtract = this.data.attributeToExtract.toLowerCase()
+                        const baseOrigin = new URL(input.metadata.source_url).origin
+
+                        return $(tag).map((i, el) => {
+                            return extractAttribute(el, attributeToExtract, baseOrigin)
+                        }).get().filter(Boolean).map(value => {
+                            return mapToHtmlOutput(value, input.metadata.source_url)
+                        })
+                    case ExtractionMode.CONTENT:
+                    default:
+                        return $(tag).map((i, el) => $(el).html()).get().map(el => {
+                            return mapToHtmlOutput(el, input.metadata.source_url)
+                        })
+                }
+            }).flat() as HtmlOutput[]
 
             usePlayStore.getState().writeToLog(`Extracted ${elements.length} elements`)
 
@@ -40,7 +72,9 @@ export class EngineExtractorNode implements BasicNode {
             usePlayStore.getState().addOutgoingPipelines(this.id, elements);
 
             // End with calling the next node
-            setTimeout(() => {  usePlayStore.getState().nextNode() }, 100);
+            setTimeout(() => {
+                usePlayStore.getState().nextNode()
+            }, 100);
         }
     }
 }

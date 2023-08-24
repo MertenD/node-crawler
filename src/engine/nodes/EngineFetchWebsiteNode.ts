@@ -2,6 +2,7 @@ import {BasicNode} from "./BasicNode";
 import {NodeType} from "@/config/NodeType";
 import {usePlayStore} from "@/stores/editor/PlayStore";
 import {FetchWebsiteNodeData} from "@/components/editor/pages/canvas/nodes/FetchWebsiteNode";
+import {HtmlOutput} from "@/config/OutputValueType";
 
 export class EngineFetchWebsiteNode implements BasicNode {
     id: string;
@@ -18,7 +19,7 @@ export class EngineFetchWebsiteNode implements BasicNode {
 
         usePlayStore.getState().writeToLog(`Fetching ${this.data.urls.length} websites with name "${this.data.name}"`)
 
-        let fetchResults: string[] = []
+        let fetchResults: HtmlOutput[] = []
 
         for (const url of this.data.urls) {
 
@@ -40,7 +41,12 @@ export class EngineFetchWebsiteNode implements BasicNode {
                 return response.text();
             })
             .then(data => {
-                fetchResults.push(data);
+                fetchResults.push({
+                    metadata: {
+                        source_url: url,
+                    },
+                    value: data
+                });
                 usePlayStore.getState().writeToLog(`Website content (First 500 characters): ${data.substring(0, 499)}`);
             })
             .catch(error => {
