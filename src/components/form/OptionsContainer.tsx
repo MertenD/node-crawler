@@ -26,7 +26,6 @@ export default function OptionsContainer(props: OptionsContainerProps) {
             display: "flex",
             flexDirection: "column",
             alignItems: 'center',
-            justifyContent: 'center',
             width: props.width || 500,
             maxHeight: `${0.7 * CANVAS_HEIGHT}vh`,
             overflowY: "auto",
