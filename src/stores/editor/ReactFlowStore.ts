@@ -200,7 +200,7 @@ export const useReactFlowStore = create<ReactFlowState>((set, get) => ({
 
             set({
                 edges: get().edges.map(edge => {
-                    if (edge.selected) {
+                    if (selectedNodeIds.length === 0 && edge.selected) {
                         return {
                             ...edge,
                             type: "edgeSelectedEdge"
@@ -228,6 +228,20 @@ export const useReactFlowStore = create<ReactFlowState>((set, get) => ({
                         ...edge,
                         type: "defaultEdge"
                     }
+                }).sort((a, b) => {
+                    if (a.type === "edgeSelectedEdge") {
+                        return 1
+                    }
+                    if (b.type === "edgeSelectedEdge") {
+                        return -1
+                    }
+                    if (a.type === "defaultEdge") {
+                        return -1
+                    }
+                    if (b.type === "defaultEdge") {
+                        return 1
+                    }
+                    return 0
                 })
             })
 
