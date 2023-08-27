@@ -15,7 +15,8 @@ export const highlightEdges: HighlightEdgeInfoTypes = {
     [OutputValueType.NONE]: createEdge(defaultEdgeColor, defaultEdgeColor, OutputValueType.NONE),
     [OutputValueType.TEXT]: createEdge("#7CFC00", "#7CFC00", OutputValueType.TEXT),
     [OutputValueType.JSON]: createEdge("#87CEEB", "#87CEEB", OutputValueType.JSON),
-    [OutputValueType.HTML]: createEdge("#FF00FF", "#FF00FF", OutputValueType.HTML)
+    [OutputValueType.HTML]: createEdge("#FF00FF", "#FF00FF", OutputValueType.HTML),
+    [OutputValueType.DATABASE]: createEdge("#FFFF00", "#FFFF00", OutputValueType.DATABASE)
 }
 
 type HighlightEdgeInfoTypes = {

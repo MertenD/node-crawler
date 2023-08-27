@@ -29,7 +29,8 @@ export const connectionRules = new Map<NodeType, ConnectionRule | DynamicConnect
                 allowedValueTypes: [
                     OutputValueType.HTML,
                     OutputValueType.TEXT,
-                    OutputValueType.JSON
+                    OutputValueType.JSON,
+                    OutputValueType.DATABASE
                 ],
                 maxConnections: 999
             }

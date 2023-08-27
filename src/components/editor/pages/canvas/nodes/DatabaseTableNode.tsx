@@ -20,7 +20,7 @@ import MultiSelectOption from "@/components/form/MultiSelectOption";
 import useReactFlowStore from "@/stores/editor/ReactFlowStore";
 
 export interface DatabaseTableNodeData extends DynamicNodeData {
-
+    tableName: string
 }
 
 // --- Style ---
@@ -69,11 +69,18 @@ export const DatabaseTableOptions = createOptionsComponent<DatabaseTableNodeData
         onDataUpdated("connectionRule", {
             ...data.connectionRule,
             inputRules: inputs,
-            outputValueType: OutputValueType.NONE
+            outputValueType: OutputValueType.DATABASE
         })
     }, [inputs]);
 
     return <>
+        <TextInputOption
+            label="Name"
+            value={data.tableName}
+            onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                onDataUpdated("tableName", event.target.value)
+            }}
+        />
         {
             inputs.map((input: InputRule, index: number) => {
                 return <RowOptionsContainer>
@@ -124,6 +131,6 @@ export const DatabaseTableNodeMetadata = {
     style: DatabaseTableShapeStyle(true),
     icon: <StorageIcon />,
     getEngineNode: (id: string, data: NodeData) => {
-        return new EngineDatabaseTableNode(id, data as DynamicNodeData)
+        return new EngineDatabaseTableNode(id, data as DatabaseTableNodeData)
     }
 } as NodeMetadata
