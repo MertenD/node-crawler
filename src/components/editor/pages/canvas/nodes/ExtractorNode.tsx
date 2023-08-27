@@ -1,6 +1,6 @@
 // --- Data ---
 import {
-    createNodeComponent,
+    createStaticNodeComponent,
     createNodeShapeStyle,
     createOptionsComponent
 } from "@/components/editor/pages/canvas/nodes/util/Creators";
@@ -23,7 +23,7 @@ export interface ExtractorNodeData extends NodeData {
 export const extractorShapeStyle = createNodeShapeStyle()
 
 // --- Node ---
-export const ExtractorNode = createNodeComponent<ExtractorNodeData>(
+export const ExtractorNode = createStaticNodeComponent<ExtractorNodeData>(
     NodeType.EXTRACTOR_NODE,
     extractorShapeStyle,
     () => {

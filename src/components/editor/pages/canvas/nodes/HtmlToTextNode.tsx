@@ -3,7 +3,7 @@
 import React from "react";
 import {NodeData} from "@/model/NodeData";
 import {
-    createNodeComponent,
+    createStaticNodeComponent,
     createNodeShapeStyle,
     createOptionsComponent
 } from "@/components/editor/pages/canvas/nodes/util/Creators";
@@ -26,7 +26,7 @@ export const htmlToTextShapeStyle = createNodeShapeStyle()
 
 
 // --- Node ---
-export const HtmlToTextNode = createNodeComponent<HtmlToTextNodeData>(
+export const HtmlToTextNode = createStaticNodeComponent<HtmlToTextNodeData>(
     NodeType.HTML_TO_TEXT_NODE,
     htmlToTextShapeStyle,
     () => {

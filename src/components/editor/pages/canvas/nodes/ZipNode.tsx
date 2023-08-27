@@ -3,7 +3,7 @@
 import React from "react";
 import {NodeData} from "@/model/NodeData";
 import {
-    createNodeComponent,
+    createStaticNodeComponent,
     createNodeShapeStyle,
     createOptionsComponent
 } from "@/components/editor/pages/canvas/nodes/util/Creators";
@@ -24,7 +24,7 @@ export const zipShapeStyle = createNodeShapeStyle({})
 
 
 // --- Node ---
-export const ZipNode = createNodeComponent<ZipNodeData>(
+export const ZipNode = createStaticNodeComponent<ZipNodeData>(
     NodeType.ZIP_NODE,
     zipShapeStyle,
     () => {

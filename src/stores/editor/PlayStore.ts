@@ -5,7 +5,7 @@ import {NodeType} from "@/config/NodeType";
 import {getNodeMap} from "@/util/NodeMapTransformer";
 import useReactFlowStore from "@/stores/editor/ReactFlowStore";
 import {Output, OutputValueType} from "@/config/OutputValueType";
-import {connectionRules} from "@/config/ConnectionRules";
+import {getConnectionRule} from "@/config/ConnectionRules";
 
 function getFormattedTimestamp() {
     const now = new Date();
@@ -271,7 +271,7 @@ export const usePlayStore = create<PlayStoreState>((set, get) => ({
                     arr.forEach(connection => {
                         if (connection.nodeId === nodeId) {
                             const prevNode = value.node;
-                            const rule = connectionRules.get(prevNode.nodeType);
+                            const rule = getConnectionRule(prevNode.nodeType, prevNode.id)
                             if (rule && rule.outputValueType === OutputValueType.NONE) {
                                 amountOfPrevNoneOutputValues++;
                             }

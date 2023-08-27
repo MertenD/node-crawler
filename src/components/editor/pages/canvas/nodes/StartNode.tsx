@@ -6,7 +6,7 @@ import {LoadingButton} from "@mui/lab";
 import PlayCircleFilledIcon from '@mui/icons-material/PlayCircleFilled';
 import {usePlayStore} from "@/stores/editor/PlayStore";
 import {
-    createNodeComponent,
+    createStaticNodeComponent,
     createNodeShapeStyle,
     createOptionsComponent
 } from "@/components/editor/pages/canvas/nodes/util/Creators";
@@ -27,7 +27,7 @@ export const startShapeStyle = createNodeShapeStyle({
 
 
 // --- Node ---
-export const StartNode = createNodeComponent<StartNodeData>(
+export const StartNode = createStaticNodeComponent<StartNodeData>(
     NodeType.START_NODE,
     startShapeStyle,
     () => {

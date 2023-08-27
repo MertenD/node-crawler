@@ -6,7 +6,7 @@ import { Badge, Button, IconButton, Typography } from "@mui/material";
 import CloudDownloadTwoToneIcon from '@mui/icons-material/CloudDownloadTwoTone';
 import {NodeData} from "@/model/NodeData";
 import {
-    createNodeComponent,
+    createStaticNodeComponent,
     createNodeShapeStyle,
     createOptionsComponent
 } from "@/components/editor/pages/canvas/nodes/util/Creators";
@@ -31,7 +31,7 @@ export const fetchWebsiteShapeStyle = createNodeShapeStyle({
 
 
 // --- Node ---
-export const FetchWebsiteNode = createNodeComponent<FetchWebsiteNodeData>(
+export const FetchWebsiteNode = createStaticNodeComponent<FetchWebsiteNodeData>(
     NodeType.FETCH_WEBSITE_NODE,
     fetchWebsiteShapeStyle,
     (id, selected, data) => {
