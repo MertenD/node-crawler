@@ -57,6 +57,7 @@ export type ReactFlowState = {
     getNodeById: (nodeId: string) => Node | null;
     setNodeSelected: (nodeId: string | null) => void
     setSelectedNodes: () => void
+    replaceEdgeAfterHandleRename: (nodeId: string, oldHandleId: string, newHandleId: string) => void
     removeIllegalEdgesAfterDynamicNodeChange: (nodeType: NodeType, nodeId: string) => void
     updateEdgesGradient: () => void
 }
@@ -195,6 +196,19 @@ export const useReactFlowStore = create<ReactFlowState>((set, get) => ({
         })
         get().updateEdgesGradient()
     },
+    replaceEdgeAfterHandleRename: (nodeId: string, oldHandleId: string, newHandleId: string) => {
+        set({
+            edges: get().edges.map(edge => {
+                if (edge.target === nodeId && edge.targetHandle === oldHandleId) {
+                    return {
+                        ...edge,
+                        targetHandle: newHandleId
+                    }
+                }
+                return edge
+            })
+        })
+    },
     removeIllegalEdgesAfterDynamicNodeChange: (nodeType: NodeType, nodeId: string) => {
         const availableHandleIds = getConnectionRule(nodeType, nodeId)?.inputRules.map(rule => rule.handleId)
         if (!availableHandleIds) {
@@ -202,14 +216,27 @@ export const useReactFlowStore = create<ReactFlowState>((set, get) => ({
         }
         set({
             edges: get().edges.filter(edge => {
-                // TODO Filter illegal edges when their pipeline datavalue does not fit anymore after a change
-                if (edge.source !== nodeId && edge.target !== nodeId) {
+                if (edge.target !== nodeId) {
                     return true
                 }
                 if (!edge.targetHandle) {
+                    return true
+                }
+
+                const sourceNode = get().getNodeById(edge.source)
+
+                if (!sourceNode) {
                     return false
                 }
-                return availableHandleIds.includes(edge.targetHandle)
+
+                const allowedInputValueTypes = getAllowedValueTypes(nodeType, nodeId, edge.targetHandle)
+                const outputValueType = getOutputValueType(sourceNode.type as NodeType, edge.source)
+
+                if (!outputValueType) {
+                    return false
+                }
+
+                return availableHandleIds.includes(edge.targetHandle) && allowedInputValueTypes.includes(outputValueType)
             })
         })
     },

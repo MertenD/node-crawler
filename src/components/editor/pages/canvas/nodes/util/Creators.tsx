@@ -86,9 +86,8 @@ export function createDynamicNodeComponent<DataType extends DynamicNodeData>(
         const updateNodeInternals = useUpdateNodeInternals()
 
         useEffect(() => {
-            if (data.connectionRule) {
+           if (data.connectionRule) {
                 addOrUpdateDynamicRule(nodeType, id, data.connectionRule)
-                useReactFlowStore.getState().removeIllegalEdgesAfterDynamicNodeChange(nodeType, id)
                 updateNodeInternals(id)
             }
         }, [data.connectionRule]);

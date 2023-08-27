@@ -56,6 +56,7 @@ export const ExtractorOptions = createOptionsComponent<ExtractorNodeData>("Extra
             onSelectionChanged={(newSelection: string) => {
                 onDataUpdated("extractionMode", newSelection)
             }}
+            label={"Select what should be extracted"}
         />
         { data.extractionMode === ExtractionMode.ATTRIBUTE && <TextInputOption
             label={"Attribute Name"}

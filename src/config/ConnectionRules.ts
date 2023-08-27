@@ -1,5 +1,6 @@
 import {NodeType} from "@/config/NodeType";
 import {OutputValueType} from "@/config/OutputValueType";
+import useReactFlowStore from "@/stores/editor/ReactFlowStore";
 
 export const connectionRules = new Map<NodeType, ConnectionRule | DynamicConnectionRule>([
     [NodeType.START_NODE, {
@@ -71,7 +72,8 @@ export const connectionRules = new Map<NodeType, ConnectionRule | DynamicConnect
                 maxConnections: 999
             }
         ]
-    }]
+    }],
+    [NodeType.DATABASE_TABLE_NODE, {}]
 ])
 
 export type ConnectionRule = {
@@ -93,6 +95,7 @@ export function addOrUpdateDynamicRule(nodeType: NodeType, nodeId: string, rule:
     if (isDynamicNodeType(nodeType) && connectionRules.get(nodeType)) {
         (connectionRules.get(nodeType) as DynamicConnectionRule)[nodeId] = rule;
     }
+    useReactFlowStore.getState().removeIllegalEdgesAfterDynamicNodeChange(nodeType, nodeId)
 }
 
 export function removeDynamicRule(nodeType: NodeType, key: string) {
