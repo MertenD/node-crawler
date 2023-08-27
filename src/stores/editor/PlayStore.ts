@@ -54,6 +54,7 @@ export type PlayStoreState = {
     addOutgoingPipelines: (from: string, value?: Output[] | Output | null) => void
     deactivateIngoingPipelines: (to: string) => void
     getInput: (nodeId: string, handleId: string, flattenInput?: boolean) => Output[][] | Output[] | undefined
+    getInputForAllHandles: (nodeId: string, flattenInput?: boolean) => Record<string, Output[][] | Output[]> | undefined
 }
 
 export const usePlayStore = create<PlayStoreState>((set, get) => ({
@@ -257,7 +258,10 @@ export const usePlayStore = create<PlayStoreState>((set, get) => ({
         // Get amount of connected pipelines to the targetHandle
         const ingoingConnections = Array.from(get().nodeMap.values()).filter((value: NodeMapValue) => {
             if (value.next !== null) {
-                return Object.values(value.next).some(nextValue => nextValue.map(n => n.nodeId).includes(nodeId));
+                return Object.values(value.next).some(nextValue =>
+                    nextValue.map(n => n.nodeId).includes(nodeId) &&
+                    nextValue.map(n => n.targetHandleId).includes(handleId)
+                );
             }
             return false;
         }).length;
@@ -298,5 +302,33 @@ export const usePlayStore = create<PlayStoreState>((set, get) => ({
             get().backtrackToNextPossibleNode()
             return undefined
         }
+    },
+    getInputForAllHandles: (nodeId: string, flattenInput: boolean = true): Record<string, Output[][] | Output[]> | undefined => {
+        const handleIds = Array.from(new Set(useReactFlowStore.getState().edges
+            .filter(edge => edge.target === nodeId)
+            .map(edge => {
+                return edge.targetHandle
+            })
+            .filter(handleId => handleId)
+        )) as string[]
+
+        const inputs: Record<string, Output[][] | Output[]> = {};
+        let allInputsDefined = true;
+
+        for (const handleId of handleIds) {
+            const input = get().getInput(nodeId, handleId, flattenInput);
+            if (input) {
+                inputs[handleId] = input;
+            } else {
+                allInputsDefined = false;
+                break;
+            }
+        }
+
+        if (!allInputsDefined) {
+            return undefined;
+        }
+
+        return inputs
     }
 }))

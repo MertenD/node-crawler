@@ -16,6 +16,10 @@ export class EngineDatabaseTableNode implements BasicNode {
 
     async run() {
 
+        const inputs = usePlayStore.getState().getInputForAllHandles(this.id)
+
+        console.log("Inputs", inputs)
+
         setTimeout(() => {
             usePlayStore.getState().nextNode()
         }, 2000);
