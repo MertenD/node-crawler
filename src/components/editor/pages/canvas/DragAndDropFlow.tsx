@@ -22,7 +22,7 @@ import './edges/EdgeGradientStyles.css'
 import OptionsToolbar from "@/components/editor/pages/canvas/toolbars/OptionsToolbar";
 import {usePlayStore} from "@/stores/editor/PlayStore";
 import OnCanvasNodesToolbar from "@/components/editor/pages/canvas/toolbars/OnCanvasNodesSelector";
-import {connectionRules} from "@/config/ConnectionRules";
+import {getConnectionRule} from "@/config/ConnectionRules";
 import {nodesMetadataMap} from "@/config/NodesMetadata";
 import {NodeType} from "@/config/NodeType";
 import {selectedColor, toolbarBackgroundColor} from "@/config/colors";
@@ -36,11 +36,11 @@ const selector = (state: any) => ({
     nodeTypes: state.nodeTypes,
     edgeTypes: state.edgeTypes,
     getNodeById: state.getNodeById,
-    setCurrentConnectionStartNodeType: state.setCurrentConnectionStartNodeType
+    setCurrentConnectionStartNode: state.setCurrentConnectionStartNode
 });
 
 export default function DragAndDropFlow() {
-    const { nodes, edges, onNodesChange, onEdgesChange, onConnect, nodeTypes, edgeTypes, getNodeById, setCurrentConnectionStartNodeType } = useReactFlowStore(selector, shallow)
+    const { nodes, edges, onNodesChange, onEdgesChange, onConnect, nodeTypes, edgeTypes, getNodeById, setCurrentConnectionStartNode } = useReactFlowStore(selector, shallow)
 
     const setSelectedNodes = useReactFlowStore((state) => state.setSelectedNodes)
 
@@ -82,12 +82,12 @@ export default function DragAndDropFlow() {
 
     const onConnectStart = useCallback((event: any, node: OnConnectStartParams) => {
         connectStartParams.current = node;
-        setCurrentConnectionStartNodeType(getNodeById(node.nodeId)?.type)
+        setCurrentConnectionStartNode(getNodeById(node.nodeId))
     }, []);
 
     const onConnectEnd = useCallback(
         (event: any) => {
-            setCurrentConnectionStartNodeType(null)
+            setCurrentConnectionStartNode(null)
             const targetIsPane = event.target.classList.contains('react-flow__pane');
             const targetIsChallengeNode = event.target.parentElement.classList.contains("react-flow__node-challengeNode")
 
@@ -173,12 +173,13 @@ export default function DragAndDropFlow() {
 
                     if (nodeType !== null && connectStartParams.current !== null && connectStartParams.current?.nodeId !== null) {
                         const id = addNodeAtPosition(reactFlowInstance.project(lastEventPosition), nodeType)
-                        let rule = connectionRules.get(nodeType)
+                        let rule = getConnectionRule(nodeType, id)
                         if(rule && rule.inputRules && rule.inputRules.length > 0) {
                             onConnect({
                                 source: connectStartParams.current?.nodeId,
                                 target: id,
                                 sourceHandle: connectStartParams.current?.handleId,
+                                // TODO Eventuell abändern, sobald ich dynamische nodes in dem onCanvasSelect drin hab
                                 targetHandle: rule.inputRules[0].handleId
                             } as Connection)
                         }

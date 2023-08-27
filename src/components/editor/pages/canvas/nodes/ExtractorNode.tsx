@@ -1,6 +1,6 @@
 // --- Data ---
 import {
-    createNodeComponent,
+    createStaticNodeComponent,
     createNodeShapeStyle,
     createOptionsComponent
 } from "@/components/editor/pages/canvas/nodes/util/Creators";
@@ -23,7 +23,7 @@ export interface ExtractorNodeData extends NodeData {
 export const extractorShapeStyle = createNodeShapeStyle()
 
 // --- Node ---
-export const ExtractorNode = createNodeComponent<ExtractorNodeData>(
+export const ExtractorNode = createStaticNodeComponent<ExtractorNodeData>(
     NodeType.EXTRACTOR_NODE,
     extractorShapeStyle,
     () => {
@@ -56,6 +56,7 @@ export const ExtractorOptions = createOptionsComponent<ExtractorNodeData>("Extra
             onSelectionChanged={(newSelection: string) => {
                 onDataUpdated("extractionMode", newSelection)
             }}
+            label={"Select what should be extracted"}
         />
         { data.extractionMode === ExtractionMode.ATTRIBUTE && <TextInputOption
             label={"Attribute Name"}

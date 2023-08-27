@@ -13,7 +13,13 @@ import {
     OnEdgesChange,
     OnNodesChange
 } from 'reactflow';
-import {connectionRules} from "@/config/ConnectionRules";
+import {
+    connectionRules,
+    getAllowedValueTypes, getConnectionRule,
+    getMaxConnections,
+    getOutputValueType,
+    isConnectionAllowed
+} from "@/config/ConnectionRules";
 import {openWarningSnackBar} from "@/stores/editor/EditorPageStore";
 import {ReactNode} from "react";
 import {getAllNodesMetadata, NodeMetadata} from "@/config/NodesMetadata";
@@ -40,9 +46,9 @@ export type ReactFlowState = {
     nodes: Node[];
     selectedNodes: Node[]
     edges: Edge[];
-    currentConnectionStartNodeType: NodeType | null
+    currentConnectionStartNode: Node | null
     isConnectionHighlightingActivated: boolean
-    setCurrentConnectionStartNodeType: (nodeType: NodeType | null) => void
+    setCurrentConnectionStartNode: (node: Node | null) => void
     setIsConnectionHighlightingActivated: (isActivated: boolean) => void
     onNodesChange: OnNodesChange;
     onEdgesChange: OnEdgesChange;
@@ -51,6 +57,8 @@ export type ReactFlowState = {
     getNodeById: (nodeId: string) => Node | null;
     setNodeSelected: (nodeId: string | null) => void
     setSelectedNodes: () => void
+    replaceEdgeAfterHandleRename: (nodeId: string, oldHandleId: string, newHandleId: string) => void
+    removeIllegalEdgesAfterDynamicNodeChange: (nodeType: NodeType, nodeId: string) => void
     updateEdgesGradient: () => void
 }
 
@@ -62,11 +70,11 @@ export const useReactFlowStore = create<ReactFlowState>((set, get) => ({
         acc[info.type] = info.getNodeComponent
         return acc
     }, {}),
-    currentConnectionStartNodeType: null,
+    currentConnectionStartNode: null,
     isConnectionHighlightingActivated: false,
-    setCurrentConnectionStartNodeType: (nodeType: NodeType | null) => {
+    setCurrentConnectionStartNode: (node: Node | null) => {
         set({
-            currentConnectionStartNodeType: nodeType
+            currentConnectionStartNode: node
         })
     },
     setIsConnectionHighlightingActivated: (isActivated: boolean) => {
@@ -123,32 +131,27 @@ export const useReactFlowStore = create<ReactFlowState>((set, get) => ({
         const sourceNodeType = sourceNode.type as NodeType
         const targetNodeType = targetNode.type as NodeType
 
-        const pipelineValueType = connectionRules.get(sourceNodeType)?.outputValueType
-        const isConnectionAllowed = pipelineValueType && connectionRules.get(targetNodeType)?.inputRules.find(rule => {
-            return rule.handleId === connection.targetHandle
-        })?.allowedValueTypes?.includes(pipelineValueType)
+        const pipelineValueType = getOutputValueType(sourceNodeType, source)
 
-        if (!isConnectionAllowed) {
+        if (!isConnectionAllowed(pipelineValueType, targetNodeType, target, connection.targetHandle)) {
             openWarningSnackBar(`You can't connect a "${
-                connectionRules.get(sourceNodeType)?.outputValueType
+                getOutputValueType(sourceNodeType, source)
             }" output to a "${
-                connectionRules.get(targetNodeType)?.inputRules.find(rule => 
-                    rule.handleId === connection.targetHandle
-                )?.allowedValueTypes.join("/")
+                getAllowedValueTypes(targetNodeType, target,  connection.targetHandle).join("/")
             }" input`)
             return
         }
 
         const existingConnectionsToTarget = get().edges.filter(edge => edge.target === target && edge.targetHandle === connection.targetHandle).length
-        const maxConnectionsToTarget = connectionRules.get(targetNodeType)?.inputRules.find(rule => {
-            return rule.handleId === connection.targetHandle
-        })?.maxConnections
+        const maxConnectionsToTarget = getMaxConnections(targetNodeType, target, connection.targetHandle)
         const isMaxConnectionsReached = maxConnectionsToTarget && existingConnectionsToTarget >= maxConnectionsToTarget
 
         if (isMaxConnectionsReached) {
             openWarningSnackBar("The max amount of inputs for this node is reached")
             return
         }
+
+        console.log("Added edge", sourceNode, targetNode, connection, connectionRules)
 
         set({
             edges: addEdge({
@@ -192,6 +195,50 @@ export const useReactFlowStore = create<ReactFlowState>((set, get) => ({
             )
         })
         get().updateEdgesGradient()
+    },
+    replaceEdgeAfterHandleRename: (nodeId: string, oldHandleId: string, newHandleId: string) => {
+        set({
+            edges: get().edges.map(edge => {
+                if (edge.target === nodeId && edge.targetHandle === oldHandleId) {
+                    return {
+                        ...edge,
+                        targetHandle: newHandleId
+                    }
+                }
+                return edge
+            })
+        })
+    },
+    removeIllegalEdgesAfterDynamicNodeChange: (nodeType: NodeType, nodeId: string) => {
+        const availableHandleIds = getConnectionRule(nodeType, nodeId)?.inputRules.map(rule => rule.handleId)
+        if (!availableHandleIds) {
+            return
+        }
+        set({
+            edges: get().edges.filter(edge => {
+                if (edge.target !== nodeId) {
+                    return true
+                }
+                if (!edge.targetHandle) {
+                    return true
+                }
+
+                const sourceNode = get().getNodeById(edge.source)
+
+                if (!sourceNode) {
+                    return false
+                }
+
+                const allowedInputValueTypes = getAllowedValueTypes(nodeType, nodeId, edge.targetHandle)
+                const outputValueType = getOutputValueType(sourceNode.type as NodeType, edge.source)
+
+                if (!outputValueType) {
+                    return false
+                }
+
+                return availableHandleIds.includes(edge.targetHandle) && allowedInputValueTypes.includes(outputValueType)
+            })
+        })
     },
     updateEdgesGradient() {
         const selectedNodeIds = get().selectedNodes.map(node => node.id)
@@ -253,7 +300,7 @@ export const useReactFlowStore = create<ReactFlowState>((set, get) => ({
                     const sourceNodeType = get().getNodeById(edge.source)?.type as NodeType
                     return {
                         ...edge,
-                        type: sourceNodeType && connectionRules.get(sourceNodeType)?.outputValueType?.toString() || "defaultEdge"
+                        type: sourceNodeType && getOutputValueType(sourceNodeType, edge.source)?.toString() || "defaultEdge"
                     }
                 })
             })

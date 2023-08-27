@@ -5,5 +5,6 @@ export enum NodeType {
     GATEWAY_NODE = "gatewayNode",
     EXTRACTOR_NODE = "extractorNode",
     ZIP_NODE = "zipNode",
-    HTML_TO_TEXT_NODE = "htmlToText"
+    HTML_TO_TEXT_NODE = "htmlToTextNode",
+    DATABASE_TABLE_NODE = "databaseTableNode"
 }

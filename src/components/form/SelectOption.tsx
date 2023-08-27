@@ -4,7 +4,8 @@ import {InputLabel, MenuItem, Select, SelectChangeEvent} from "@mui/material";
 export interface SelectOptionProps {
     values: string[],
     selectedValue: string,
-    onSelectionChanged: (newSelection: string) => void
+    onSelectionChanged: (newSelection: string) => void,
+    label?: string
 }
 
 export default function SelectOption(props: SelectOptionProps) {
@@ -12,7 +13,7 @@ export default function SelectOption(props: SelectOptionProps) {
     return <div style={{
         width: "100%"
     }}>
-        <InputLabel id="selectAttributeLabel">Select what should be extracted</InputLabel>
+        { props.label && <InputLabel id="selectAttributeLabel">{ props.label }</InputLabel> }
         <Select
             labelId="selectAttributeLabel"
             value={props.selectedValue}

@@ -1,15 +1,16 @@
-import {Handle, Node, NodeProps, Position} from "reactflow";
+import {Handle, Node, NodeProps, Position, useUpdateNodeInternals} from "reactflow";
 import React, {CSSProperties, useEffect, useMemo, useState} from "react";
 import {handleStyle, useReactFlowStore} from "@/stores/editor/ReactFlowStore";
-import {connectionRules} from "@/config/ConnectionRules";
+import {addOrUpdateDynamicRule, getInputRules, getOutputValueType} from "@/config/ConnectionRules";
 import OptionsContainer from "@/components/form/OptionsContainer";
 import {setNodeWithUpdatedDataValue} from "@/components/editor/pages/canvas/nodes/util/OptionsUtil";
 import {usePlayStore} from "@/stores/editor/PlayStore";
 import CacheTextField from "@/components/form/CacheTextField";
 import {Tooltip} from "@mui/material";
 import {NodeType} from "@/config/NodeType";
-import {NodeData} from "@/model/NodeData";
+import {DynamicNodeData, NodeData} from "@/model/NodeData";
 import {nodeBackgroundColor, nodeShadowColor, selectedColor} from "@/config/colors";
+import Typography from "@mui/material/Typography";
 
 export const createNodeShapeStyle = (additionalCSS: CSSProperties = {}): (selected: boolean) => CSSProperties => {
     return function(selected) {
@@ -26,37 +27,37 @@ export const createNodeShapeStyle = (additionalCSS: CSSProperties = {}): (select
     }
 }
 
-export function createNodeComponent<DataType>(
+export function createStaticNodeComponent<DataType>(
     nodeType: NodeType,
     shapeStyle: (isSelected: boolean) => CSSProperties,
     content: (id: string, selected: boolean, data: DataType) => React.ReactNode
 ) {
 
-    const inputRules = connectionRules.get(nodeType)?.inputRules
-
     return function({ id, selected, data }: NodeProps<DataType>) {
 
-        const currentConnectionStartNodeType = useReactFlowStore(state => state.currentConnectionStartNodeType)
+        const inputRules = getInputRules(nodeType, id)
+
+        const currentConnectionStartNode = useReactFlowStore(state => state.currentConnectionStartNode)
         const handleHighlightedMap = useMemo(() => {
             let newMap = new Map()
 
-            if (inputRules && currentConnectionStartNodeType) {
+            if (inputRules && currentConnectionStartNode) {
                 // Find the rule for the currentConnectionStartNodeType once before the loop
-                const outputValueType = connectionRules.get(currentConnectionStartNodeType)?.outputValueType;
+                const outputValueType = getOutputValueType(currentConnectionStartNode.type as NodeType, currentConnectionStartNode.id)
                 if (outputValueType) {
                     inputRules.forEach(rule => {
-                        newMap.set(rule.handleId, rule.allowedValueTypes.includes(outputValueType));
+                        newMap.set(rule.handleId, rule.allowedValueTypes.includes(outputValueType) && currentConnectionStartNode.id !== id);
                     });
                 }
             }
 
             return newMap;
-        }, [currentConnectionStartNodeType]);
+        }, [currentConnectionStartNode]);
 
         return <div style={{
             ...shapeStyle(selected),
         }}>
-            { connectionRules.get(nodeType)?.inputRules.map(rule => {
+            { getInputRules(nodeType, id).map(rule => {
                 return <Tooltip title={"Allowed input values: " + rule.allowedValueTypes.join(", ")} >
                     <Handle id={rule.handleId} style={{
                         ...handleStyle(selected),
@@ -64,12 +65,93 @@ export function createNodeComponent<DataType>(
                     }} type="target" position={Position.Left} />
                 </Tooltip>
             }) }
-            { connectionRules.get(nodeType)?.outputValueType && (
-                <Tooltip title={"Output value: " + connectionRules.get(nodeType)?.outputValueType} >
+            { getOutputValueType(nodeType, id) && (
+                <Tooltip title={"Output value: " + getOutputValueType(nodeType, id)} >
                     <Handle id="output" style={handleStyle(selected)} type="source" position={Position.Right}/>
                 </Tooltip>
             ) }
             { content(id, selected, data) }
+        </div>
+    }
+}
+
+export function createDynamicNodeComponent<DataType extends DynamicNodeData>(
+    nodeType: NodeType,
+    shapeStyle: (isSelected: boolean) => CSSProperties,
+    content: (id: string, selected: boolean, data: DataType) => React.ReactNode
+) {
+
+    return function({ id, selected, data }: NodeProps<DataType>) {
+
+        const updateNodeInternals = useUpdateNodeInternals()
+
+        useEffect(() => {
+           if (data.connectionRule) {
+                addOrUpdateDynamicRule(nodeType, id, data.connectionRule)
+                updateNodeInternals(id)
+            }
+        }, [data.connectionRule]);
+
+        const currentConnectionStartNode = useReactFlowStore(state => state.currentConnectionStartNode)
+        const handleHighlightedMap = useMemo(() => {
+            let newMap = new Map()
+
+            if (data.connectionRule?.inputRules && currentConnectionStartNode) {
+                // Find the rule for the currentConnectionStartNodeType once before the loop
+                const outputValueType = getOutputValueType(currentConnectionStartNode.type as NodeType, currentConnectionStartNode.id)
+                if (outputValueType) {
+                    data.connectionRule.inputRules.forEach(rule => {
+                        newMap.set(rule.handleId, rule.allowedValueTypes.includes(outputValueType) && currentConnectionStartNode.id !== id);
+                    });
+                }
+            }
+
+            return newMap;
+        }, [currentConnectionStartNode]);
+
+        return <div style={{
+            ...shapeStyle(selected),
+            height: Math.max(shapeStyle(selected).height as number || 0, shapeStyle(selected).minHeight as number || 0) + (data.connectionRule?.inputRules.length || 0) * 30
+        }}>
+            { data.connectionRule?.inputRules.map((rule, index) => {
+                return <Tooltip title={"Allowed input values: " + rule.allowedValueTypes.join(", ")} >
+                    <Handle id={rule.handleId} style={{
+                        ...handleStyle(selected),
+                        backgroundColor: handleHighlightedMap.get(rule.handleId) ? selectedColor : handleStyle(selected).backgroundColor,
+                        top: Math.max(shapeStyle(selected).height as number || 0, shapeStyle(selected).minHeight as number || 0) + (index * 30),
+                        zIndex: 1
+                    }} type="target" position={Position.Left} />
+                </Tooltip>
+            }) }
+            { data.connectionRule?.outputValueType && (
+                <Tooltip title={"Output value: " + data.connectionRule.outputValueType} >
+                    <Handle id="output" style={{
+                        ...handleStyle(selected),
+                        top: data.connectionRule.inputRules.length > 0 ?
+                            Math.max(shapeStyle(selected).height as number || 0, shapeStyle(selected).minHeight as number || 0) + ((data.connectionRule.inputRules.length - 1) * 30) / 2
+                            : undefined,
+                        zIndex: 1
+                    }} type="source" position={Position.Right}/>
+                </Tooltip>
+            ) }
+            { content(id, selected, data) }
+            <div style={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "flex-start",
+                width: "80%",
+                position: "absolute",
+                top: Math.max(shapeStyle(selected).height as number || 0, shapeStyle(selected).minHeight as number || 0) - 13,
+                marginLeft: 10
+            }}>
+                { data.connectionRule?.inputRules.map((rule) => {
+                    return <div style={{ height: 30 }}>
+                        <Typography variant="body1">
+                            {rule.handleId}
+                        </Typography>
+                    </div>
+                }) }
+            </div>
         </div>
     }
 }

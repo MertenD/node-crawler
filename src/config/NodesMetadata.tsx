@@ -9,6 +9,7 @@ import {BasicNode} from "@/engine/nodes/BasicNode";
 import {startNodeMetadata} from "@/components/editor/pages/canvas/nodes/StartNode";
 import {zipNodeMetadata} from "@/components/editor/pages/canvas/nodes/ZipNode";
 import {htmlToTextNodeMetadata} from "@/components/editor/pages/canvas/nodes/HtmlToTextNode";
+import {DatabaseTableNodeMetadata} from "@/components/editor/pages/canvas/nodes/DatabaseTableNode";
 
 export const nodesMetadataMap: NodeMetadataType = {
     [NodeType.START_NODE]: startNodeMetadata,
@@ -17,7 +18,8 @@ export const nodesMetadataMap: NodeMetadataType = {
     [NodeType.GATEWAY_NODE]: null,
     [NodeType.EXTRACTOR_NODE]: extractorNodeMetadata,
     [NodeType.ZIP_NODE]: zipNodeMetadata,
-    [NodeType.HTML_TO_TEXT_NODE]: htmlToTextNodeMetadata
+    [NodeType.HTML_TO_TEXT_NODE]: htmlToTextNodeMetadata,
+    [NodeType.DATABASE_TABLE_NODE]: DatabaseTableNodeMetadata
 };
 
 // --- Do not change anything below --- \\

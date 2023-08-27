@@ -5,7 +5,7 @@ import {NodeData} from "@/model/NodeData";
 import FileNameInputOption from "@/components/form/FileNameInputOption";
 import TextInputOption from "@/components/form/TextInputOption";
 import {
-    createNodeComponent,
+    createStaticNodeComponent,
     createNodeShapeStyle,
     createOptionsComponent
 } from "@/components/editor/pages/canvas/nodes/util/Creators";
@@ -28,7 +28,7 @@ export const saveShapeStyle = createNodeShapeStyle()
 
 
 // --- Node ---
-export const SaveNode = createNodeComponent<SaveNodeData>(
+export const SaveNode = createStaticNodeComponent<SaveNodeData>(
     NodeType.SAVE_NODE,
     saveShapeStyle,
     () => {

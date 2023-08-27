@@ -2,7 +2,8 @@ export enum OutputValueType {
     NONE = "none",
     HTML = "html",
     JSON = "json",
-    TEXT = "text"
+    TEXT = "text",
+    DATABASE = "database"
 }
 
 export interface Output {
@@ -24,4 +25,11 @@ export interface JsonOutput extends Output {
 
 export interface TextOutput extends Output {
     value: string
+}
+
+export interface DatabaseOutput extends Output {
+    value: {
+        schema: string
+        content: string
+    }
 }

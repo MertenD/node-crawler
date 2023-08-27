@@ -6,7 +6,7 @@ import Dialog from '@mui/material/Dialog';
 import {Tooltip, Typography} from "@mui/material";
 import {NodeType} from "@/config/NodeType";
 import {Node} from "reactflow";
-import {connectionRules} from "@/config/ConnectionRules";
+import {getInputRules, getOutputValueType, isDynamicNodeType} from "@/config/ConnectionRules";
 import {getAllNodesMetadata} from "@/config/NodesMetadata";
 
 export interface OnCanvasNodesToolbarProps {
@@ -71,15 +71,17 @@ export default function OnCanvasNodesToolbar(props: OnCanvasNodesToolbarProps) {
                 textAlign: "center"
             }}>
                 { getAllNodesMetadata().filter(nodeInfo => {
-                    if (nodeInfo.type === NodeType.START_NODE) {
+                    // TODO Hier überlegen, wie ich das mit dynamischen Nodes handhabe. Will ichd ie gar nciht in dem Menü anzeigen wie jetzt? Oder Standardwerte?
+                    if (nodeInfo.type === NodeType.START_NODE || isDynamicNodeType(nodeInfo.type)) {
                         return false
                     }
                     if (props.sourceNode === null) {
                         return true
                     }
 
-                    const sourceOutputValue = connectionRules.get(props.sourceNode.type as NodeType)?.outputValueType
-                    const currentNodeInputRules = connectionRules.get(nodeInfo.type)?.inputRules
+                    const sourceOutputValue = getOutputValueType(props.sourceNode.type as NodeType, props.sourceNode.id)
+                    // The nodeInfo nodeType is not a dynamic one (see guards), therefore the "id" is unnecessary and "" is given as the id
+                    const currentNodeInputRules = getInputRules(nodeInfo.type, "")
 
                     // TODO Nochmal weiter überlegen, wie ich das handhabe, sobald ich einen node mit mehr als einem Eingang hab
                     if ((currentNodeInputRules?.length || 0) > 1 || !sourceOutputValue) {
