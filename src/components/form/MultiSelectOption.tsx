@@ -1,5 +1,5 @@
 import React from "react";
-import {Checkbox, InputLabel, ListItemText, MenuItem, Select, SelectChangeEvent} from "@mui/material";
+import {Checkbox, ListItemText, MenuItem, Select, SelectChangeEvent} from "@mui/material";
 import OutlinedInput from '@mui/material/OutlinedInput';
 
 export interface MultiSelectOptionProps {

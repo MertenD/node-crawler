@@ -265,7 +265,7 @@ export const usePlayStore = create<PlayStoreState>((set, get) => ({
         let amountOfPrevNoneOutputValues = 0;
         // Traverse the nodeMap to find the previous nodes for the given nodeId
         // and count how many of them have an output value of NONE
-        get().nodeMap.forEach((value, key) => {
+        get().nodeMap.forEach((value) => {
             if (value.next) {
                 Object.values(value.next).forEach(arr => {
                     arr.forEach(connection => {

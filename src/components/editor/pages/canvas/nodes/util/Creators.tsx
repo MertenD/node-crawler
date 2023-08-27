@@ -144,7 +144,7 @@ export function createDynamicNodeComponent<DataType extends DynamicNodeData>(
                 top: Math.max(shapeStyle(selected).height as number || 0, shapeStyle(selected).minHeight as number || 0) - 13,
                 marginLeft: 10
             }}>
-                { data.connectionRule?.inputRules.map((rule, index) => {
+                { data.connectionRule?.inputRules.map((rule) => {
                     return <div style={{ height: 30 }}>
                         <Typography variant="body1">
                             {rule.handleId}

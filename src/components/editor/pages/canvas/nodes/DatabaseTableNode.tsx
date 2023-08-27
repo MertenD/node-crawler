@@ -10,7 +10,7 @@ import {NodeMetadata} from "@/config/NodesMetadata";
 import {DynamicNodeData, NodeData} from "@/model/NodeData";
 import {EngineDatabaseTableNode} from "@/engine/nodes/EngineDatabaseTableNode";
 import {Button, IconButton} from "@mui/material";
-import {connectionRules, InputRule} from "@/config/ConnectionRules";
+import {InputRule} from "@/config/ConnectionRules";
 import {OutputValueType} from "@/config/OutputValueType";
 import TextInputOption from "@/components/form/TextInputOption";
 import StorageIcon from '@mui/icons-material/Storage';
