@@ -18,6 +18,7 @@ import RowOptionsContainer from "@/components/form/RowOptionsContainer";
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import MultiSelectOption from "@/components/form/MultiSelectOption";
 import useReactFlowStore from "@/stores/editor/ReactFlowStore";
+import DraggableOptionsListContainer from "@/components/form/DraggableOptionsListContainer";
 
 export interface DatabaseTableNodeData extends DynamicNodeData {
     tableName: string
@@ -81,16 +82,18 @@ export const DatabaseTableOptions = createOptionsComponent<DatabaseTableNodeData
                 onDataUpdated("tableName", event.target.value)
             }}
         />
-        {
-            inputs.map((input: InputRule, index: number) => {
+        <DraggableOptionsListContainer<InputRule>
+            items={inputs}
+            onOrderChanged={(newItems) => setInputs(newItems)}
+            mapItem={(item: InputRule, index: number) => {
                 return <RowOptionsContainer>
                     <TextInputOption
                         key={index}
                         label={"Input Name"}
-                        value={input.handleId}
+                        value={item.handleId}
                         onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
                             const cleanedValue = event.target.value.replaceAll(" ", "-")
-                            useReactFlowStore.getState().replaceEdgeAfterHandleRename(id, input.handleId, cleanedValue)
+                            useReactFlowStore.getState().replaceEdgeAfterHandleRename(id, item.handleId, cleanedValue)
                             const newInputs = [...inputs]
                             newInputs[index].handleId = cleanedValue
                             setInputs(newInputs)
@@ -98,7 +101,7 @@ export const DatabaseTableOptions = createOptionsComponent<DatabaseTableNodeData
                     />
                     <MultiSelectOption
                         values={Object.values(OutputValueType)}
-                        selectedValues={input.allowedValueTypes}
+                        selectedValues={item.allowedValueTypes}
                         onSelectionChanged={(newSelection: string[]) => {
                             const newInputs = [...inputs]
                             newInputs[index].allowedValueTypes = newSelection.map(selection => selection as OutputValueType)
@@ -115,8 +118,8 @@ export const DatabaseTableOptions = createOptionsComponent<DatabaseTableNodeData
                         <DeleteForeverIcon />
                     </IconButton>
                 </RowOptionsContainer>
-            })
-        }
+            }}
+        />
         <Button onClick={addInput}>Add Input</Button>
     </>
 })

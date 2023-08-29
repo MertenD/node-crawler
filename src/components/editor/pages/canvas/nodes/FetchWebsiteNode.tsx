@@ -2,19 +2,20 @@
 
 import React from "react";
 import TextInputOption from "@/components/form/TextInputOption";
-import { Badge, Button, IconButton, Typography } from "@mui/material";
+import {Badge, Button, IconButton, Typography} from "@mui/material";
 import CloudDownloadTwoToneIcon from '@mui/icons-material/CloudDownloadTwoTone';
 import {NodeData} from "@/model/NodeData";
 import {
-    createStaticNodeComponent,
     createNodeShapeStyle,
-    createOptionsComponent
+    createOptionsComponent,
+    createStaticNodeComponent
 } from "@/components/editor/pages/canvas/nodes/util/Creators";
 import {EngineFetchWebsiteNode} from "@/engine/nodes/EngineFetchWebsiteNode";
 import {NodeType} from "@/config/NodeType";
 import {NodeMetadata} from "@/config/NodesMetadata";
 import {defaultEdgeColor, selectedColor} from "@/config/colors";
-import CloseIcon from "@mui/icons-material/Close";
+import DraggableOptionsListContainer from "@/components/form/DraggableOptionsListContainer";
+import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 
 
 // --- Data ---
@@ -72,8 +73,10 @@ export const FetchWebsiteOptions = createOptionsComponent<FetchWebsiteNodeData>(
                 onDataUpdated("name", event.target.value)
             }}
         />
-        {
-            urls.map((url, index) => {
+        <DraggableOptionsListContainer
+            items={urls}
+            onOrderChanged={(newUrls: string[]) => setUrls(newUrls)}
+            mapItem={(url: string, index: number) => {
                 return <TextInputOption
                     key={index}
                     label={"URL " + (index > 0 ? index + 1 : "")}
@@ -95,15 +98,15 @@ export const FetchWebsiteOptions = createOptionsComponent<FetchWebsiteNodeData>(
                                         onDataUpdated("urls", newUrls)
                                     }
                                 }>
-                                    <CloseIcon />
+                                    <DeleteForeverIcon />
                                 </IconButton>
                                 :
                                 <></>
                         )
                     }}
                 />
-            })
-        }
+            }}
+        />
         <Button onClick={addValue}>Add Url</Button>
     </>
 })
