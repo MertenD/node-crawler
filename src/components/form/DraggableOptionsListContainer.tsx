@@ -28,7 +28,7 @@ export const DraggableOptionsListContainer = <T,>(
                         width: "100%",
                         display: "flex",
                         flexDirection: "column",
-                        gap: 10
+                        gap: 15
                     }} {...provided.droppableProps}>
                         {items.map((item, index) => (
                             <Draggable key={index.toString()} draggableId={index.toString()} index={index}>
