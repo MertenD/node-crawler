@@ -1,4 +1,4 @@
-export function getUniqueSelector(el) {
+export function getUniqueSelector(el: any): string {
     let path = [];
     while (el.nodeType === Node.ELEMENT_NODE) {
         let selector = el.nodeName.toLowerCase();
@@ -45,24 +45,15 @@ export function getUniqueSelector(el) {
     return path.join(' > ');
 }*/
 
-export function removeIDFromSelector(selector) {
+export function removeIDFromSelector(selector: string): string {
     return selector.replace(/#[^\s]+/g, '');
 }
 
-export function isValidSelector(iframeDoc, selector) {
+export function isValidSelector(iframeDoc: any, selector: string): boolean {
     try {
         iframeDoc.querySelector(selector);
         return true;
     } catch (e) {
         return false
-    }
-}
-
-export function isRelativeURL(url) {
-    try {
-        new URL(url);
-        return false;
-    } catch (e) {
-        return true;
     }
 }
