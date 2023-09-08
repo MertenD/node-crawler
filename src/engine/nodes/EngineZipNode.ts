@@ -23,6 +23,8 @@ export class EngineZipNode implements BasicNode {
 
             usePlayStore.getState().writeToLog(`Zipping ${inputs.length} inputs together`)
 
+            inputs.sort((a, b) => a.length - b.length)
+
             const zippedInputs = inputs[0].map((_, i) => inputs.map(row => row[i]))
                 .map(zippedList => {
                     const jsonObject = zippedList.reduce((acc, value, index) => {
