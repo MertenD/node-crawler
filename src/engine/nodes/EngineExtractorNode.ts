@@ -24,46 +24,47 @@ export class EngineExtractorNode implements BasicNode {
             usePlayStore.getState().writeToLog(`Extracting "${this.data.tag}" from provided html`)
 
             const elements = inputs.map(input => {
-                const tag = this.data.tag;
 
-                // Parse the HTML with Cheerio
-                const $ = cheerio.load(input.value);
-
-                const mapToHtmlOutput = (value: string, source_url: string): HtmlOutput => {
+                const mapToHtmlOutput = (values: string[], source_url: string): HtmlOutput => {
                     return {
                         metadata: {
                             source_url: source_url
                         },
-                        value: value
+                        value: values
                     } as HtmlOutput
                 }
 
-                switch (this.data.extractionMode) {
-                    case ExtractionMode.ATTRIBUTE:
+                const extractResults = input.value.map(html => {
+                    const tag = this.data.tag;
 
-                        const extractAttribute = (el: cheerio.Element, attribute: string, baseOrigin: string): string | undefined => {
-                            let value = $(el).attr(attribute)
-                            if (attribute === "href" && value) {
-                                return new URL(value, baseOrigin).href
+                    // Parse the HTML with Cheerio
+                    const $ = cheerio.load(html);
+
+                    switch (this.data.extractionMode) {
+                        case ExtractionMode.ATTRIBUTE:
+
+                            const extractAttribute = (el: cheerio.Element, attribute: string, baseOrigin: string): string | undefined => {
+                                let value = $(el).attr(attribute)
+                                if (attribute === "href" && value) {
+                                    return new URL(value, baseOrigin).href
+                                }
+                                return value
                             }
-                            return value
-                        }
 
-                        const attributeToExtract = this.data.attributeToExtract.toLowerCase()
-                        const baseOrigin = new URL(input.metadata.source_url).origin
+                            const attributeToExtract = this.data.attributeToExtract.toLowerCase()
+                            const baseOrigin = new URL(input.metadata.source_url).origin
 
-                        return $(tag).map((i, el) => {
-                            return extractAttribute(el, attributeToExtract, baseOrigin)
-                        }).get().filter(Boolean).map(value => {
-                            return mapToHtmlOutput(value, input.metadata.source_url)
-                        })
-                    case ExtractionMode.CONTENT:
-                    default:
-                        return $(tag).map((i, el) => $(el).html()).get().map(el => {
-                            return mapToHtmlOutput(el, input.metadata.source_url)
-                        })
-                }
-            }).flat() as HtmlOutput[]
+                            return $(tag).map((i, el) => {
+                                return extractAttribute(el, attributeToExtract, baseOrigin)
+                            }).get().filter(Boolean)
+                        case ExtractionMode.CONTENT:
+                        default:
+                            return $(tag).map((i, el) => $(el).html()).get()
+                    }
+                }).flat()
+
+                return mapToHtmlOutput(extractResults, input.metadata.source_url)
+            })
 
             usePlayStore.getState().writeToLog(`Extracted ${elements.length} elements`)
 

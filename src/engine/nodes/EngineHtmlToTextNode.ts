@@ -3,6 +3,7 @@ import {NodeType} from "@/config/NodeType";
 import {usePlayStore} from "@/stores/editor/PlayStore";
 import {HtmlToTextNodeData} from "@/components/editor/pages/canvas/nodes/HtmlToTextNode";
 import {HtmlOutput, TextOutput} from "@/config/OutputValueType";
+import cheerio from "cheerio";
 
 export class EngineHtmlToTextNode implements BasicNode {
     id: string;
@@ -24,9 +25,11 @@ export class EngineHtmlToTextNode implements BasicNode {
 
             const cheerio = require('cheerio');
             const textElements: TextOutput[] = inputs.map(input => {
-                const $ = cheerio.load(input.value);
                 return {
-                    value: $('body').text()
+                    value: input.value.map(html => {
+                        const $ = cheerio.load(html)
+                        return $('body').text()
+                    })
                 } as TextOutput
             })
 

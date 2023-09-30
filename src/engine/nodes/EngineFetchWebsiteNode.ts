@@ -19,7 +19,7 @@ export class EngineFetchWebsiteNode implements BasicNode {
 
         const inputs = usePlayStore.getState().getInput(this.id, "input") as TextOutput[] | HtmlOutput[] | NoneOutput[] | undefined
 
-        const combinedUrls: string[] = [...this.data.urls ?? [], ...inputs?.map(input => input.value.toString()) ?? []]
+        const combinedUrls: string[] = [...this.data.urls ?? [], ...inputs?.flatMap(input => input.value).map(url => url.toString()) ?? []]
 
         usePlayStore.getState().writeToLog(`Fetching ${combinedUrls.length} websites with name "${this.data.name}"`)
 
@@ -49,7 +49,7 @@ export class EngineFetchWebsiteNode implements BasicNode {
                     metadata: {
                         source_url: url,
                     },
-                    value: data
+                    value: [data]
                 });
                 usePlayStore.getState().writeToLog(`Website content (First 500 characters): ${data.substring(0, 499)}`);
             })

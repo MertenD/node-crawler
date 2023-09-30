@@ -16,7 +16,7 @@ export interface HtmlOutput extends Output {
     metadata: {
         source_url: string
     }
-    value: string
+    value: string[]
 }
 
 export interface JsonOutput extends Output {
@@ -24,7 +24,7 @@ export interface JsonOutput extends Output {
 }
 
 export interface TextOutput extends Output {
-    value: string
+    value: string[]
 }
 
 export interface DatabaseOutput extends Output {
